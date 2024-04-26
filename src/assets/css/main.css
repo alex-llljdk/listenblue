@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 * {
     margin: 0;
     padding: 0;
@@ -25,12 +28,12 @@ a {
     position: absolute;
     left: 250px;
     right: 0;
-    top: 70px;
+    top: 97px;
     bottom: 0;
-    padding-bottom: 30px;
+    padding-bottom: 0;
     -webkit-transition: left .3s ease-in-out;
     transition: left .3s ease-in-out;
-    background: #f0f0f0;
+    background: #ffffff;
 }
 
 .content {
@@ -57,7 +60,7 @@ a {
 }
 
 .el-table th {
-    background-color: #f5f7fa !important;
+    background-color: #ffffff !important;
 }
 
 .pagination {
@@ -174,4 +177,33 @@ a {
 
 .v-note-wrapper .v-note-panel {
     min-height: 500px;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.select-none {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+.text-primary {
+    --un-text-opacity: 1;
+    color: hsl(221.2 83.2% 53.3% / 1);
+}
+
+.px, .px-4, [px=""] {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
 }

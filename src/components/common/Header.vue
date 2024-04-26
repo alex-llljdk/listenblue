@@ -1,13 +1,16 @@
 <template>
-    <div class="header">
+    <div class="flex items-center justify-between gap-2 border-b border-gray-400 px-4 col-span-2 h-24">
         <!-- 折叠按钮 -->
-        <div class="collapse-btn" @click="collapseChage">
-            <i v-if="!collapse" class="el-icon-s-fold"></i>
-            <i v-else class="el-icon-s-unfold"></i>
+        <div class="flex items-center px-2">
+            <div class="px-4" @click="collapseChage">
+                <i v-if="!collapse" class="el-icon-s-fold"></i>
+                <i v-else class="el-icon-s-unfold"></i>
+            </div>
+            <img src="../../assets/logo.png">
         </div>
-        <div class="logo">后台管理系统</div>
-        <div class="header-right">
-            <div class="header-user-con">
+        
+        <div>
+            <div class="flex items-center">
                 <!-- 全屏显示 -->
                 <div class="btn-fullscreen" @click="handleFullScreen">
                     <el-tooltip effect="dark" :content="fullscreen?`取消全屏`:`全屏`" placement="bottom">
@@ -50,6 +53,7 @@
 </template>
 <script>
 import bus from '../common/bus';
+import Logo from '../../assets/logo.png'
 export default {
     data() {
         return {
@@ -114,21 +118,20 @@ export default {
 };
 </script>
 <style scoped>
-.header {
+/* .header {
     position: relative;
     box-sizing: border-box;
     width: 100%;
     height: 70px;
     font-size: 22px;
     color: #fff;
-}
+} */
 .collapse-btn {
     float: left;
     padding: 0 21px;
     cursor: pointer;
-    line-height: 70px;
 }
-.header .logo {
+/* .header .logo {
     float: left;
     width: 250px;
     line-height: 70px;
@@ -136,7 +139,7 @@ export default {
 .header-right {
     float: right;
     padding-right: 50px;
-}
+} */
 .header-user-con {
     display: flex;
     height: 70px;
