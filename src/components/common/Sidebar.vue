@@ -111,8 +111,8 @@ export default {
             explore_items: [
                 {
                     icon: 'el-icon-lx-home',
-                    index: 'dashboard',
-                    title: '发现'
+                    index: '/home',
+                    title: '首页'
                 },
                 {
                     icon: 'el-icon-lx-cascades',
