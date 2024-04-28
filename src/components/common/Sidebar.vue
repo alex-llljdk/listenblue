@@ -187,6 +187,7 @@ export default {
     top: 97px;
     bottom: 0;
     overflow-y: scroll;
+    z-index: 1;
 }
 .sidebar::-webkit-scrollbar {
     width: 0;

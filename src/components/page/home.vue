@@ -15,22 +15,73 @@
                 >{{ item.msg }}</div>
             </div>
         </div>
-
-        <el-row class="mt-20">
-            <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
+        <div>
+            <el-row class="mt-5" :gutter="15">
+            <el-col span="7">
                 <div
-                    class="transform transition duration-300 hover:scale-110 rounded-lg shadow-lg h-52 w-112 hover:shadow-xl bg-white"
+                    class="hcard transform transition duration-300 hover:scale-110 rounded-2xl shadow-lg h-64 hover:shadow-xl opacity-50"
                 >
                     <div
-                        class="bg-gradient-to-br from-pink-100 via-purple-200 to-purple-300 m-2 h-3/6 rounded-lg"
-                    ></div>
-
-                    <div class="px-5 pt-2 flex flex-col">
-                        <h2 class="font-semibold">Title</h2>
+                        class="bg-gradient-to-br flex from-blue-100 via-blue-300 to-blue-500 h-full rounded-2xl" 
+                    >
+                        <div class="w-1/2 h-full meet_bg bg-cover bg-no-repeat rounded-l-2xl ">
+                            
+                        </div>
                     </div>
+
                 </div>
             </el-col>
-        </el-row>
+            <el-col span="7">
+                <div
+                    class="hcard transform transition duration-300 hover:scale-110 rounded-2xl shadow-lg h-64 hover:shadow-xl bg-white opacity-30"
+                >
+                    <div
+                        class="bg-gradient-to-br from-purple-100 via-purple-300 to-purple-500 h-full rounded-2xl"
+                    >
+                        <div class="w-1/2 h-full class_bg bg-cover bg-no-repeat rounded-l-2xl ">
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </el-col>
+            <el-col span="7">
+                <div>
+                    1
+                </div>
+            </el-col>
+            </el-row>
+            <el-row class="mt-5" :gutter="15">
+                       <el-col span="7">
+                <div
+                    class="transform transition duration-300 hover:scale-110 rounded-2xl shadow-lg h-64 hover:shadow-xl bg-white opacity-30 hcard"
+                >
+                    <div
+                        class="bg-gradient-to-br from-pink-100 via-pink-200 to-pink-300 h-full rounded-2xl"
+                    >
+                        <div class="w-1/2 h-full doc_bg bg-cover bg-no-repeat rounded-l-2xl ">
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </el-col>
+                       <el-col span="7">
+                <div
+                    class="transform transition duration-300 hover:scale-110 rounded-2xl shadow-lg h-64 hover:shadow-xl bg-white opacity-30 hcard"
+                >
+                    <div
+                        class="bg-gradient-to-br from-red-100 via-red-300 to-red-500 h-full rounded-2xl"
+                    >
+                        <div class="w-1/2 h-full live_bg bg-cover bg-no-repeat rounded-l-2xl ">
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </el-col>
+            </el-row>
+        </div>
         </div>
     </div>
 </template>
@@ -43,7 +94,7 @@ export default {
     data() {
         return {
             ulList: [{ msg: '高效开会！' }, { msg: '轻松学习！' }, { msg: '随手总结！' }],
-            play: false
+            play: false,
         };
     },
     methods: {
@@ -71,16 +122,41 @@ export default {
 }
 
 .bg{
-    background: url(//g.alicdn.com/idst-fe/mind-meeting-assistant2/0.0.204/static/mask.4122db2d.png) 0px 0px no-repeat;
+    /* background: url(//g.alicdn.com/idst-fe/mind-meeting-assistant2/0.0.204/static/mask.4122db2d.png) 0px 0px no-repeat; */
+    background: url(../../assets/img/homepage_bg.png) 0px 0px no-repeat;
+    background-size: 395px;
     position: absolute;
     top: 0px;
     right: 0px;
-    width: 1440px;
-    height: 810px;
+    width: 395px;
+    height: 512px;
 }
 
-/* 隐藏滚动条 */
-::-webkit-scrollbar {
-    display: none;
+.hcard:hover{
+    opacity: 1.0;
+}
+
+.meet_bg{
+    background-image: url(../../assets/img/meeting.jpg);
+    background-size: 100% 100%;
+    opacity: 1.0;
+}
+
+.class_bg{
+    background-image: url(../../assets/img/class.png);
+    background-size: 100% 100%;
+    opacity: 1.0;
+}
+
+.doc_bg{
+    background-image: url(../../assets/img/doc.png);
+    background-size: 100% 100%;
+    opacity: 1.0;
+}
+
+.live_bg{
+    background-image: url(../../assets/img/live.png);
+    background-size: 100% 100%;
+    opacity: 1.0;
 }
 </style>
