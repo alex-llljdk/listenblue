@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="w-full h-full bg-gradient-to-br from-white via-gray-100 to-gray-200 overflow-auto">
         <div class="bg"></div>
         <div class="pl-10 pr-10 pb-10 z-1">
         <div class="w-full h-32 flex px-5 py-4 text-6xl font-semibold mt-20">
@@ -16,7 +16,7 @@
             </div>
         </div>
         <div>
-            <el-row class="mt-5" :gutter="15">
+            <el-row class="mt-5" type="flex" :gutter="15">
             <el-col span="7">
                 <div
                     class="hcard transform transition duration-300 hover:scale-110 rounded-2xl shadow-lg h-64 hover:shadow-xl opacity-50"
@@ -45,11 +45,14 @@
 
                 </div>
             </el-col>
-            <el-col span="7">
-                <div>
-                    1
-                </div>
-            </el-col>
+            <div class="h-72 w-80 float-left ml-10 text-base">
+               最近
+               <div class="mt-5">
+                    <div v-for="item in rencent_items" class="h-32 w-72 bg-white mb-6 rounded-2xl">
+                     {{item}}
+                    </div>
+               </div>
+            </div>
             </el-row>
             <el-row class="mt-5" :gutter="15">
                        <el-col span="7">
@@ -95,6 +98,7 @@ export default {
         return {
             ulList: [{ msg: '高效开会！' }, { msg: '轻松学习！' }, { msg: '随手总结！' }],
             play: false,
+            rencent_items:["1","2","3"]
         };
     },
     methods: {
@@ -130,6 +134,7 @@ export default {
     right: 0px;
     width: 395px;
     height: 512px;
+    user-select: none;
 }
 
 .hcard:hover{
@@ -140,23 +145,27 @@ export default {
     background-image: url(../../assets/img/meeting.jpg);
     background-size: 100% 100%;
     opacity: 1.0;
+     user-select: none;
 }
 
 .class_bg{
     background-image: url(../../assets/img/class.png);
     background-size: 100% 100%;
     opacity: 1.0;
+     user-select: none;
 }
 
 .doc_bg{
     background-image: url(../../assets/img/doc.png);
     background-size: 100% 100%;
     opacity: 1.0;
+     user-select: none;
 }
 
 .live_bg{
     background-image: url(../../assets/img/live.png);
     background-size: 100% 100%;
     opacity: 1.0;
+    user-select: none;
 }
 </style>
