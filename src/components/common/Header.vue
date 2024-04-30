@@ -118,14 +118,16 @@ export default {
 };
 </script>
 <style scoped>
-/* .header {
+.header {
     position: relative;
     box-sizing: border-box;
     width: 100%;
     height: 70px;
     font-size: 22px;
     color: #fff;
-} */
+    min-width: 1920px !important;
+    max-width: 1920px !important;
+}
 .collapse-btn {
     float: left;
     padding: 0 21px;
