@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import VoiceRecord from '../components/page/VoiceRecord'
 
 Vue.use(Router);
 
@@ -110,8 +111,12 @@ export default new Router({
             meta: { title: '登录' }
         },
         {
+            path: '/voice-record',
+            component: VoiceRecord
+        },
+        {
             path: '*',
             redirect: '/404'
-        }
+        },
     ]
 });

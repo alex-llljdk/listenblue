@@ -21,43 +21,74 @@
             <div class="flex">
                 <div class="ml-20 z-10">
                     <div class="flex">
-                        <div
-                            class="hcard transform transition duration-300 hover:scale-110 rounded-2xl shadow-xl h-64 hover:shadow-xl flex cursor-pointer relative"
-                        >
-                            <div class="w-1/2 h-full meet_bg bg-cover bg-no-repeat rounded-l-2xl"></div>
+                        <router-link to="/voice-record">
                             <div
-                                class="w-1/2 h-full bg-gradient-to-br from-blue-300 via-blue-400 to-blue-500 rounded-r-2xl text-white p-4 bx_sd"
+                                class="hcard transform transition duration-300 hover:scale-110 rounded-2xl shadow-xl h-64 hover:shadow-xl flex cursor-pointer relative"
                             >
-                            <div class="font-semibold text-2xl">会议、课堂实时记录</div>
-                            <div class="font-medium text-base leading-7 mt-3">
-                                实时语音转文字
+                                <div
+                                    class="w-1/2 h-full meet_bg bg-cover bg-no-repeat rounded-l-2xl"
+                                ></div>
+                                <div
+                                    class="w-1/2 h-full bg-gradient-to-br from-blue-300 via-blue-400 to-blue-500 rounded-r-2xl text-white p-4 bx_sd"
+                                >
+                                    <div class="font-semibold text-2xl">会议、课堂实时记录</div>
+                                    <div class="font-medium text-base leading-7 mt-3">实时语音转文字</div>
+                                    <div class="font-medium text-base leading-7">同步翻译，智能总结要点</div>
+                                    <div
+                                        class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0"
+                                    >
+                                        <svg
+                                            t="1714583281873"
+                                            class="icon"
+                                            viewBox="0 0 1024 1024"
+                                            version="1.1"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            p-id="13528"
+                                            width="30"
+                                            height="30"
+                                        >
+                                            <path
+                                                d="M844.15488 512.70656L571.58656 254.95552c-11.84768-11.84768-29.62432-11.84768-41.48224 0-11.84768 11.84768-11.84768 29.62432 0 41.472L749.34272 503.808H201.2672c-17.77664 0-29.62432 11.84768-29.62432 29.63456 0 17.7664 11.84768 29.62432 29.62432 29.62432h548.08576l-219.2384 207.38048c-11.84768 11.84768-11.84768 29.63456 0 41.48224 5.92896 5.92896 14.81728 8.88832 20.736 8.88832 5.92896 0 14.81728-2.95936 20.736-8.88832l272.55808-257.7408c5.92896-5.92896 8.88832-14.81728 8.88832-20.736 0.01024-5.92896-2.94912-14.81728-8.87808-20.74624z m0 0"
+                                                fill="#ffffff"
+                                                p-id="13529"
+                                            />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div></div>
                             </div>
-                            <div class="font-medium text-base leading-7">
-                                同步翻译，智能总结要点
-                            </div>
-                            <div class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0">
-                                <svg t="1714583281873" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13528" width="30" height="30"><path d="M844.15488 512.70656L571.58656 254.95552c-11.84768-11.84768-29.62432-11.84768-41.48224 0-11.84768 11.84768-11.84768 29.62432 0 41.472L749.34272 503.808H201.2672c-17.77664 0-29.62432 11.84768-29.62432 29.63456 0 17.7664 11.84768 29.62432 29.62432 29.62432h548.08576l-219.2384 207.38048c-11.84768 11.84768-11.84768 29.63456 0 41.48224 5.92896 5.92896 14.81728 8.88832 20.736 8.88832 5.92896 0 14.81728-2.95936 20.736-8.88832l272.55808-257.7408c5.92896-5.92896 8.88832-14.81728 8.88832-20.736 0.01024-5.92896-2.94912-14.81728-8.87808-20.74624z m0 0" fill="#ffffff" p-id="13529"></path></svg>
-                            </div>
-                            </div>
-                            <div></div>
-                        </div>
+                        </router-link>
+                        <router-view />
                         <div
                             class="ml-10 hcard transform transition duration-300 hover:scale-110 rounded-2xl shadow-lg h-64 hover:shadow-xl flex cursor-pointer"
                         >
                             <div class="w-1/2 h-full class_bg bg-cover bg-no-repeat rounded-l-2xl"></div>
                             <div
                                 class="bg-gradient-to-br from-purple-300 via-purple-400 to-purple-500 w-1/2 h-full rounded-r-2xl text-white p-4 bx_sd"
-                            > 
-                            <div class="font-semibold text-2xl">音视频上传记录总结</div>
-                            <div class="font-medium text-base leading-7 mt-3">
-                                音视频转文字
-                            </div>
-                            <div class="font-medium text-base leading-7">
-                                章节速览总结，一键导出
-                            </div>
-                             <div class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0">
-                                <svg t="1714583281873" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13528" width="30" height="30"><path d="M844.15488 512.70656L571.58656 254.95552c-11.84768-11.84768-29.62432-11.84768-41.48224 0-11.84768 11.84768-11.84768 29.62432 0 41.472L749.34272 503.808H201.2672c-17.77664 0-29.62432 11.84768-29.62432 29.63456 0 17.7664 11.84768 29.62432 29.62432 29.62432h548.08576l-219.2384 207.38048c-11.84768 11.84768-11.84768 29.63456 0 41.48224 5.92896 5.92896 14.81728 8.88832 20.736 8.88832 5.92896 0 14.81728-2.95936 20.736-8.88832l272.55808-257.7408c5.92896-5.92896 8.88832-14.81728 8.88832-20.736 0.01024-5.92896-2.94912-14.81728-8.87808-20.74624z m0 0" fill="#ffffff" p-id="13529"></path></svg>
-                            </div>
+                            >
+                                <div class="font-semibold text-2xl">音视频上传记录总结</div>
+                                <div class="font-medium text-base leading-7 mt-3">音视频转文字</div>
+                                <div class="font-medium text-base leading-7">章节速览总结，一键导出</div>
+                                <div
+                                    class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0"
+                                >
+                                    <svg
+                                        t="1714583281873"
+                                        class="icon"
+                                        viewBox="0 0 1024 1024"
+                                        version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        p-id="13528"
+                                        width="30"
+                                        height="30"
+                                    >
+                                        <path
+                                            d="M844.15488 512.70656L571.58656 254.95552c-11.84768-11.84768-29.62432-11.84768-41.48224 0-11.84768 11.84768-11.84768 29.62432 0 41.472L749.34272 503.808H201.2672c-17.77664 0-29.62432 11.84768-29.62432 29.63456 0 17.7664 11.84768 29.62432 29.62432 29.62432h548.08576l-219.2384 207.38048c-11.84768 11.84768-11.84768 29.63456 0 41.48224 5.92896 5.92896 14.81728 8.88832 20.736 8.88832 5.92896 0 14.81728-2.95936 20.736-8.88832l272.55808-257.7408c5.92896-5.92896 8.88832-14.81728 8.88832-20.736 0.01024-5.92896-2.94912-14.81728-8.87808-20.74624z m0 0"
+                                            fill="#ffffff"
+                                            p-id="13529"
+                                        />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -69,16 +100,29 @@
                             <div
                                 class="bg-gradient-to-br from-pink-200 via-pink-300 to-pink-400 w-1/2 h-full rounded-r-2xl text-white p-4 bx_sd"
                             >
-                            <div class="font-semibold text-2xl">文档、图片一键归纳</div>
-                            <div class="font-medium text-base leading-7 mt-3">
-                                文档、图片总结归纳
-                            </div>
-                            <div class="font-medium text-base leading-7">
-                                扫描上传，轻松阅读
-                            </div>
-                             <div class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0">
-                                <svg t="1714583281873" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13528" width="30" height="30"><path d="M844.15488 512.70656L571.58656 254.95552c-11.84768-11.84768-29.62432-11.84768-41.48224 0-11.84768 11.84768-11.84768 29.62432 0 41.472L749.34272 503.808H201.2672c-17.77664 0-29.62432 11.84768-29.62432 29.63456 0 17.7664 11.84768 29.62432 29.62432 29.62432h548.08576l-219.2384 207.38048c-11.84768 11.84768-11.84768 29.63456 0 41.48224 5.92896 5.92896 14.81728 8.88832 20.736 8.88832 5.92896 0 14.81728-2.95936 20.736-8.88832l272.55808-257.7408c5.92896-5.92896 8.88832-14.81728 8.88832-20.736 0.01024-5.92896-2.94912-14.81728-8.87808-20.74624z m0 0" fill="#ffffff" p-id="13529"></path></svg>
-                            </div>
+                                <div class="font-semibold text-2xl">文档、图片一键归纳</div>
+                                <div class="font-medium text-base leading-7 mt-3">文档、图片总结归纳</div>
+                                <div class="font-medium text-base leading-7">扫描上传，轻松阅读</div>
+                                <div
+                                    class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0"
+                                >
+                                    <svg
+                                        t="1714583281873"
+                                        class="icon"
+                                        viewBox="0 0 1024 1024"
+                                        version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        p-id="13528"
+                                        width="30"
+                                        height="30"
+                                    >
+                                        <path
+                                            d="M844.15488 512.70656L571.58656 254.95552c-11.84768-11.84768-29.62432-11.84768-41.48224 0-11.84768 11.84768-11.84768 29.62432 0 41.472L749.34272 503.808H201.2672c-17.77664 0-29.62432 11.84768-29.62432 29.63456 0 17.7664 11.84768 29.62432 29.62432 29.62432h548.08576l-219.2384 207.38048c-11.84768 11.84768-11.84768 29.63456 0 41.48224 5.92896 5.92896 14.81728 8.88832 20.736 8.88832 5.92896 0 14.81728-2.95936 20.736-8.88832l272.55808-257.7408c5.92896-5.92896 8.88832-14.81728 8.88832-20.736 0.01024-5.92896-2.94912-14.81728-8.87808-20.74624z m0 0"
+                                            fill="#ffffff"
+                                            p-id="13529"
+                                        />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                         <div
@@ -89,16 +133,29 @@
                             <div
                                 class="bg-gradient-to-br from-red-200 via-red-300 to-red-400 w-1/2 h-full rounded-r-2xl text-white p-4 bx_sd"
                             >
-                            <div class="font-semibold text-2xl">实时直播,实时记录</div>
-                            <div class="font-medium text-base leading-7 mt-3">
-                                直播总结，实时笔记
-                            </div>
-                            <div class="font-medium text-base leading-7">
-                                双语翻译，实时字幕
-                            </div>
-                             <div class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0">
-                                <svg t="1714583281873" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13528" width="30" height="30"><path d="M844.15488 512.70656L571.58656 254.95552c-11.84768-11.84768-29.62432-11.84768-41.48224 0-11.84768 11.84768-11.84768 29.62432 0 41.472L749.34272 503.808H201.2672c-17.77664 0-29.62432 11.84768-29.62432 29.63456 0 17.7664 11.84768 29.62432 29.62432 29.62432h548.08576l-219.2384 207.38048c-11.84768 11.84768-11.84768 29.63456 0 41.48224 5.92896 5.92896 14.81728 8.88832 20.736 8.88832 5.92896 0 14.81728-2.95936 20.736-8.88832l272.55808-257.7408c5.92896-5.92896 8.88832-14.81728 8.88832-20.736 0.01024-5.92896-2.94912-14.81728-8.87808-20.74624z m0 0" fill="#ffffff" p-id="13529"></path></svg>
-                            </div>
+                                <div class="font-semibold text-2xl">实时直播,实时记录</div>
+                                <div class="font-medium text-base leading-7 mt-3">直播总结，实时笔记</div>
+                                <div class="font-medium text-base leading-7">双语翻译，实时字幕</div>
+                                <div
+                                    class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0"
+                                >
+                                    <svg
+                                        t="1714583281873"
+                                        class="icon"
+                                        viewBox="0 0 1024 1024"
+                                        version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        p-id="13528"
+                                        width="30"
+                                        height="30"
+                                    >
+                                        <path
+                                            d="M844.15488 512.70656L571.58656 254.95552c-11.84768-11.84768-29.62432-11.84768-41.48224 0-11.84768 11.84768-11.84768 29.62432 0 41.472L749.34272 503.808H201.2672c-17.77664 0-29.62432 11.84768-29.62432 29.63456 0 17.7664 11.84768 29.62432 29.62432 29.62432h548.08576l-219.2384 207.38048c-11.84768 11.84768-11.84768 29.63456 0 41.48224 5.92896 5.92896 14.81728 8.88832 20.736 8.88832 5.92896 0 14.81728-2.95936 20.736-8.88832l272.55808-257.7408c5.92896-5.92896 8.88832-14.81728 8.88832-20.736 0.01024-5.92896-2.94912-14.81728-8.87808-20.74624z m0 0"
+                                            fill="#ffffff"
+                                            p-id="13529"
+                                        />
+                                    </svg>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -321,26 +378,28 @@ export default {
             return (zero + num).slice(-digit);
         },
         rename() {
-            console.log("111111")
-        this.$prompt( '重命名', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputPattern: /^[^\n]{1,150}$/,
-          inputErrorMessage: '命名不能为空,不能带有回车，最大长度为150字符',
-          inputType:'textarea',
-          inputValue:this.rencent_items[0]
-        }).then(({ value }) => {
-          this.$message({
-            type: 'success',
-            message: '你的邮箱是: ' + value
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          });       
-        });
-      }
+            console.log('111111');
+            this.$prompt('重命名', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                inputPattern: /^[^\n]{1,150}$/,
+                inputErrorMessage: '命名不能为空,不能带有回车，最大长度为150字符',
+                inputType: 'textarea',
+                inputValue: this.rencent_items[0]
+            })
+                .then(({ value }) => {
+                    this.$message({
+                        type: 'success',
+                        message: '你的邮箱是: ' + value
+                    });
+                })
+                .catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消输入'
+                    });
+                });
+        }
     }
 };
 </script>
