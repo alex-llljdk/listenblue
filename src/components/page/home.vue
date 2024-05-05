@@ -1,6 +1,144 @@
 <template>
     <div class="w-full h-full overflow-auto">
         <div class="bg"></div>
+
+        <div class="right-0 top-60 z-10 fixed flex flex-col select-none" v-if="isUpload===true">
+            <div class="relative flex flex-col">
+                <div
+                    class="h-14 w-64 flex px-4 items-center bg-white justify-between rounded-lg cursor-pointer mr-0 shadow-2xl border"
+                    :class="[{'hoverTrans': (openTrans===false)},
+                    {'closeTrans': (openTrans===false)}]"
+                    @click="clickTrans"
+                >
+                    <div class="flex items-center">
+                        <div class="mr-2">
+                            <svg
+                                t="1714943972617"
+                                class="icon"
+                                viewBox="0 0 1024 1024"
+                                version="1.1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                p-id="6806"
+                                width="20"
+                                height="20"
+                            >
+                                <path
+                                    d="M512.005813 0C229.229613 0 0 229.229613 0 512.06394s229.229613 511.93606 512.005813 511.93606 511.982562-229.229613 511.982562-511.93606S794.770387 0 512.005813 0z m190.65654 475.804321a24.715598 24.715598 0 0 1-34.876197 0L536.663283 344.716324v393.577876a24.669096 24.669096 0 0 1-49.326566 0V344.716324L356.24872 475.804321a24.660958 24.660958 0 0 1-34.876196-34.876196l172.695298-172.672048a26.192023 26.192023 0 0 1 35.864356 0l172.683673 172.683673a24.715598 24.715598 0 0 1 0 34.864571z"
+                                    p-id="6807"
+                                    fill="#1296db"
+                                />
+                            </svg>
+                        </div>
+                        <div class>转写中</div>
+                    </div>
+                    <div>
+                        <svg
+                            t="1714907031563"
+                            class="icon"
+                            viewBox="0 0 1024 1024"
+                            version="1.1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            p-id="4545"
+                            width="20"
+                            height="20"
+                        >
+                            <path
+                                d="M510.182608 762.39791 71.456449 261.260306 952.544575 261.260306Z"
+                                fill="#8a8a8a"
+                                p-id="4546"
+                            />
+                        </svg>
+                    </div>
+                </div>
+
+                <div
+                    class="top-full right-0 mt-2.5 ml-1.5 max-h-96 overflow-y-scroll w-80 absolute flex bg-white rounded-lg border"
+                    v-if="openTrans===true"
+                >
+                    <div class="transListContainer relative w-full">
+                        <div class="pt-5 pl-5 text-xs h-11">
+                            <el-checkbox
+                                :indeterminate="isIndeterminate"
+                                v-model="checkAll"
+                                @change="handleCheckAllChange"
+                            >全选</el-checkbox>
+                        </div>
+                        <ul class="mb-0 pb-4 list-none">
+                            <div
+                                class="w-full inline-block m-0 p-0 leading-normal text-sm text-black text-opacity-80"
+                            >
+                                <li class="flex list-none m-0 pr-6 pl-5">
+                                    <div class="flex pt-3.5">
+                                        <div class="list-none mr-2">
+                                            <el-checkbox></el-checkbox>
+                                        </div>
+                                        <div>
+                                            <svg
+                                                t="1714906781285"
+                                                class="icon"
+                                                viewBox="0 0 1024 1024"
+                                                version="1.1"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                p-id="3240"
+                                                width="20"
+                                                height="20"
+                                            >
+                                                <path
+                                                    d="M0 0h1024v1024H0V0z"
+                                                    fill="#202425"
+                                                    opacity=".01"
+                                                    p-id="3241"
+                                                />
+                                                <path
+                                                    d="M955.733333 512c0 245.077333-198.656 443.733333-443.733333 443.733333S68.266667 757.077333 68.266667 512 266.922667 68.266667 512 68.266667s443.733333 198.656 443.733333 443.733333z"
+                                                    fill="#11AA66"
+                                                    p-id="3242"
+                                                />
+                                                <path
+                                                    d="M512 102.4C285.7984 102.4 102.4 285.7984 102.4 512s183.3984 409.6 409.6 409.6 409.6-183.3984 409.6-409.6S738.2016 102.4 512 102.4zM34.133333 512C34.133333 248.081067 248.081067 34.133333 512 34.133333s477.866667 213.947733 477.866667 477.866667-213.947733 477.866667-477.866667 477.866667S34.133333 775.918933 34.133333 512z"
+                                                    fill="#11AA66"
+                                                    p-id="3243"
+                                                />
+                                                <path
+                                                    d="M787.114667 339.285333a51.2 51.2 0 0 1 0 72.362667l-307.2 307.2a51.2 51.2 0 0 1-72.362667 0l-170.666667-170.666667a51.2 51.2 0 0 1 72.362667-72.362666L443.733333 610.235733l271.018667-271.018666a51.2 51.2 0 0 1 72.362667 0z"
+                                                    fill="#FFFFFF"
+                                                    p-id="3244"
+                                                />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <div class="ml-2 py-3.5 flex-1 w-0">
+                                        <div class="w-full flex justify-between items-center">
+                                            <span class="overflow-hidden overflow-ellipsis">乱世巨星</span>
+                                            <span class="cursor-pointer">
+                                                <svg
+                                                    t="1714943421170"
+                                                    class="icon"
+                                                    viewBox="0 0 1024 1024"
+                                                    version="1.1"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    p-id="4042"
+                                                    width="11"
+                                                    height="11"
+                                                >
+                                                    <path
+                                                        d="M551.358403 519.66047l402.416186 402.416186L914.421302 961.429942 512.002047 559.013757 109.578698 961.437106 70.224388 922.083819l402.423349-402.423349L70.221318 117.229958l39.35738-39.353286 402.423349 402.426419L914.425396 77.882811l39.353286 39.35738L551.358403 519.66047z"
+                                                        fill="#3A2E2E"
+                                                        p-id="4043"
+                                                    />
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="mt-1 text-xs text-gray-500">转写中，预计剩余...</div>
+                                    </div>
+                                </li>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div
             class="w-full h-1/5 bottom-0 absolute bg-gradient-to-b from-transparent via-blue-50 to-blue-100"
         ></div>
@@ -18,19 +156,17 @@
                     >{{ item.msg }}</div>
                 </div>
             </div>
-            <div class="flex">
+            <div class="flex select-none">
                 <div class="ml-20 z-10">
                     <div class="flex">
                         <router-link to="/voice-record">
                             <div
-                                class="hcard transform transition duration-300 hover:scale-110 rounded-2xl shadow-xl h-64 hover:shadow-xl flex cursor-pointer bg-gradient-to-br  bg-blue-100 hover:from-blue-300 hover:via-blue-400 hover:to-blue-500 text-black hover:text-white"
+                                class="hcard transform transition duration-300 hover:scale-110 rounded-2xl shadow-xl h-64 hover:shadow-xl flex cursor-pointer bg-gradient-to-br bg-blue-100 hover:from-blue-300 hover:via-blue-400 hover:to-blue-500 text-black hover:text-white"
                             >
                                 <div
                                     class="w-1/2 h-full meet_bg bg-cover bg-no-repeat rounded-l-2xl"
                                 ></div>
-                                <div
-                                    class="w-1/2 h-full  rounded-r-2xl p-4 bx_sd"
-                                >
+                                <div class="w-1/2 h-full rounded-r-2xl p-4 bx_sd">
                                     <div class="font-semibold text-2xl">会议、课堂实时记录</div>
                                     <div class="font-medium text-base leading-7 mt-3">实时语音转文字</div>
                                     <div class="font-medium text-base leading-7">同步翻译，智能总结要点</div>
@@ -64,9 +200,7 @@
                             @click="videoDialogVisible = true"
                         >
                             <div class="w-1/2 h-full class_bg bg-cover bg-no-repeat rounded-l-2xl"></div>
-                            <div
-                                class=" w-1/2 h-full rounded-r-2xl p-4 bx_sd"
-                            >
+                            <div class="w-1/2 h-full rounded-r-2xl p-4 bx_sd">
                                 <div class="font-semibold text-2xl">音视频上传记录总结</div>
                                 <div class="font-medium text-base leading-7 mt-3">音视频转文字</div>
                                 <div class="font-medium text-base leading-7">章节速览总结，一键导出</div>
@@ -96,14 +230,13 @@
                     <div class="flex mt-5">
                         <div
                             class="transform transition duration-300 hover:scale-110 rounded-2xl shadow-lg h-64 hover:shadow-xl hcard flex cursor-pointer bg-pink-200 bg-gradient-to-br hover:from-pink-200 hover:via-pink-300 hover:to-pink-400 text-black hover:text-white"
+                            @click="docUploadDialogVisible = true"
                         >
                             <div class="w-1/2 h-full doc_bg bg-cover bg-no-repeat rounded-l-2xl"></div>
-                            <div
-                                class="w-1/2 h-full rounded-r-2xl p-4 bx_sd"
-                            >
-                                <div class="font-semibold text-2xl">文档、图片一键归纳</div>
+                            <div class="w-1/2 h-full rounded-r-2xl p-4 bx_sd">
+                                <div class="font-semibold text-2xl">文档、图片一键提取</div>
                                 <div class="font-medium text-base leading-7 mt-3">文档、图片总结归纳</div>
-                                <div class="font-medium text-base leading-7">扫描上传，轻松阅读</div>
+                                <div class="font-medium text-base leading-7">拍照上传，轻松阅读</div>
                                 <div
                                     class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0"
                                 >
@@ -131,9 +264,7 @@
                         >
                             <div class="w-1/2 h-full live_bg bg-cover bg-no-repeat rounded-l-2xl"></div>
 
-                            <div
-                                class="w-1/2 h-full rounded-r-2xl p-4 bx_sd"
-                            >
+                            <div class="w-1/2 h-full rounded-r-2xl p-4 bx_sd">
                                 <div class="font-semibold text-2xl">实时直播,实时记录</div>
                                 <div class="font-medium text-base leading-7 mt-3">直播总结，实时笔记</div>
                                 <div class="font-medium text-base leading-7">双语翻译，实时字幕</div>
@@ -171,6 +302,7 @@
                     <div class="grid w-full place-items-center">
                         <div
                             v-for="item in rencent_items"
+                            :key="item.id"
                             class="relative h-40 w-80 mb-2 rounded-md shadow-lg py-4 px-6 border text-base font-semibold hover_card cursor-pointer"
                         >
                             <div class="flex changetotext">
@@ -227,7 +359,11 @@
                                 </div>
                             </div>
                             <div class="mt-5 overflow-hidden flex-wrap flex select-none h-6">
-                                <el-tag v-for="tag in recent_tag" class="flex mr-1">{{tag}}</el-tag>
+                                <el-tag
+                                    v-for="tag in recent_tag"
+                                    :key="tag.id"
+                                    class="flex mr-1"
+                                >{{tag}}</el-tag>
                             </div>
                             <div
                                 class="mt-4 flex justify-between text-xs font-normal text-gray-400 select-none"
@@ -321,34 +457,260 @@
         </div>
         <!-- <div class="bg_gif">
         </div>-->
-        <el-dialog  
-            :visible.sync="videoDialogVisible"
+        <el-dialog
+            :visible="videoDialogVisible"
             title="上传音视频"
             width="30%"
-            top=25vh
-            :before-close="handleClose"
-            :close-on-click-modal=false
-            >
-            <div class=" items-center">  
-            <div class="videodialogcard flex items-center bg-purple-100 bg-opacity-95 hover:bg-purple-200 cursor-pointer">
-                <svg t="1714675464716" class="icon ml-5 mr-10 " viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6860" width="60" height="60"><path d="M960.711582 372.46606l0 523.083429c0 36.684504-29.738301 66.423829-66.422805 66.423829L130.420375 961.973318c-36.684504 0-66.422805-29.738301-66.422805-66.423829L63.99757 131.682112c0-36.684504 29.738301-66.422805 66.422805-66.422805l523.083429 0 0-0.261966 0.261966 0.261966 30.127158 0 1.151219 1.152243 1.671059-1.670036L956.784132 334.808392l-1.671059 1.671059 5.598508 5.597485 0 30.127158 0.261966 0.261966L960.711582 372.46606zM695.018314 131.753743l0 116.169813c0 45.855374 37.173644 83.029018 83.029018 83.029018l116.169813 0L695.018314 131.753743zM919.197072 372.46606 736.532823 372.46606c-45.855374 0-83.029018-37.173644-83.029018-83.029018L653.503804 106.772792 155.329694 106.772792c-27.513634 0-49.817616 22.303982-49.817616 49.817616l0 714.050786c0 27.513634 22.303982 49.817616 49.817616 49.817616l714.050786 0c27.513634 0 49.817616-22.303982 49.817616-49.817616L919.198096 372.46606zM861.077374 845.73085l-49.817616 0c-4.585435 0-8.303106-3.714602-8.303106-8.30106l0-49.819662c0-4.582365 3.717671-8.30106 8.303106-8.30106l49.817616 0c4.585435 0 8.303106 3.718695 8.303106 8.30106l0 49.819662C869.38048 842.016249 865.662809 845.73085 861.077374 845.73085zM861.077374 704.58418l-49.817616 0c-4.585435 0-8.303106-3.718695-8.303106-8.305153l0-49.814546c0-4.586458 3.717671-8.305153 8.303106-8.305153l49.817616 0c4.585435 0 8.303106 3.718695 8.303106 8.305153l0 49.814546C869.38048 700.865485 865.662809 704.58418 861.077374 704.58418zM861.077374 563.434439l-49.817616 0c-4.585435 0-8.303106-3.718695-8.303106-8.305153l0-49.814546c0-4.586458 3.717671-8.305153 8.303106-8.305153l49.817616 0c4.585435 0 8.303106 3.718695 8.303106 8.305153l0 49.814546C869.38048 559.715745 865.662809 563.434439 861.077374 563.434439zM654.699026 535.981181 436.936397 670.177556c-7.795547 4.804423-17.503653 7.468089-27.588335 8.499581-2.730181 0.60989-5.634324 0.9967-8.705266 0.9967-3.207042 0-6.245238-0.406253-9.075703-1.067308-1.24741-0.140193-2.524496-0.101307-3.756557-0.296759L387.810536 348.922854c1.231037-0.195451 2.509147-0.156566 3.756557-0.296759 2.830465-0.662079 5.868661-1.067308 9.075703-1.067308 3.070942 0 5.976108 0.387833 8.705266 0.9967 10.084683 1.032516 19.792788 3.695159 27.588335 8.499581l217.761606 134.195352C674.742525 503.602749 674.742525 523.628852 654.699026 535.981181zM600.258113 502.43311l-173.951821-107.197464 0 236.761332 173.951821-107.197464C610.280374 518.622838 610.280374 508.609787 600.258113 502.43311zM213.449393 845.73085l-49.817616 0c-4.585435 0-8.303106-3.714602-8.303106-8.30106l0-49.819662c0-4.582365 3.717671-8.30106 8.303106-8.30106l49.817616 0c4.585435 0 8.303106 3.718695 8.303106 8.30106l0 49.819662C221.7525 842.016249 218.035852 845.73085 213.449393 845.73085zM213.449393 704.58418l-49.817616 0c-4.585435 0-8.303106-3.718695-8.303106-8.305153l0-49.814546c0-4.586458 3.717671-8.305153 8.303106-8.305153l49.817616 0c4.585435 0 8.303106 3.718695 8.303106 8.305153l0 49.814546C221.7525 700.865485 218.035852 704.58418 213.449393 704.58418zM213.449393 563.434439l-49.817616 0c-4.585435 0-8.303106-3.718695-8.303106-8.305153l0-49.814546c0-4.586458 3.717671-8.305153 8.303106-8.305153l49.817616 0c4.585435 0 8.303106 3.718695 8.303106 8.305153l0 49.814546C221.7525 559.715745 218.035852 563.434439 213.449393 563.434439zM213.449393 413.982616l-49.817616 0c-4.585435 0-8.303106-3.719718-8.303106-8.306176l0-49.814546c0-4.586458 3.717671-8.306176 8.303106-8.306176l49.817616 0c4.585435 0 8.303106 3.719718 8.303106 8.306176l0 49.814546C221.7525 410.262898 218.035852 413.982616 213.449393 413.982616zM213.449393 272.831852l-49.817616 0c-4.585435 0-8.303106-3.719718-8.303106-8.302083l0-49.818639c0-4.586458 3.717671-8.302083 8.303106-8.302083l49.817616 0c4.585435 0 8.303106 3.715625 8.303106 8.302083l0 49.818639C221.7525 269.112134 218.035852 272.831852 213.449393 272.831852z" p-id="6861"></path></svg>
-                <div>
-                    <p class=" text-black text-lg font-medium">上传本地音视频文件</p>
-                    <p class="text-sm text-gray-400">音视频转文字，提炼总结，一键导出</p>
+            top="25vh"
+            :close-on-click-modal="false"
+            @close="closeVideoDialog"
+            :destroy-on-close="true"
+            class="select-none"
+        >
+            <div class="items-center">
+                <div
+                    class="videodialogcard flex items-center bg-purple-100 bg-opacity-95 hover:bg-purple-200 cursor-pointer"
+                    @click="videoDialogVisible = false;videoUploadDialogVisible = true"
+                >
+                    <svg
+                        t="1714675464716"
+                        class="icon ml-5 mr-10"
+                        viewBox="0 0 1024 1024"
+                        version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        p-id="6860"
+                        width="60"
+                        height="60"
+                    >
+                        <path
+                            d="M960.711582 372.46606l0 523.083429c0 36.684504-29.738301 66.423829-66.422805 66.423829L130.420375 961.973318c-36.684504 0-66.422805-29.738301-66.422805-66.423829L63.99757 131.682112c0-36.684504 29.738301-66.422805 66.422805-66.422805l523.083429 0 0-0.261966 0.261966 0.261966 30.127158 0 1.151219 1.152243 1.671059-1.670036L956.784132 334.808392l-1.671059 1.671059 5.598508 5.597485 0 30.127158 0.261966 0.261966L960.711582 372.46606zM695.018314 131.753743l0 116.169813c0 45.855374 37.173644 83.029018 83.029018 83.029018l116.169813 0L695.018314 131.753743zM919.197072 372.46606 736.532823 372.46606c-45.855374 0-83.029018-37.173644-83.029018-83.029018L653.503804 106.772792 155.329694 106.772792c-27.513634 0-49.817616 22.303982-49.817616 49.817616l0 714.050786c0 27.513634 22.303982 49.817616 49.817616 49.817616l714.050786 0c27.513634 0 49.817616-22.303982 49.817616-49.817616L919.198096 372.46606zM861.077374 845.73085l-49.817616 0c-4.585435 0-8.303106-3.714602-8.303106-8.30106l0-49.819662c0-4.582365 3.717671-8.30106 8.303106-8.30106l49.817616 0c4.585435 0 8.303106 3.718695 8.303106 8.30106l0 49.819662C869.38048 842.016249 865.662809 845.73085 861.077374 845.73085zM861.077374 704.58418l-49.817616 0c-4.585435 0-8.303106-3.718695-8.303106-8.305153l0-49.814546c0-4.586458 3.717671-8.305153 8.303106-8.305153l49.817616 0c4.585435 0 8.303106 3.718695 8.303106 8.305153l0 49.814546C869.38048 700.865485 865.662809 704.58418 861.077374 704.58418zM861.077374 563.434439l-49.817616 0c-4.585435 0-8.303106-3.718695-8.303106-8.305153l0-49.814546c0-4.586458 3.717671-8.305153 8.303106-8.305153l49.817616 0c4.585435 0 8.303106 3.718695 8.303106 8.305153l0 49.814546C869.38048 559.715745 865.662809 563.434439 861.077374 563.434439zM654.699026 535.981181 436.936397 670.177556c-7.795547 4.804423-17.503653 7.468089-27.588335 8.499581-2.730181 0.60989-5.634324 0.9967-8.705266 0.9967-3.207042 0-6.245238-0.406253-9.075703-1.067308-1.24741-0.140193-2.524496-0.101307-3.756557-0.296759L387.810536 348.922854c1.231037-0.195451 2.509147-0.156566 3.756557-0.296759 2.830465-0.662079 5.868661-1.067308 9.075703-1.067308 3.070942 0 5.976108 0.387833 8.705266 0.9967 10.084683 1.032516 19.792788 3.695159 27.588335 8.499581l217.761606 134.195352C674.742525 503.602749 674.742525 523.628852 654.699026 535.981181zM600.258113 502.43311l-173.951821-107.197464 0 236.761332 173.951821-107.197464C610.280374 518.622838 610.280374 508.609787 600.258113 502.43311zM213.449393 845.73085l-49.817616 0c-4.585435 0-8.303106-3.714602-8.303106-8.30106l0-49.819662c0-4.582365 3.717671-8.30106 8.303106-8.30106l49.817616 0c4.585435 0 8.303106 3.718695 8.303106 8.30106l0 49.819662C221.7525 842.016249 218.035852 845.73085 213.449393 845.73085zM213.449393 704.58418l-49.817616 0c-4.585435 0-8.303106-3.718695-8.303106-8.305153l0-49.814546c0-4.586458 3.717671-8.305153 8.303106-8.305153l49.817616 0c4.585435 0 8.303106 3.718695 8.303106 8.305153l0 49.814546C221.7525 700.865485 218.035852 704.58418 213.449393 704.58418zM213.449393 563.434439l-49.817616 0c-4.585435 0-8.303106-3.718695-8.303106-8.305153l0-49.814546c0-4.586458 3.717671-8.305153 8.303106-8.305153l49.817616 0c4.585435 0 8.303106 3.718695 8.303106 8.305153l0 49.814546C221.7525 559.715745 218.035852 563.434439 213.449393 563.434439zM213.449393 413.982616l-49.817616 0c-4.585435 0-8.303106-3.719718-8.303106-8.306176l0-49.814546c0-4.586458 3.717671-8.306176 8.303106-8.306176l49.817616 0c4.585435 0 8.303106 3.719718 8.303106 8.306176l0 49.814546C221.7525 410.262898 218.035852 413.982616 213.449393 413.982616zM213.449393 272.831852l-49.817616 0c-4.585435 0-8.303106-3.719718-8.303106-8.302083l0-49.818639c0-4.586458 3.717671-8.302083 8.303106-8.302083l49.817616 0c4.585435 0 8.303106 3.715625 8.303106 8.302083l0 49.818639C221.7525 269.112134 218.035852 272.831852 213.449393 272.831852z"
+                            p-id="6861"
+                        />
+                    </svg>
+                    <div>
+                        <p class="text-black text-lg font-medium">上传本地音视频文件</p>
+                        <p class="text-sm text-gray-400">音视频转文字，提炼总结，一键导出</p>
+                    </div>
                 </div>
+
+                <div
+                    class="videodialogcard flex items-center bg-blue-100 bg-opacity-95 hover:bg-blue-200 cursor-pointer"
+                    @click="videoDialogVisible = false;videoLinkUploadDialogVisible = true"
+                >
+                    <svg
+                        t="1714675580159"
+                        class="icon ml-5 mr-10"
+                        viewBox="0 0 1024 1024"
+                        version="1.1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        p-id="8715"
+                        width="60"
+                        height="60"
+                    >
+                        <path
+                            d="M913.937279 113.328092c-32.94432-32.946366-76.898391-51.089585-123.763768-51.089585s-90.819448 18.143219-123.763768 51.089585L416.737356 362.999454c-32.946366 32.94432-51.089585 76.898391-51.089585 123.763768s18.143219 90.819448 51.087539 123.763768c25.406646 25.40767 57.58451 42.144866 93.053326 48.403406 1.76418 0.312108 3.51915 0.463558 5.249561 0.463558 14.288424 0 26.951839-10.244318 29.519314-24.802896 2.879584-16.322757-8.016581-31.889291-24.339338-34.768875-23.278169-4.106528-44.38386-15.081487-61.039191-31.736818-21.61018-21.61018-33.509185-50.489928-33.509185-81.322144s11.899004-59.711963 33.509185-81.322144l15.864316-15.864316c-0.267083 1.121544-0.478907 2.267647-0.6191 3.440355-1.955538 16.45988 9.800203 31.386848 26.260084 33.344432 25.863041 3.072989 49.213865 14.378475 67.527976 32.692586 21.608134 21.608134 33.509185 50.489928 33.509185 81.322144s-11.901051 59.71401-33.509185 81.322144L318.53987 871.368764c-21.61018 21.61018-50.489928 33.511231-81.322144 33.511231-30.832216 0-59.711963-11.901051-81.322144-33.511231-21.61018-21.61018-33.509185-50.489928-33.509185-81.322144s11.899004-59.711963 33.509185-81.322144l169.43597-169.438017c11.720949-11.718903 11.720949-30.722722 0-42.441625-11.718903-11.718903-30.722722-11.718903-42.441625 0L113.452935 666.282852c-32.946366 32.94432-51.089585 76.898391-51.089585 123.763768 0 46.865377 18.143219 90.819448 51.089585 123.763768 32.94432 32.946366 76.898391 51.091632 123.763768 51.091632s90.819448-18.145266 123.763768-51.091632l249.673409-249.671363c32.946366-32.94432 51.089585-76.898391 51.089585-123.763768-0.002047-46.865377-18.145266-90.819448-51.089585-123.763768-27.5341-27.536146-64.073294-45.240367-102.885252-49.854455-3.618411-0.428765-7.161097-0.196475-10.508331 0.601704l211.589023-211.589023c21.61018-21.61018 50.489928-33.509185 81.322144-33.509185s59.711963 11.899004 81.322144 33.509185c21.61018 21.61018 33.509185 50.489928 33.509185 81.322144s-11.899004 59.711963-33.509185 81.322144l-150.180418 150.182464c-11.720949 11.718903-11.720949 30.722722 0 42.441625 11.718903 11.718903 30.722722 11.718903 42.441625 0l150.180418-150.182464c32.946366-32.94432 51.089585-76.898391 51.089585-123.763768C965.026864 190.226482 946.882622 146.272411 913.937279 113.328092z"
+                            fill="#272636"
+                            p-id="8716"
+                        />
+                    </svg>
+                    <div>
+                        <p class="text-black text-lg font-medium select-none">输入解析音视频链接</p>
+                        <p class="text-sm text-gray-400 select-none">自动解析，自动总结</p>
+                    </div>
+                </div>
+            </div>
+        </el-dialog>
+
+        <el-dialog
+            :visible="videoUploadDialogVisible"
+            title="上传音视频"
+            width="30%"
+            top="30vh"
+            :close-on-click-modal="false"
+            @close="closeVideoUploadDialog"
+            class="select-none"
+            :destroy-on-close="true"
+        >
+            <div class="flex">
+                <el-upload
+                    drag
+                    class="upload-demo"
+                    action="#"
+                    ref="upload"
+                    multiple
+                    :limit="5"
+                    :auto-upload="false"
+                    :on-exceed="handleExceed"
+                    :file-list="fileList"
+                    :http-request="handleFileUpload"
+                    :on-change="handleChange"
+                    :on-remove="handleRemove"
+                    accept=".mp3, .mp4"
+                >
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">
+                        将文件拖到此处，或
+                        <em>点击上传</em>
+                    </div>
+                    <div class="el-upload__tip flex justify-between" slot="tip">
+                        <div>目前仅支持mp4，mp3文件，文件时长最长为1小时</div>
+                        <div>{{fileCount}}/5</div>
+                    </div>
+                </el-upload>
+                <div class="ml-5">
+                    <div class="mb-5">
+                        <div>音视频语言</div>
+                        <div>
+                            <el-radio-group v-model="lang" @change="changeLang">
+                                <el-radio-button label="0">中文</el-radio-button>
+                                <el-radio-button label="1">英语</el-radio-button>
+                            </el-radio-group>
+                        </div>
+                    </div>
+                    <div class="mb-5">
+                        <div class>翻译</div>
+                        <el-select v-model="transValue">
+                            <el-option
+                                v-for="item in uploadOptions"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value"
+                            ></el-option>
+                        </el-select>
+                        <div></div>
+                    </div>
+                    <div class="flex justify-center">
+                        <el-button class="w-1/2" type="primary">
+                            上传
+                            <i class="el-icon-upload el-icon--right"></i>
+                        </el-button>
+                    </div>
+                </div>
+            </div>
+        </el-dialog>
+
+        <el-dialog
+            :visible="videoLinkUploadDialogVisible"
+            title="上传音视频链接"
+            width="30%"
+            top="30vh"
+            :close-on-click-modal="false"
+            @close="closeVideoLinkUploadDialog"
+            class="select-none"
+            :destroy-on-close="true"
+        >
+            <div>
+                <el-input
+                    :autosize="{ minRows: 12, maxRows: 12}"
+                    resize="none"
+                    v-model="videoUrl"
+                    min="1"
+                    type="textarea"
+                    placeholder="请输入音视频链接"
+                ></el-input>
             </div>
 
-            <div class="videodialogcard flex items-center bg-blue-100 bg-opacity-95 hover:bg-blue-200 cursor-pointer">
-                <svg t="1714675580159" class="icon ml-5 mr-10 " viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8715" width="60" height="60"><path d="M913.937279 113.328092c-32.94432-32.946366-76.898391-51.089585-123.763768-51.089585s-90.819448 18.143219-123.763768 51.089585L416.737356 362.999454c-32.946366 32.94432-51.089585 76.898391-51.089585 123.763768s18.143219 90.819448 51.087539 123.763768c25.406646 25.40767 57.58451 42.144866 93.053326 48.403406 1.76418 0.312108 3.51915 0.463558 5.249561 0.463558 14.288424 0 26.951839-10.244318 29.519314-24.802896 2.879584-16.322757-8.016581-31.889291-24.339338-34.768875-23.278169-4.106528-44.38386-15.081487-61.039191-31.736818-21.61018-21.61018-33.509185-50.489928-33.509185-81.322144s11.899004-59.711963 33.509185-81.322144l15.864316-15.864316c-0.267083 1.121544-0.478907 2.267647-0.6191 3.440355-1.955538 16.45988 9.800203 31.386848 26.260084 33.344432 25.863041 3.072989 49.213865 14.378475 67.527976 32.692586 21.608134 21.608134 33.509185 50.489928 33.509185 81.322144s-11.901051 59.71401-33.509185 81.322144L318.53987 871.368764c-21.61018 21.61018-50.489928 33.511231-81.322144 33.511231-30.832216 0-59.711963-11.901051-81.322144-33.511231-21.61018-21.61018-33.509185-50.489928-33.509185-81.322144s11.899004-59.711963 33.509185-81.322144l169.43597-169.438017c11.720949-11.718903 11.720949-30.722722 0-42.441625-11.718903-11.718903-30.722722-11.718903-42.441625 0L113.452935 666.282852c-32.946366 32.94432-51.089585 76.898391-51.089585 123.763768 0 46.865377 18.143219 90.819448 51.089585 123.763768 32.94432 32.946366 76.898391 51.091632 123.763768 51.091632s90.819448-18.145266 123.763768-51.091632l249.673409-249.671363c32.946366-32.94432 51.089585-76.898391 51.089585-123.763768-0.002047-46.865377-18.145266-90.819448-51.089585-123.763768-27.5341-27.536146-64.073294-45.240367-102.885252-49.854455-3.618411-0.428765-7.161097-0.196475-10.508331 0.601704l211.589023-211.589023c21.61018-21.61018 50.489928-33.509185 81.322144-33.509185s59.711963 11.899004 81.322144 33.509185c21.61018 21.61018 33.509185 50.489928 33.509185 81.322144s-11.899004 59.711963-33.509185 81.322144l-150.180418 150.182464c-11.720949 11.718903-11.720949 30.722722 0 42.441625 11.718903 11.718903 30.722722 11.718903 42.441625 0l150.180418-150.182464c32.946366-32.94432 51.089585-76.898391 51.089585-123.763768C965.026864 190.226482 946.882622 146.272411 913.937279 113.328092z" fill="#272636" p-id="8716"></path></svg>
-                <div>
-                    <p class=" text-black text-lg font-medium select-none">输入解析音视频链接</p>
-                    <p class="text-sm text-gray-400 select-none">自动解析，自动总结</p>
-            
+            <div class="flex justify-center mt-5">
+                <el-button class="w-1/4" type="primary">
+                    上传
+                    <i class="el-icon-upload el-icon--right"></i>
+                </el-button>
+            </div>
+        </el-dialog>
+
+        <el-dialog
+            :visible="docUploadDialogVisible"
+            title="上传文档、图片"
+            width="25%"
+            top="30vh"
+            :close-on-click-modal="false"
+            @close="closeDocUploadDialog"
+            class="select-none"
+            :destroy-on-close="true"
+        >
+            <div class="flex justify-center -mt-10">
+                <el-menu
+                    :default-active="docUploadDialogAcitveIndex"
+                    class="el-menu-demo"
+                    background-color="#fff"
+                    mode="horizontal"
+                    @select="handleDocTypeSelect"
+                    style="border-bottom: 0px !important;"
+                >
+                    <el-menu-item index="0">文档阅读</el-menu-item>
+                    <el-menu-item index="1">网页阅读</el-menu-item>
+                </el-menu>
+            </div>
+            <div class="w-full flex justify-center mt-2" v-if="docUploadDialogAcitveIndex==='0'">
+                <el-upload
+                    drag
+                    class="upload-demo"
+                    action="#"
+                    ref="upload"
+                    multiple
+                    :limit="1"
+                    :file-list="fileList"
+                    :http-request="handleFileUpload"
+                    accept=".pdf, .doc, .docx, .img, .png, jepg"
+                >
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">
+                        将文件拖到此处，或
+                        <em>点击上传</em>
+                    </div>
+                    <div class="el-upload__tip" slot="tip">
+                        <div class="flex justify-between mb-2">
+                            <div class="w-5/6">
+                                <el-input
+                                    v-model="pdfUrl"
+                                    min="1"
+                                    placeholder="输入包含文档的URL，后缀需为XXX.pdf"
+                                ></el-input>
+                            </div>
+                            <div>
+                                <el-button>添加</el-button>
+                            </div>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <div class="text-gray-400">文件类型</div>
+                            <div class="w-5/6">
+                                <el-select v-model="docType" class="ml-3 w-full">
+                                    <el-option
+                                        v-for="item in docTypeOptions"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                    ></el-option>
+                                </el-select>
+                            </div>
+                        </div>
+                        <div class="text-gray-400">文件格式：PDF/ Word/ 图片/ HTML</div>
+                        <div class="text-gray-400">文档大小：文件最大支持100M，图片最大支持20M</div>
+                        <div class="text-gray-400">文档页数：PDF/Word最多支持100页</div>
+                    </div>
+                </el-upload>
+            </div>
+
+            <div v-else class="select-none">
+                <div class="mb-3">
+                    <el-input
+                        :autosize="{ minRows: 12, maxRows: 12}"
+                        resize="none"
+                        v-model="htmlUrl"
+                        min="1"
+                        type="textarea"
+                        placeholder="请输入或粘贴网址"
+                    ></el-input>
+                </div>
+
+                <div class="text-gray-400 mb-3 text-xs">单次上传一个网址，请确保添加网址符合网络规范</div>
+                <div class="flex justify-center">
+                    <el-button class="w-1/4" type="primary">
+                        上传
+                        <i class="el-icon-upload el-icon--right"></i>
+                    </el-button>
                 </div>
             </div>
-        </div>
-            <span slot="footer" class="dialog-footer">
-            </span>
         </el-dialog>
     </div>
 </template>
@@ -371,6 +733,44 @@ export default {
             period: '02:14',
             record_date: '04-25 16:11',
             videoDialogVisible: false,
+            videoUploadDialogVisible: false,
+            videoLinkUploadDialogVisible: false,
+            docUploadDialogVisible: false,
+            fileList: [],
+            fileCount: 0,
+            lang: 0,
+            transValue: 0,
+            videoUrl: '',
+            htmlUrl: '',
+            docType: 0,
+            docUploadDialogAcitveIndex: '0',
+            pdfUrl: '',
+            openTrans: false,
+            isUpload: false,
+            uploadOptions: [
+                {
+                    value: 0,
+                    label: '不翻译'
+                },
+                {
+                    value: 1,
+                    label: '英语'
+                }
+            ],
+            docTypeOptions: [
+                {
+                    value: 0,
+                    label: '文档'
+                },
+                {
+                    value: 1,
+                    label: '论文'
+                },
+                {
+                    value: 2,
+                    label: '图书'
+                }
+            ]
         };
     },
     methods: {
@@ -430,6 +830,81 @@ export default {
                         message: '取消输入'
                     });
                 });
+        },
+        closeVideoDialog() {
+            this.videoDialogVisible = false;
+        },
+        closeVideoUploadDialog() {
+            this.videoUploadDialogVisible = false;
+            this.uploadOptions[1].label = '英语';
+            this.lang = 0;
+            this.transValue = 0;
+            this.fileCount = 0;
+        },
+        closeVideoLinkUploadDialog() {
+            this.videoLinkUploadDialogVisible = false;
+            this.link = '';
+        },
+        closeDocUploadDialog() {
+            this.docUploadDialogVisible = false;
+        },
+        // 处理移除操作
+        handleChange(file, fileList) {
+            this.fileCount = fileList.length;
+        },
+        handleRemove(file, fileList) {
+            this.fileCount = fileList.length;
+        },
+        // 处理超出图片个数操作
+        handleExceed(files, fileList) {
+            this.$message.warning(
+                `当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`
+            );
+        },
+        // 处理文件上传操作
+        handleFileUpload(file) {
+            this.loading = true;
+            // 调用后端服务器的接口
+            uploadFile(file.file)
+                .then(resp => {
+                    this.form.installImgUrl = resp.url;
+                })
+                .catch(e => {
+                    this.$message.error(e.message);
+                    this.$refs.upload.clearFiles();
+                });
+        },
+        submitUpload() {
+            this.$refs.upload.submit();
+        },
+        changeLang() {
+            if (this.lang == '0') {
+                this.uploadOptions[1].label = '英语';
+            } else {
+                this.uploadOptions[1].label = '中文';
+            }
+        },
+        isValidUrl() {
+            const regex = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+            return regex.test(this.link);
+        },
+        handleDocTypeSelect(key, keyPath) {
+            this.docUploadDialogAcitveIndex = key;
+            this.pdfUrl = '';
+            this.htmlUrl = '';
+            console.log(this.docUploadDialogAcitveIndex);
+        },
+        clickTrans() {
+            this.openTrans = !this.openTrans;
+        },
+        handleCheckAllChange(val) {
+            this.checkedCities = val ? cityOptions : [];
+            this.isIndeterminate = false;
+        },
+        handleCheckedCitiesChange(value) {
+            let checkedCount = value.length;
+            this.checkAll = checkedCount === this.cities.length;
+            this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
         }
     }
 };
@@ -572,7 +1047,7 @@ border-radius: 10px;
     display: none;
 }
 
-.videodialogcard{
+.videodialogcard {
     height: 110px;
     width: 85%;
     margin-top: 20px;
@@ -580,5 +1055,45 @@ border-radius: 10px;
     margin-right: auto;
     border-radius: 14px;
     padding: 8px;
+}
+
+::v-deep .el-radio-button__inner {
+    width: 100px;
+    height: 36px;
+    border: 1 !important;
+    border-radius: 2px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #696969;
+    line-height: 14px;
+    outline: none;
+    box-shadow: none;
+}
+/*激活样式*/
+::v-deep .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+    background: #74baff;
+    border: 0 !important;
+    color: #ffffff;
+    line-height: 14px;
+    outline: none;
+    box-shadow: none;
+}
+
+.el-menu--horizontal >>> .el-menu-item:not(.is-disabled):hover {
+    background: transparent !important;
+}
+
+.hoverTrans:hover {
+    margin-right: 0;
+    transition: all 0.2s ease-in 0s;
+}
+
+.closeTrans {
+    margin-right: -128px;
+    transition: all 0.2s ease-in 0s;
+}
+
+.transListContainer {
+    transition: opacity 0.3s;
 }
 </style>

@@ -13,7 +13,7 @@
 
     <div class="py-2 px-3">
     <template>
-     <el-text class="mb-2 select-none px-4 text-xl font-semibold tracking-tight text-primary">探索</el-text>
+     <div class="mb-2 select-none px-4 text-xl font-semibold tracking-tight text-primary">探索</div>
     </template>
         <!-- active-text-color="#20a0ff" -->
         <div class="space-y-2">
@@ -57,7 +57,7 @@
 
  <div class="py-2 px-3">
     <template>
-     <el-text class="mb-2 select-none px-4 text-xl font-semibold tracking-tight text-primary">我的</el-text>
+     <div class="mb-2 select-none px-4 text-xl font-semibold tracking-tight text-primary">我的</div>
     </template>
         <!-- active-text-color="#20a0ff" -->
         <div class="space-y-2">
