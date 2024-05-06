@@ -261,6 +261,7 @@
                         </div>
                         <div
                             class="ml-10 transform transition duration-300 hover:scale-110 rounded-2xl shadow-lg h-64 hover:shadow-xl hcard flex cursor-pointer bg-red-100 bg-gradient-to-br hover:from-red-200 hover:via-red-300 hover:to-red-400 text-black hover:text-white"
+                            @click="liveDialogVisible = true"
                         >
                             <div class="w-1/2 h-full live_bg bg-cover bg-no-repeat rounded-l-2xl"></div>
 
@@ -459,6 +460,7 @@
         </div>-->
         <el-dialog
             :visible="videoDialogVisible"
+            v-if="videoDialogVisible"
             title="上传音视频"
             width="30%"
             top="25vh"
@@ -523,6 +525,7 @@
 
         <el-dialog
             :visible="videoUploadDialogVisible"
+            v-if="videoUploadDialogVisible"
             title="上传音视频"
             width="30%"
             top="30vh"
@@ -532,31 +535,33 @@
             :destroy-on-close="true"
         >
             <div class="flex">
-                <el-upload
-                    drag
-                    class="upload-demo"
-                    action="#"
-                    ref="upload"
-                    multiple
-                    :limit="5"
-                    :auto-upload="false"
-                    :on-exceed="handleExceed"
-                    :file-list="fileList"
-                    :http-request="handleFileUpload"
-                    :on-change="handleChange"
-                    :on-remove="handleRemove"
-                    accept=".mp3, .mp4"
-                >
-                    <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">
-                        将文件拖到此处，或
-                        <em>点击上传</em>
-                    </div>
-                    <div class="el-upload__tip flex justify-between" slot="tip">
-                        <div>目前仅支持mp4，mp3文件，文件时长最长为1小时</div>
-                        <div>{{fileCount}}/5</div>
-                    </div>
-                </el-upload>
+                <div class="overflow-hidden overflow-ellipsis">
+                    <el-upload
+                        drag
+                        class="upload-demo"
+                        action="#"
+                        ref="upload"
+                        multiple
+                        :limit="5"
+                        :auto-upload="false"
+                        :on-exceed="handleExceed"
+                        :file-list="fileList"
+                        :http-request="handleFileUpload"
+                        :on-change="handleChange"
+                        :on-remove="handleRemove"
+                        accept=".mp3, .mp4"
+                    >
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">
+                            将文件拖到此处，或
+                            <em>点击上传</em>
+                        </div>
+                        <div class="el-upload__tip flex justify-between" slot="tip">
+                            <div>目前仅支持mp4，mp3文件，文件时长最长为1小时</div>
+                            <div>{{fileCount}}/5</div>
+                        </div>
+                    </el-upload>
+                </div>
                 <div class="ml-5">
                     <div class="mb-5">
                         <div>音视频语言</div>
@@ -591,6 +596,7 @@
 
         <el-dialog
             :visible="videoLinkUploadDialogVisible"
+            v-if="videoLinkUploadDialogVisible"
             title="上传音视频链接"
             width="30%"
             top="30vh"
@@ -620,6 +626,7 @@
 
         <el-dialog
             :visible="docUploadDialogVisible"
+            v-if="docUploadDialogVisible"
             title="上传文档、图片"
             width="25%"
             top="30vh"
@@ -712,6 +719,216 @@
                 </div>
             </div>
         </el-dialog>
+
+        <el-dialog
+            :visible="liveDialogVisible"
+            v-if="liveDialogVisible"
+            title="实时直播"
+            width="25%"
+            top="30vh"
+            :close-on-click-modal="false"
+            @close="closeLiveDialog"
+            class="select-none"
+            :destroy-on-close="true"
+        >
+            <div class="w-full flex mt-2 justify-between">
+                <div
+                    class="w-2/5 bg-blue-300 h-40 ml-8 rounded-xl flex justify-center items-center hover:bg-blue-500 cursor-pointer"
+                    @click="liveDialogVisible = false; createLiveDialogVisible = true; roomNumber = generateRandomString()"
+                >
+                    <div>
+                        <div class="text-xl text-white">开启直播</div>
+                        <div class="flex justify-center">
+                            <svg
+                                t="1714991848004"
+                                class="icon"
+                                viewBox="0 0 1024 1024"
+                                version="1.1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                p-id="5416"
+                                width="40"
+                                height="40"
+                            >
+                                <path
+                                    d="M897.536 264.704H655.36l142.848-145.408c10.752-10.752 10.24-28.16-0.512-38.912-10.752-10.752-28.16-10.24-38.912 0.512L578.56 264.704H448.512L267.776 80.896c-10.752-10.752-28.16-10.752-38.912-0.512-10.752 10.752-10.752 28.16-0.512 38.912l142.848 145.408H129.024c-55.296 0-100.864 45.056-100.864 100.864v481.792c0 55.296 45.056 100.864 100.864 100.864h768.512c55.296 0 100.864-45.056 100.864-100.864V365.568c0-55.808-45.056-100.864-100.864-100.864z m46.08 582.656c0 25.088-20.48 45.568-45.568 45.568H129.024c-25.088 0-45.568-20.48-45.568-45.568V365.568c0-25.088 20.48-45.568 45.568-45.568h768.512c25.088 0 45.568 20.48 45.568 45.568v481.792z"
+                                    p-id="5417"
+                                    fill="#ffffff"
+                                />
+                                <path
+                                    d="M653.312 582.656L415.744 445.44c-8.704-5.12-18.944-5.12-27.648 0-8.704 5.12-13.824 13.824-13.824 23.552v274.432c0 9.728 5.12 18.944 13.824 23.552 4.096 2.56 9.216 3.584 13.824 3.584 4.608 0 9.728-1.024 13.824-3.584l237.568-137.216c8.704-5.12 13.824-13.824 13.824-23.552s-5.12-18.944-13.824-23.552zM429.568 696.32v-179.2l155.136 89.6L429.568 696.32z"
+                                    p-id="5418"
+                                    fill="#ffffff"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="w-2/5 bg-purple-300 hover:bg-purple-500 h-40 mr-8 rounded-xl flex justify-center items-center cursor-pointer"
+                    @click="liveDialogVisible = false; inLiveDialogVisible = true"
+                >
+                    <div>
+                        <div class="text-xl text-white">加入房间</div>
+                        <div class="flex justify-center">
+                            <svg
+                                t="1714994529313"
+                                class="icon"
+                                viewBox="0 0 1024 1024"
+                                version="1.1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                p-id="14834"
+                                width="40"
+                                height="40"
+                            >
+                                <path
+                                    d="M952.54478 242.151024h-339.418536L742.150244 113.276878c16.67122-14.435902 16.67122-40.56039 0-57.443902-14.435902-16.683707-40.597854-16.683707-57.418927 0L506.692683 233.784195 393.141073 120.257561c-14.435902-16.67122-40.785171-16.67122-57.45639 0-16.67122 14.435902-16.67122 40.56039 0 57.443902l64.349658 64.462049H70.281366c-30.994732 0-57.344 26.199415-57.344 57.319025v592.60878c0 31.00722 26.349268 57.319024 57.344 57.319024h882.238439c31.094634 0 57.368976-26.311805 57.368975-92.859317V263.917268c0.074927 4.333268-26.099512-21.766244-57.344-21.766244z m-16.671219 599.701854c0 19.118829-16.78361 38.212683-38.325073 38.212683H125.390049a37.750634 37.750634 0 0 1-38.325073-38.212683V349.658537a37.912976 37.912976 0 0 1 38.337561-38.325074H478.033171c4.945171 1.111415 10.065171 1.111415 14.997853 0h25.674927a34.965854 34.965854 0 0 0 15.110244 0H897.498537a37.912976 37.912976 0 0 1 38.337561 38.337561v492.181854h0.024975z"
+                                    fill="#ffffff"
+                                    p-id="14835"
+                                />
+                                <path
+                                    d="M407.102439 734.282927h-55.096195c-2.884683 0-5.794341-2.747317-5.794342-5.769366V479.219512c0-2.872195 2.772293-5.906732 5.794342-5.906732h55.196097c2.897171 0 5.806829 2.884683 5.80683 5.906732v249.431415a6.218927 6.218927 0 0 1-5.906732 5.619512z m-206.086244-75.301464V479.207024c0-2.872195-2.772293-5.906732-5.769366-5.906731h-55.196097c-2.78478 0-5.806829 2.884683-5.80683 5.906731V731.53561c0 2.747317 2.872195 5.719415 5.794342 5.719414h156.647024c2.872195 0 5.894244-2.84722 5.894244-5.719414v-58.168195c0-2.772293-2.984585-5.756878-5.894244-5.756878h-84.117853c-8.566634-2.84722-11.55122-5.619512-11.55122-8.641561zM883.012683 525.53678v-49.351804a6.119024 6.119024 0 0 0-5.831805-5.756878H737.891902c-2.78478 0-5.769366 2.772293-5.769365 5.756878v252.316097c0 2.909659 2.84722 5.756878 5.769365 5.756878h139.288976c2.909659 0 5.831805-2.747317 5.831805-5.756878v-49.314341c0-2.909659-2.772293-5.906732-5.831805-5.906732h-69.507122c-2.909659 0-5.906732-2.772293-5.906732-5.74439v-29.021659c0-2.872195 2.922146-5.756878 5.906732-5.756878h69.507122c2.909659 0 5.831805-2.872195 5.831805-5.906732V586.302439a6.119024 6.119024 0 0 0-5.831805-5.756878h-69.507122c-2.909659 0-5.906732-2.872195-5.906732-5.906732V545.717073c0-2.772293 2.922146-5.756878 5.906732-5.756878h69.507122c2.947122-5.731902 5.831805-8.491707 5.831805-14.398439z m-269.911415-46.329756v29.009171l-34.840975 139.189073c-2.772293 5.894244-11.413854 5.894244-11.413854 0l-34.878439-139.189073v-29.009171c0-2.872195-2.922146-5.906732-5.906732-5.906731h-54.996292c-2.872195 0-5.906732 2.884683-5.906732 5.906731v34.766049l60.865561 223.281951h101.650732-14.535805 14.535805l60.903024-223.281951v-34.766049c0-2.872195-2.872195-5.906732-5.906732-5.906731h-54.996292c-11.588683-2.772293-14.573268 0.037463-14.573269 5.906731z"
+                                    fill="#ffffff"
+                                    p-id="14836"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </el-dialog>
+
+        <el-dialog
+            :visible="createLiveDialogVisible"
+            v-if="createLiveDialogVisible"
+            title="创建房间"
+            width="20%"
+            top="30vh"
+            :close-on-click-modal="false"
+            @close="closeCreateLiveDialog"
+            class="select-none"
+            :destroy-on-close="true"
+        >
+            <div class="px-2">
+                <div class="flex items-center w-full mb-5">
+                    <div class="w-1/6">房间名:</div>
+                    <div class="w-5/6">
+                        <el-input
+                            class="w-full"
+                            type="text"
+                            placeholder="请输入内容"
+                            v-model="roomName"
+                            maxlength="15"
+                            show-word-limit
+                        ></el-input>
+                    </div>
+                </div>
+
+                <div class="flex items-center w-full mb-5">
+                    <div class="w-1/6">是否公开</div>
+                    <div class="w-5/6">
+                        <el-radio v-model="openLiveRadio" label="0">公开</el-radio>
+                        <el-radio v-model="openLiveRadio" label="1">私密</el-radio>
+                    </div>
+                </div>
+
+                <div class="flex items-center w-full mb-5" v-if="openLiveRadio==='1'">
+                    <div class="w-1/6">密码:</div>
+                    <div class="w-5/6">
+                        <el-input
+                            class="w-full"
+                            type="text"
+                            placeholder="请输入房间密码"
+                            v-model="roomPassword"
+                            maxlength="8"
+                            show-word-limit
+                        ></el-input>
+                    </div>
+                </div>
+
+                <div class="flex items-center w-full mb-5">
+                    <div class="mr-2">实时记录</div>
+                    <div>
+                        <el-radio v-model="liveRecordRadio" label="0">开启</el-radio>
+                        <el-radio v-model="liveRecordRadio" label="1">关闭</el-radio>
+                    </div>
+                </div>
+
+                <div class="flex items-center w-full mb-5">
+                    <div class="flex">
+                        <div class="mr-2">房间号:</div>
+                        <div id="roomNumber" class="mr-1">{{roomNumber}}</div>
+                        <div class="cursor-pointer" @click="copyRoomNumber">
+                            <svg
+                                t="1715003398431"
+                                class="icon"
+                                viewBox="0 0 1024 1024"
+                                version="1.1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                p-id="3497"
+                                width="15"
+                                height="15"
+                            >
+                                <path
+                                    d="M394.666667 106.666667h448a74.666667 74.666667 0 0 1 74.666666 74.666666v448a74.666667 74.666667 0 0 1-74.666666 74.666667H394.666667a74.666667 74.666667 0 0 1-74.666667-74.666667V181.333333a74.666667 74.666667 0 0 1 74.666667-74.666666z m0 64a10.666667 10.666667 0 0 0-10.666667 10.666666v448a10.666667 10.666667 0 0 0 10.666667 10.666667h448a10.666667 10.666667 0 0 0 10.666666-10.666667V181.333333a10.666667 10.666667 0 0 0-10.666666-10.666666H394.666667z m245.333333 597.333333a32 32 0 0 1 64 0v74.666667a74.666667 74.666667 0 0 1-74.666667 74.666666H181.333333a74.666667 74.666667 0 0 1-74.666666-74.666666V394.666667a74.666667 74.666667 0 0 1 74.666666-74.666667h74.666667a32 32 0 0 1 0 64h-74.666667a10.666667 10.666667 0 0 0-10.666666 10.666667v448a10.666667 10.666667 0 0 0 10.666666 10.666666h448a10.666667 10.666667 0 0 0 10.666667-10.666666v-74.666667z"
+                                    fill="#707070"
+                                    p-id="3498"
+                                />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full flex justify-center">
+                    <el-button type="primary">创建</el-button>
+                </div>
+            </div>
+        </el-dialog>
+
+        <el-dialog
+            :visible="inLiveDialogVisible"
+            v-if="inLiveDialogVisible"
+            title="加入房间"
+            width="20%"
+            top="30vh"
+            :close-on-click-modal="false"
+            @close="closeInLiveDialog"
+            class="select-none"
+            :destroy-on-close="true"
+        >   
+        <div class="px-2">
+            <div class="flex w-full items-center mb-2">
+                <div class="w-1/6">房间号:</div>
+                <div class="w-5/6">
+                    <el-input
+                        class="w-full"
+                        type="text"
+                        placeholder="请输入房间号"
+                        v-model="roomNumber"
+                        maxlength="6"
+                        show-word-limit
+                    ></el-input>
+                </div>
+            </div>
+
+            <div class="flex w-full items-center mb-2">
+                <div class="w-1/6">房间密码:</div>
+                <div class="w-5/6">
+                    <el-input
+                        class="w-full"
+                        type="text"
+                        placeholder="请输入房间密码"
+                        v-model="roomPassword"
+                        maxlength="8"
+                        show-word-limit
+                    ></el-input>
+                </div>
+            </div>
+
+            <div class="w-full flex justify-center">
+                    <el-button type="primary">加入</el-button>
+            </div>
+            </div>
+        </el-dialog>
     </div>
 </template>
  
@@ -736,6 +953,9 @@ export default {
             videoUploadDialogVisible: false,
             videoLinkUploadDialogVisible: false,
             docUploadDialogVisible: false,
+            liveDialogVisible: false,
+            createLiveDialogVisible: false,
+            inLiveDialogVisible: false,
             fileList: [],
             fileCount: 0,
             lang: 0,
@@ -745,8 +965,13 @@ export default {
             docType: 0,
             docUploadDialogAcitveIndex: '0',
             pdfUrl: '',
+            roomName: '',
             openTrans: false,
             isUpload: false,
+            openLiveRadio: '0',
+            liveRecordRadio: '0',
+            roomNumber: '',
+            roomPassword: '',
             uploadOptions: [
                 {
                     value: 0,
@@ -836,10 +1061,10 @@ export default {
         },
         closeVideoUploadDialog() {
             this.videoUploadDialogVisible = false;
-            this.uploadOptions[1].label = '英语';
-            this.lang = 0;
-            this.transValue = 0;
-            this.fileCount = 0;
+            // this.uploadOptions[1].label = '英语';
+            // this.lang = 0;
+            // this.transValue = 0;
+            // this.fileCount = 0;
         },
         closeVideoLinkUploadDialog() {
             this.videoLinkUploadDialogVisible = false;
@@ -847,6 +1072,20 @@ export default {
         },
         closeDocUploadDialog() {
             this.docUploadDialogVisible = false;
+        },
+        closeLiveDialog() {
+            this.liveDialogVisible = false;
+        },
+        closeInLiveDialog() {
+            this.inLiveDialogVisible = false;
+            this.roomNumber = '';
+            this.roomPassword = '';
+        },
+        closeCreateLiveDialog() {
+            this.createLiveDialogVisible = false;
+            this.roomName = '';
+            this.roomNumber = '';
+            this.roomPassword = '';
         },
         // 处理移除操作
         handleChange(file, fileList) {
@@ -905,6 +1144,15 @@ export default {
             let checkedCount = value.length;
             this.checkAll = checkedCount === this.cities.length;
             this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
+        },
+        generateRandomString() {
+            return Math.floor(Math.random() * 100000).toString();
+        },
+        copyRoomNumber() {
+            const value = document.getElementById('roomNumber').innerText;
+            this.$copyText(value).then(e => {
+                console.log('复制成功：', e);
+            });
         }
     }
 };
@@ -1058,7 +1306,7 @@ border-radius: 10px;
 }
 
 ::v-deep .el-radio-button__inner {
-    width: 100px;
+    width: 83px;
     height: 36px;
     border: 1 !important;
     border-radius: 2px;
