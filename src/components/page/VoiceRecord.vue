@@ -493,9 +493,9 @@ export default {
         //启动录音
         startRecording() {
             // 获取录音权限
-            Recorder.getPermission()
-                .then(() => {
-                    // 麦克风可用，切换到录音时的内容
+            Recorder.getPermission().then(
+                () => {
+                    // 麦克风可用，执行成功时的操作
                     this.showRecording = true;
                     if (this.recording) {
                         this.addRecordingItem();
@@ -505,12 +505,13 @@ export default {
                     console.log('开始录音');
                     this.initWebSocket();
                     this.recorder.start(); // 开始录音
-                })
-                .catch(error => {
-                    // 麦克风不可用，可以在此处处理错误
+                },
+                (error) => {
+                    // 处理获取权限失败的情况
                     console.error('无法访问麦克风:', error);
                     alert('无法访问麦克风，请检查权限设置或硬件连接');
-                });
+                }
+            );
             this.inRecording();
         },
         inRecording() {
