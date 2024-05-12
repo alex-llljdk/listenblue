@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import VoiceRecord from '../components/page/VoiceRecord'
 
 Vue.use(Router);
 
@@ -111,8 +110,14 @@ export default new Router({
             meta: { title: '登录' }
         },
         {
+            path: '/live',
+            component: () => import(/* webpackChunkName: "live" */ '../components/page/Live.vue'),
+            meta: { title: '直播' }
+        },
+        {
             path: '/voice-record',
-            component: VoiceRecord
+            component: () => import(/* webpackChunkName: "live" */ '../components/page/VoiceRecord.vue'),
+            meta: { title: '直播' }
         },
         {
             path: '*',

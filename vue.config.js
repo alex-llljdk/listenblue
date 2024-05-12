@@ -4,6 +4,17 @@ module.exports = {
     baseUrl: './',
     assetsDir: 'static',
     productionSourceMap: false,
+    configureWebpack: {
+        module: {
+          rules: [
+            {
+              test: /\.mjs$/,
+              include: /node_modules/,
+              type: "javascript/auto"
+            }
+          ] 
+        }
+    }
 }
 
     // devServer: {

@@ -5,25 +5,30 @@
   "scripts": {
     "dev": "npm run serve",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "SET NODE_OPTIONS=--openssl-legacy-provider & vue-cli-service build"
   },
   "dependencies": {
     "@tailwindcss/postcss7-compat": "^2.2.17",
     "autoprefixer": "^9.8.8",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "babel-polyfill": "^6.26.0",
     "element-ui": "^2.11.0",
+    "flv.js": "^1.6.2",
     "mavon-editor": "^2.6.17",
+    "pinia": "^2.1.7",
     "postcss": "^7.0.39",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
     "vue": "^2.6.10",
     "vue-clipboard2": "^0.3.3",
     "vue-cropperjs": "^3.0.0",
+    "vue-dplayer": "^0.0.10",
     "vue-i18n": "^8.10.0",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.3",
     "vue-schart": "^2.0.0",
-    "vuedraggable": "^2.17.0"
+    "vue-video-player": "^5.0.1",
+    "vuedraggable": "^2.17.0",
+    "websocket": "^1.0.34"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.9.0",

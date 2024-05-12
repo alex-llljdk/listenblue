@@ -884,51 +884,53 @@
             </div>
         </el-dialog>
 
-        <el-dialog
-            :visible="inLiveDialogVisible"
-            v-if="inLiveDialogVisible"
-            title="加入房间"
-            width="20%"
-            top="30vh"
-            :close-on-click-modal="false"
-            @close="closeInLiveDialog"
-            class="select-none"
-            :destroy-on-close="true"
-        >   
-        <div class="px-2">
-            <div class="flex w-full items-center mb-2">
-                <div class="w-1/6">房间号:</div>
-                <div class="w-5/6">
-                    <el-input
-                        class="w-full"
-                        type="text"
-                        placeholder="请输入房间号"
-                        v-model="roomNumber"
-                        maxlength="6"
-                        show-word-limit
-                    ></el-input>
-                </div>
-            </div>
+        <router-link to="/live">
+            <el-dialog
+                :visible="inLiveDialogVisible"
+                v-if="inLiveDialogVisible"
+                title="加入房间"
+                width="20%"
+                top="30vh"
+                :close-on-click-modal="false"
+                @close="closeInLiveDialog"
+                class="select-none"
+                :destroy-on-close="true"
+            >
+                <div class="px-2">
+                    <div class="flex w-full items-center mb-2">
+                        <div class="w-1/6">房间号:</div>
+                        <div class="w-5/6">
+                            <el-input
+                                class="w-full"
+                                type="text"
+                                placeholder="请输入房间号"
+                                v-model="roomNumber"
+                                maxlength="6"
+                                show-word-limit
+                            ></el-input>
+                        </div>
+                    </div>
 
-            <div class="flex w-full items-center mb-2">
-                <div class="w-1/6">房间密码:</div>
-                <div class="w-5/6">
-                    <el-input
-                        class="w-full"
-                        type="text"
-                        placeholder="请输入房间密码"
-                        v-model="roomPassword"
-                        maxlength="8"
-                        show-word-limit
-                    ></el-input>
-                </div>
-            </div>
+                    <div class="flex w-full items-center mb-2">
+                        <div class="w-1/6">房间密码:</div>
+                        <div class="w-5/6">
+                            <el-input
+                                class="w-full"
+                                type="text"
+                                placeholder="请输入房间密码"
+                                v-model="roomPassword"
+                                maxlength="8"
+                                show-word-limit
+                            ></el-input>
+                        </div>
+                    </div>
 
-            <div class="w-full flex justify-center">
-                    <el-button type="primary">加入</el-button>
-            </div>
-            </div>
-        </el-dialog>
+                    <div class="w-full flex justify-center">
+                        <el-button type="primary">加入</el-button>
+                    </div>
+                </div>
+            </el-dialog>
+        </router-link>
     </div>
 </template>
  
@@ -937,7 +939,7 @@ var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 export default {
     mounted() {
         setInterval(this.startPlay, 7000);
-        setInterval(this.updateTime, 1000);
+        setInterval(this.updateTime, 1000);        
     },
     data() {
         return {
