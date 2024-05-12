@@ -5,24 +5,51 @@
   "scripts": {
     "dev": "npm run serve",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "SET NODE_OPTIONS=--openssl-legacy-provider & vue-cli-service build"
   },
   "dependencies": {
     "@tailwindcss/postcss7-compat": "^2.2.17",
     "autoprefixer": "^9.8.8",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "babel-polyfill": "^6.26.0",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
     "element-ui": "^2.11.0",
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+    "flv.js": "^1.6.2",
+=======
+    "express": "^4.19.2",
+    "js-audio-recorder": "^1.0.7",
+>>>>>>> Stashed changes
+=======
+    "express": "^4.19.2",
+    "js-audio-recorder": "^1.0.7",
+>>>>>>> Stashed changes
     "mavon-editor": "^2.6.17",
+    "pinia": "^2.1.7",
     "postcss": "^7.0.39",
+    "socket.io-client": "^4.7.5",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
     "vue": "^2.6.10",
+    "vue-clipboard2": "^0.3.3",
     "vue-cropperjs": "^3.0.0",
+    "vue-dplayer": "^0.0.10",
     "vue-i18n": "^8.10.0",
     "vue-quill-editor": "^3.0.6",
     "vue-router": "^3.0.3",
     "vue-schart": "^2.0.0",
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+    "vue-video-player": "^5.0.1",
+    "vuedraggable": "^2.17.0",
+    "websocket": "^1.0.34"
+=======
+=======
+>>>>>>> Stashed changes
+    "vue-socket.io": "^3.0.10",
     "vuedraggable": "^2.17.0"
+>>>>>>> Stashed changes
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.9.0",

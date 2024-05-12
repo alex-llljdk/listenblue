@@ -14,6 +14,14 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 
+import VueClipBoard from 'vue-clipboard2'
+import VueDPlayer from "vue-dplayer";
+import "vue-dplayer/dist/vue-dplayer.css";
+import { createPinia } from 'pinia';
+const pinia = createPinia();
+Vue.use(pinia)
+Vue.use(VueDPlayer);
+Vue.use(VueClipBoard)
 Vue.config.productionTip = false;
 Vue.use(VueQuillEditor);
 Vue.use(VueI18n);
@@ -25,6 +33,8 @@ const i18n = new VueI18n({
     locale: 'zh',
     messages
 });
+
+
 
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
@@ -52,3 +62,4 @@ new Vue({
     i18n,
     render: h => h(App)
 }).$mount('#app');
+
