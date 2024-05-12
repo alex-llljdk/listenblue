@@ -9,12 +9,18 @@ import 'element-ui/lib/theme-chalk/index.css'; // 默认主题
 import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
+import VueQuillEditor from 'vue-quill-editor'  //引入富文本编译器
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
 
 Vue.config.productionTip = false;
+Vue.use(VueQuillEditor);
 Vue.use(VueI18n);
 Vue.use(ElementUI, {
     size: 'small'
 });
+
 const i18n = new VueI18n({
     locale: 'zh',
     messages
