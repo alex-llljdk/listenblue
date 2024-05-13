@@ -115,23 +115,8 @@ export default {
                     title: '首页'
                 },
                 {
-                    icon: 'el-icon-lx-cascades',
-                    index: 'table',
-                    title: '会议纪要'
-                },
-                {
-                    icon: 'el-icon-lx-cascades',
-                    index: 'table',
-                    title: '学习归纳'
-                },
-                {
-                    icon: 'el-icon-lx-cascades',
-                    index: 'table',
-                    title: '有声阅读'
-                },
-                {
                     icon: 'el-icon-lx-copy',
-                    index: 'tabs',
+                    index: '/livelist',
                     title: '直播',
                 },
                

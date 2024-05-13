@@ -10,7 +10,7 @@
 <script>
 import flvjs from 'flv.js';
 import DPlayer from 'dplayer';
-import { useMyStore } from '../../store/store';
+import { loginStore } from '../../store/store';
 const windowHeight = parseInt(window.innerHeight);
 const windowWidth = parseInt(window.innerWidth);
 export default {
@@ -152,13 +152,10 @@ export default {
         }
     },
     computed: {
-        appid() {
-            return useMyStore().appid;
+        isLogin() {
+            return loginStore().isLogin;
         },
-        appkey() {
-            return useMyStore().appkey;
-        }
-    }
+    },
 };
 </script>
 

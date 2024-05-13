@@ -1,7 +1,6 @@
 <template>
     <div class="w-full h-full overflow-auto">
         <div class="bg"></div>
-
         <div class="right-0 top-60 z-10 fixed flex flex-col select-none" v-if="isUpload===true">
             <div class="relative flex flex-col">
                 <div
@@ -159,7 +158,7 @@
             <div class="flex select-none">
                 <div class="ml-20 z-10">
                     <div class="flex">
-                        <router-link to="/voice-record">
+                        <div @click="goToVoiceRecord()">
                             <div
                                 class="hcard transform transition duration-300 hover:scale-110 rounded-2xl shadow-xl h-64 hover:shadow-xl flex cursor-pointer bg-gradient-to-br bg-blue-100 hover:from-blue-300 hover:via-blue-400 hover:to-blue-500 text-black hover:text-white"
                             >
@@ -193,11 +192,11 @@
                                 </div>
                                 <div></div>
                             </div>
-                        </router-link>
+                        </div>
                         <router-view />
                         <div
                             class="ml-10 hcard transform transition duration-300 hover:scale-110 rounded-2xl shadow-lg h-64 hover:shadow-xl flex cursor-pointer bg-purple-200 bg-gradient-to-br hover:from-purple-300 hover:via-purple-400 hover:to-purple-500 text-black hover:text-white"
-                            @click="videoDialogVisible = true"
+                            @click="opendialog('videoDialog')"
                         >
                             <div class="w-1/2 h-full class_bg bg-cover bg-no-repeat rounded-l-2xl"></div>
                             <div class="w-1/2 h-full rounded-r-2xl p-4 bx_sd">
@@ -230,7 +229,7 @@
                     <div class="flex mt-5">
                         <div
                             class="transform transition duration-300 hover:scale-110 rounded-2xl shadow-lg h-64 hover:shadow-xl hcard flex cursor-pointer bg-pink-200 bg-gradient-to-br hover:from-pink-200 hover:via-pink-300 hover:to-pink-400 text-black hover:text-white"
-                            @click="docUploadDialogVisible = true"
+                            @click="opendialog('docUploadDialog')"
                         >
                             <div class="w-1/2 h-full doc_bg bg-cover bg-no-repeat rounded-l-2xl"></div>
                             <div class="w-1/2 h-full rounded-r-2xl p-4 bx_sd">
@@ -261,7 +260,7 @@
                         </div>
                         <div
                             class="ml-10 transform transition duration-300 hover:scale-110 rounded-2xl shadow-lg h-64 hover:shadow-xl hcard flex cursor-pointer bg-red-100 bg-gradient-to-br hover:from-red-200 hover:via-red-300 hover:to-red-400 text-black hover:text-white"
-                            @click="liveDialogVisible = true"
+                            @click="opendialog('liveDialog')"
                         >
                             <div class="w-1/2 h-full live_bg bg-cover bg-no-repeat rounded-l-2xl"></div>
 
@@ -931,17 +930,121 @@
                 </div>
             </el-dialog>
         </router-link>
+
+        <el-dialog
+            :visible="loginDialogVisible"
+            v-if="loginDialogVisible"
+            width="350px"
+            top="20vh"
+            :close-on-click-modal="false"
+            @close="closeLoginDialog"
+            class="select-none"
+            :destroy-on-close="true"
+        >
+            <el-form :model="loginForm" :rules="rules" ref="loginForm" v-if="logintab===0">
+                <p class="form-title">请登录账户</p>
+                <el-form-item label="邮箱" prop="email">
+                    <el-input
+                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full"
+                        min="1"
+                        v-model="loginForm.email"
+                        placeholder="请输入邮箱"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="password">
+                    <el-input
+                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full"
+                        min="1"
+                        v-model="loginForm.password"
+                        placeholder="请输入密码"
+                    ></el-input>
+                </el-form-item>
+                <button
+                    class="mt-2 w-full bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center text-white"
+                    type="submit"
+                >登录</button>
+
+                <p class="signup-link mt-1">
+                    没有帐户?
+                    <a href="javascript:void(0);" @click="changeLoginTab()">注册</a>
+                </p>
+            </el-form>
+
+            <el-form
+                :model="registerForm"
+                :rules="rules"
+                ref="registerForm"
+                class="demo-ruleForm"
+                v-else
+            >
+                <p
+                    class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl"
+                >注册用户</p>
+                <el-form-item label="用户名" prop="userName">
+                    <el-input
+                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full"
+                        min="1"
+                        v-model="registerForm.userName"
+                        placeholder="请输入用户名"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱" prop="email">
+                    <el-input
+                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full"
+                        min="1"
+                        v-model="registerForm.email"
+                        placeholder="请输入登陆邮箱"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="password">
+                    <el-input
+                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full"
+                        min="1"
+                        v-model="registerForm.password"
+                        placeholder="请输入密码"
+                    ></el-input>
+                </el-form-item>
+                <el-form-item label="确认密码" prop="confirmPassword">
+                    <el-input
+                        class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full"
+                        min="1"
+                        v-model="registerForm.confirmPassword"
+                        placeholder="请确认密码"
+                    ></el-input>
+                </el-form-item>
+                <p class="signup-link">
+                    已有帐户?
+                    <a href="javascript:void(0);" @click="changeLoginTab()">登录</a>
+                </p>
+
+                <button
+                    class="w-full bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center text-white"
+                    type="submit"
+                >创建用户</button>
+            </el-form>
+        </el-dialog>
     </div>
 </template>
  
 <script>
 var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+import { loginStore } from '../../store/store';
+const loginstore = loginStore();
 export default {
     mounted() {
         setInterval(this.startPlay, 7000);
-        setInterval(this.updateTime, 1000);        
+        setInterval(this.updateTime, 1000);
     },
     data() {
+        var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.registerForm.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
         return {
             ulList: [{ msg: '高效开会！' }, { msg: '轻松学习！' }, { msg: '随手总结！' }],
             play: false,
@@ -958,6 +1061,8 @@ export default {
             liveDialogVisible: false,
             createLiveDialogVisible: false,
             inLiveDialogVisible: false,
+            loginDialogVisible: false,
+            logintab: 0,
             fileList: [],
             fileCount: 0,
             lang: 0,
@@ -974,6 +1079,30 @@ export default {
             liveRecordRadio: '0',
             roomNumber: '',
             roomPassword: '',
+            loginForm: {
+                email: '',
+                password: ''
+            },
+            registerForm: {
+                userName: '',
+                email: '',
+                password: '',
+                confirmPassword: ''
+            },
+            rules: {
+                userName: [
+                    { required: true, message: '请输入用户名', trigger: 'blur' },
+                    { min: 1, max: 5, message: '长度在 1 到 5 个字符', trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, message: '请输入密码', trigger: 'blur' },
+                    { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
+                ],
+                email: [{ type: 'email', required: true, message: '请输入正确邮箱格式', trigger: 'blur' }],
+                confirmPassword: [
+                    { validator: validatePass2, trigger: 'blur' },
+                ],
+            },
             uploadOptions: [
                 {
                     value: 0,
@@ -1036,7 +1165,10 @@ export default {
             return (zero + num).slice(-digit);
         },
         rename() {
-            console.log('111111');
+            if (!loginstore.isLogin) {
+                this.loginDialogVisible = true;
+                return;
+            }
             this.$prompt('重命名', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -1088,6 +1220,10 @@ export default {
             this.roomName = '';
             this.roomNumber = '';
             this.roomPassword = '';
+        },
+        closeLoginDialog() {
+            this.loginDialogVisible = false;
+            this.logintab = 0;
         },
         // 处理移除操作
         handleChange(file, fileList) {
@@ -1155,6 +1291,28 @@ export default {
             this.$copyText(value).then(e => {
                 console.log('复制成功：', e);
             });
+        },
+        opendialog(name) {
+            if (!loginstore.isLogin) {
+                this.loginDialogVisible = true;
+                return;
+            }
+            var variable = name + 'Visible';
+            this[variable] = true;
+        },
+        goToVoiceRecord() {
+            if (!loginstore.isLogin) {
+                this.loginDialogVisible = true;
+                return;
+            }
+            this.$router.push('/voice-record');
+        },
+        changeLoginTab() {
+            if (this.logintab == 1) {
+                this.logintab = 0;
+                return;
+            }
+            this.logintab = 1;
         }
     }
 };
@@ -1345,5 +1503,53 @@ border-radius: 10px;
 
 .transListContainer {
     transition: opacity 0.3s;
+}
+
+.el-form {
+    background-color: #fff;
+    display: block;
+    padding: 1rem;
+    max-width: 350px;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.form-title {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+    text-align: center;
+    color: #000;
+}
+
+.input-container {
+    position: relative;
+}
+
+.submit {
+    display: block;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    background-color: #4f46e5;
+    color: #ffffff;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    width: 100%;
+    border-radius: 0.5rem;
+    text-transform: uppercase;
+}
+
+.signup-link {
+    color: #6b7280;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    text-align: center;
+}
+
+.signup-link a {
+    text-decoration: underline;
 }
 </style>

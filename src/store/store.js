@@ -11,3 +11,10 @@ export const useMyStore = defineStore({
               'nonce_str': parse.quote('xarhtv6afy7n5ime'), 'engineid': "longasrlisten"}
   }),
 });
+
+export const loginStore = defineStore({
+  id: 'loginStore',
+  state: () => ({
+    isLogin:false,
+  }),
+});
