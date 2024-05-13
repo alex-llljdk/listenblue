@@ -342,6 +342,7 @@ export default {
                 theme: 'snow', //主题 snow/bubble
                 syntax: true //语法检测
             },
+            wsUrl: 'ws://localhost:8765',
             recorder: null //多媒体对象，用来处理音频
         };
     },
@@ -437,7 +438,6 @@ export default {
         },
         toggleDivs() {
             this.recording = !this.recording; // 录音与暂停状态切换
-            this.endRecording();
             if (this.recording) {
                 this.startTimer();
                 this.addRecordingItem();
@@ -487,7 +487,7 @@ export default {
                 sampleBits: 16, // 采样位数，支持 8 或 16，默认是16
                 sampleRate: 16000, // 采样率，支持 11025、16000、22050、24000、44100、48000，根据浏览器默认值，我的chrome是48000
                 numChannels: 1, // 声道，支持 1 或 2， 默认是1
-                compiling: true //(0.x版本中生效,1.x增加中)  // 是否边录边转换，默认是false
+                compiling: true //(0.x版本中生效)  // 是否边录边转换，默认是false
             });
         },
         //启动录音
@@ -496,35 +496,28 @@ export default {
             Recorder.getPermission().then(
                 () => {
                     // 麦克风可用，执行成功时的操作
-                    this.showRecording = true;
-                    if (this.recording) {
-                        this.addRecordingItem();
-                        this.item_index = 0;
-                        this.startTimer();
-                    }
-                    console.log('开始录音');
-                    this.initWebSocket();
-                    this.recorder.start(); // 开始录音
+                    this.initWebSocketAndRecording();
                 },
-                (error) => {
+                error => {
                     // 处理获取权限失败的情况
                     console.error('无法访问麦克风:', error);
                     alert('无法访问麦克风，请检查权限设置或硬件连接');
                 }
             );
-            this.inRecording();
         },
         inRecording() {
             try {
+                let That = this;
                 //获取录音数据
                 const blob = this.recorder.getWAVBlob();
                 //blob转为arrayBuffer
                 let reader = new FileReader();
                 reader.readAsArrayBuffer(blob);
                 reader.onload = function() {
-                    console.log('this.result', this.result);
+                    var outbuffer = this.result;
+                    var arr = new Int8Array(outbuffer);
                     // //调用webSocket发送服务端
-                    this.send(this.result);
+                    That.send(arr);
                 };
             } catch (e) {
                 console.log(e);
@@ -534,7 +527,58 @@ export default {
             console.log('this.recorder.getWAVBlob(): ', this.recorder.getWAVBlob());
             this.recorder.stop();
         },
+        initWebSocketAndRecording() {
+            console.log('initWesocket==');
+            // 建立WebSocket连接
+            this.socket = new WebSocket(this.wsUrl);
 
+            // 监听WebSocket的open事件，当连接打开时触发
+            this.socket.onopen = event => {
+                console.log('socket.onopen成功, 开始录音');
+                
+                // 保证socket连接成功再开始录音
+                this.showRecording = true;
+                if (this.recording) {
+                    this.addRecordingItem();
+                    this.item_index = 0;
+                    this.startTimer();
+                }
+                this.recorder.start(); // 开始录音
+                this.inRecording();
+
+                //可删除，只是用来测试后端自动断开连接的时间
+                setInterval(() => {
+                    this.second++;
+                }, 1000);
+            };
+            // 监听WebSocket的message事件，当收到服务器消息时触发
+            this.socket.onmessage = event => {
+                console.log('socket.onmessage==', event.data);
+                // var data = JSON.parse(event.data);
+                // switch (
+                //     data.type //根据WebSocket返回值的某个字段，区分改做什么事情
+                // ) {
+                //     case 'connect': // // {"type":"connect","data":"7f0000010b540000000a"}
+                //         //写你自己的逻辑
+                //         break;
+                //     case 'xxx':
+                //         //写你自己的逻辑
+                //         break;
+                // }
+            };
+            // 监听WebSocket的close事件，当连接关闭时触发
+            this.socket.onclose = event => {
+                console.log('socket.onclose==');
+                console.log(`WebSocket连接${this.second}秒后关闭了`);
+                //连接关闭，就重新连接
+                // this.reconnect();
+            };
+
+            // 监听WebSocket的error事件，当发生错误时触发
+            this.socket.onerror = error => {
+                console.error('socket.onerror:', error);
+            };
+        },
         initWebSocket() {
             console.log('initWesocket==');
 
