@@ -1,10 +1,10 @@
 <template>
     <div class="h-full w-full flex">
-        <div class="h-full" style="background: #e9efff;">
+        <div class="h-full" style="background: #e9efff">
             <el-aside width="80px">
                 <router-link to="/home">
                     <div class="text-center mt-12">
-                        <div class="rounded-lg bg-white mx-3 mt-7" style="font-size: 32px;">
+                        <div class="rounded-lg bg-white mx-3 mt-7" style="font-size: 32px">
                             <i class="el-icon-arrow-left"></i>
                         </div>
                     </div>
@@ -17,7 +17,7 @@
                 </div>
             </el-aside>
         </div>
-        <div class="flex h-full w-full" style="background: #f2f5fb;">
+        <div class="flex h-full w-full" style="background: #f2f5fb">
             <div class="jphwIe">
                 <div class="WFeMQ">
                     <div>
@@ -32,30 +32,17 @@
                         </div>
 
                         <div>
-                            <span
-                                class="text-xs text-gray-400"
-                                style="user-select: none;"
-                            >{{ savedTime }}</span>
+                            <span class="text-xs text-gray-400" style="user-select: none">{{ savedTime }}</span>
                         </div>
                     </div>
                 </div>
                 <div class="h-full w-full">
                     <div v-if="showRecording" class="h-full w-full">
-                        <div class="dDPXpc" style="overflow: auto;">
-                            <div
-                                class="dSJFEj"
-                                v-for="(item_recording, index) in recording_items"
-                                :key="index"
-                            >
+                        <div class="dDPXpc" style="overflow: auto">
+                            <div class="dSJFEj" v-for="(item_recording, index) in recording_items" :key="index">
                                 <div class="jgzocF">
                                     <div class="jVabAE">
-                                        <svg
-                                            t="1714715933780"
-                                            class="icon"
-                                            viewBox="0 0 1024 1024"
-                                            width="25"
-                                            height="25"
-                                        >
+                                        <svg t="1714715933780" class="icon" viewBox="0 0 1024 1024" width="25" height="25">
                                             <path
                                                 d="M111.8 596c-18.5 30.8-20.8 71.1-6.9 119.7 13.7 48.1 37.2 81.2 69.7 98.3 17.3 9.1 35 12.6 50.6 13.4-16.5-40.5-47.5-134.4-55.7-279.2-16.8 7.1-41.7 21.2-57.7 47.8zM854.8 548.4C846.3 683.9 814 785 798.2 827.3c15.9-0.7 34-4.2 51.5-13.5 32.3-17.2 55.7-50.2 69.4-98.2 13.9-48.7 11.6-88.9-6.9-119.7-15.9-26.3-40.6-40.4-57.4-47.5z"
                                                 fill="#A0D3F8"
@@ -82,10 +69,7 @@
                                 </div>
 
                                 <div class="iwvckw">
-                                    <div
-                                        class="gnYZJU"
-                                        :class="item_recording.isActive ? 'gnYZJU_focus ring-1 ring-purple-300' : 'gnYZJU'"
-                                    >
+                                    <div class="gnYZJU" :class="item_recording.isActive ? 'gnYZJU_focus ring-1 ring-purple-300' : 'gnYZJU'">
                                         <div class="jItVgd">
                                             <div class="kCofWf">
                                                 <div
@@ -118,20 +102,14 @@
                                         </div>
                                         <div class="running-time">
                                             <span>{{ formatTime(currentTime) }}</span>
-                                            <span style="opacity: 0.45; margin: 0px 5px;">/</span>
-                                            <span style="opacity: 0.45;">01:00:00</span>
+                                            <span style="opacity: 0.45; margin: 0px 5px">/</span>
+                                            <span style="opacity: 0.45">01:00:00</span>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="right-btn">
                                     <div class="red_container" title="结束录音">
-                                        <svg
-                                            t="1714747107927"
-                                            class="icon"
-                                            viewBox="0 0 1024 1024"
-                                            width="25"
-                                            height="25"
-                                        >
+                                        <svg t="1714747107927" class="icon" viewBox="0 0 1024 1024" width="25" height="25">
                                             <path
                                                 d="M718.9248 239.328c24.1984 17.2096 45.7152 36.704 64.5376 58.4896s34.9568 45.312 48.4032 70.592c13.4464 25.28 23.6608 52.032 30.6496 80.2688 6.9952 28.2368 10.4896 56.8704 10.4896 85.9136 0 50.016-9.5424 96.9408-28.64 140.7744-19.0848 43.8336-44.9088 82.016-77.4464 114.5536s-70.7264 58.3552-114.5536 77.4464C608.5376 886.4576 561.6192 896 511.5968 896c-49.472 0-96.1344-9.5424-139.9616-28.64-43.8336-19.0848-82.1504-44.9088-114.9568-77.4464s-58.6176-70.7264-77.4464-114.5536-28.2368-90.7584-28.2368-140.7744c0-28.4992 3.36-56.4736 10.0864-83.8976 6.72-27.4304 16.2624-53.5104 28.64-78.2464 12.3712-24.7424 27.6928-47.872 45.984-69.376 18.2848-21.5168 38.72-40.8768 61.3056-58.0928 11.84-8.6016 24.608-11.8272 38.3232-9.6768 13.7152 2.1504 24.8704 8.8768 33.472 20.1664 8.608 11.296 11.84 23.936 9.6896 37.92-2.1568 13.984-8.8768 25.28-20.1728 33.8816C324.4352 352 298.4896 382.3872 280.4736 418.4192c-18.016 36.032-27.0336 74.7584-27.0336 116.1664 0 35.5008 6.7264 68.9728 20.1728 100.4352 13.4464 31.4624 31.8656 58.8928 55.2576 82.2848 23.3984 23.392 50.8224 41.952 82.2848 55.6608 31.4624 13.7216 64.9344 20.576 100.4288 20.576 35.5008 0 68.9792-6.8544 100.4352-20.576 31.4624-13.7152 58.8928-32.2688 82.2848-55.6608 23.3984-23.392 41.952-50.8224 55.6608-82.2848 13.7216-31.4624 20.576-64.9344 20.576-100.4352 0-41.952-9.6832-81.6128-29.0432-118.9888s-46.5216-68.1664-81.472-92.3712c-11.84-8.064-18.9632-19.0912-21.3824-33.0688-2.4192-13.9904 0.4032-26.8928 8.4672-38.7264 8.0704-11.296 19.0912-18.1504 33.0752-20.5696C694.1824 228.4352 707.0912 231.264 718.9248 239.328L718.9248 239.328zM511.5968 537.0048c-13.984 0-25.9456-4.9728-35.8912-14.9184-9.952-9.952-14.9248-21.92-14.9248-35.904L460.7808 179.6288c0-13.984 4.9728-26.08 14.9248-36.3008S497.6128 128 511.5968 128c14.528 0 26.7648 5.1072 36.704 15.328 9.9584 10.2208 14.9312 22.3168 14.9312 36.3008l0 306.5536c0 13.984-4.9728 25.952-14.9312 35.904C538.3552 532.032 526.1184 537.0048 511.5968 537.0048L511.5968 537.0048zM511.5968 537.0048"
                                                 fill="#d1685a"
@@ -140,40 +118,14 @@
                                         </svg>
                                     </div>
 
-                                    <div
-                                        class="blue_container"
-                                        v-if="recording"
-                                        @click="toggleDivs"
-                                        title="暂停录音"
-                                    >
-                                        <svg
-                                            t="1714749774206"
-                                            class="icon"
-                                            viewBox="0 0 1024 1024"
-                                            width="25"
-                                            height="25"
-                                        >
-                                            <path
-                                                d="M640 832V192h128v640h-128zM256 192h128v640H256V192z"
-                                                fill="#0590DF"
-                                                p-id="15295"
-                                            />
+                                    <div class="blue_container" v-if="recording" @click="toggleDivs" title="暂停录音">
+                                        <svg t="1714749774206" class="icon" viewBox="0 0 1024 1024" width="25" height="25">
+                                            <path d="M640 832V192h128v640h-128zM256 192h128v640H256V192z" fill="#0590DF" p-id="15295" />
                                         </svg>
                                     </div>
 
-                                    <div
-                                        class="blue_container"
-                                        v-else
-                                        @click="toggleDivs"
-                                        title="继续录音"
-                                    >
-                                        <svg
-                                            t="1714746776172"
-                                            class="icon"
-                                            viewBox="0 0 1024 1024"
-                                            width="25"
-                                            height="25"
-                                        >
+                                    <div class="blue_container" v-else @click="toggleDivs" title="继续录音">
+                                        <svg t="1714746776172" class="icon" viewBox="0 0 1024 1024" width="25" height="25">
                                             <path
                                                 d="M512 648c92.8 0 168-75.2 168-168V304c0-92.8-75.2-168-168-168S344 211.2 344 304v176c0 92.8 75.2 168 168 168zM392 304c0-65.6 54.4-120 120-120s120 54.4 120 120v176c0 65.6-54.4 120-120 120s-120-54.4-120-120V304z"
                                                 fill="#2090E0"
@@ -226,7 +178,7 @@
                     </div>
                 </div>
             </div>
-            <div class="h-full w-1/2" style="background: #f2f5fb;">
+            <div class="h-full w-1/2" style="background: #f2f5fb">
                 <div class="h-full editorViewport">
                     <quill-editor
                         class="h-full"
@@ -247,7 +199,133 @@ import { quillEditor } from 'vue-quill-editor';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css';
-import Recorder from 'js-audio-recorder';
+
+//Recorder
+var Recorder = function (stream, socket) {
+    var sampleBits = 16; //输出采样数位 8, 16
+    var sampleRate = 16000; //输出采样率
+    console.log('sampleBits: ', sampleBits, 'sampleRate: ', sampleRate);
+    var context = new AudioContext();
+    var audioInput = context.createMediaStreamSource(stream);
+    var recorder = context.createScriptProcessor(1024, 1, 1);
+    var wholeAudioDataBuffer = []; // 整个录音过程的音频数据
+    var ws = socket;
+    var sendSize = 1280; // 每次send大小
+
+    var audioData = {
+        size: 0, //录音文件长度
+        buffer: [], //录音缓存
+        inputSampleRate: 24000, //输入采样率
+        inputSampleBits: 16, //输入采样数位 8, 16
+        outputSampleRate: sampleRate, //输出采样数位
+        oututSampleBits: sampleBits, //输出采样率
+        clear: function () {
+            this.buffer = [];
+            this.size = 0;
+        },
+        input: function (data) {
+            this.buffer.push(new Float32Array(data));
+            this.size += data.length;
+        },
+        compress: function () {
+            //合并压缩
+            //合并
+            var data = new Float32Array(this.size);
+            var offset = 0;
+            for (var i = 0; i < this.buffer.length; i++) {
+                data.set(this.buffer[i], offset);
+                offset += this.buffer[i].length;
+            }
+            //压缩
+            var compression = parseInt(this.inputSampleRate / this.outputSampleRate);
+            //console.log(compression)
+            var length = data.length / compression;
+            var result = new Float32Array(length);
+            var index = 0,
+                j = 0;
+            while (index < length) {
+                result[index] = data[j];
+                j += compression;
+                index++;
+            }
+            return result;
+        },
+        encodePCM: function () {
+            //这里不对采集到的数据进行其他格式处理，如有需要均交给服务器端处理。
+            var sampleRate = Math.min(this.inputSampleRate, this.outputSampleRate);
+            var sampleBits = Math.min(this.inputSampleBits, this.oututSampleBits);
+            var bytes = this.compress();
+            var dataLength = bytes.length * (sampleBits / 8);
+            var buffer = new ArrayBuffer(dataLength);
+            var data = new DataView(buffer);
+            var offset = 0;
+            for (var i = 0; i < bytes.length; i++, offset += 2) {
+                var s = Math.max(-1, Math.min(1, bytes[i]));
+                data.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+            }
+            return new Blob([data]);
+        }
+    };
+
+    var sendData = function () {
+        //对以获取的数据进行处理(分包)
+        var reader = new FileReader();
+        reader.onload = (e) => {
+            var outbuffer = e.target.result;
+            var arr = new Int8Array(outbuffer);
+            // console.log('arr: ', arr);
+            if (arr.length > 0) {
+                var tmparr = new Int8Array(sendSize);
+                var j = 0;
+                for (var i = 0; i < arr.byteLength; i++) {
+                    // wholeAudioDataBuffer.push(1);
+
+                    tmparr[j++] = arr[i];
+                    if ((i + 1) % sendSize == 0) {
+                        // console.log("tmparr: ", tmparr);
+                        ws.send(tmparr);
+
+                        if (arr.byteLength - i - 1 >= sendSize) {
+                            tmparr = new Int8Array(sendSize);
+                        } else {
+                            tmparr = new Int8Array(arr.byteLength - i - 1);
+                        }
+                        j = 0;
+                    }
+                    if (i + 1 == arr.byteLength && (i + 1) % sendSize != 0) {
+                        ws.send(tmparr);
+                    }
+                }
+            }
+        };
+        reader.readAsArrayBuffer(audioData.encodePCM());
+        audioData.clear(); //每次发送完成则清理掉旧数据
+    };
+
+    this.start = function () {
+        audioInput.connect(recorder);
+        recorder.connect(context.destination);
+    };
+
+    this.stop = function () {
+        recorder.disconnect();
+    };
+
+    this.getBlob = function () {
+        return audioData.encodePCM();
+    };
+    this.clear = function () {
+        audioData.clear();
+    };
+
+    recorder.onaudioprocess = function (e) {
+        var inputBuffer = e.inputBuffer.getChannelData(0);
+        audioData.input(inputBuffer);
+        sendData();
+        // console.log('wholeAudioDataBuffer: ', wholeAudioDataBuffer);
+        // console.log('发送音频流');
+    };
+};
 
 // toolbar标题
 const titleConfig = [
@@ -342,8 +420,9 @@ export default {
                 theme: 'snow', //主题 snow/bubble
                 syntax: true //语法检测
             },
-            wsUrl: 'ws://localhost:8888/',
-            recorder: null //多媒体对象，用来处理音频
+            wsUrl: 'ws://localhost:8889',
+            recorder: null, //多媒体对象，用来处理音频
+            curVoiceIndex: 0 // 已读音频数据的下标
         };
     },
     mounted() {
@@ -351,9 +430,7 @@ export default {
         this.updateInfo();
         this.initTitle();
     },
-    created() {
-        this.initRecorder();
-    },
+    created() {},
     computed: {
         getYMDHMSTime() {
             const now = new Date();
@@ -442,9 +519,11 @@ export default {
                 this.startTimer();
                 this.addRecordingItem();
                 console.log(this.item_index);
+                this.recorder.start();
             } else {
                 this.stopTimer();
                 this.deleteItem();
+                this.recorder.stop();
             }
         },
         startTimer() {
@@ -480,80 +559,73 @@ export default {
         outDiv(index, event) {
             this.recording_items[index].isActive = false;
         },
-
-        //启动浏览器麦克风，开始录制
-        initRecorder() {
-            this.recorder = new Recorder({
-                sampleBits: 16, // 采样位数，支持 8 或 16，默认是16
-                sampleRate: 16000, // 采样率，支持 11025、16000、22050、24000、44100、48000，根据浏览器默认值，我的chrome是48000
-                numChannels: 1, // 声道，支持 1 或 2， 默认是1
-                compiling: true //(0.x版本中生效)  // 是否边录边转换，默认是false
-            });
-        },
         //启动录音
         startRecording() {
-            // 获取录音权限
-            Recorder.getPermission().then(
-                () => {
-                    // 麦克风可用，执行成功时的操作
-                    this.initWebSocketAndRecording();
-                },
-                error => {
-                    // 处理获取权限失败的情况
-                    console.error('无法访问麦克风:', error);
-                    alert('无法访问麦克风，请检查权限设置或硬件连接');
-                }
-            );
-        },
-        inRecording() {
-            try {
-                let That = this;
-                //获取录音数据
-                const blob = this.recorder.getWAVBlob();
-                //blob转为arrayBuffer
-                let reader = new FileReader();
-                reader.readAsArrayBuffer(blob);
-                reader.onload = function() {
-                    var outbuffer = this.result;
-                    var arr = new Int8Array(outbuffer);
-                    // //调用webSocket发送服务端
-                    That.send(arr);
-                };
-            } catch (e) {
-                console.log(e);
+            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+            if (!navigator.getUserMedia) {
+                console.error('无法访问麦克风:', error);
+                alert('无法访问麦克风，请检查权限设置或硬件连接');
+            } else {
+                var That = this;
+                navigator.getUserMedia(
+                    {
+                        audio: true
+                    },
+                    function (mediaStream) {
+                        // 麦克风可用，执行成功时的操作
+                        That.initWebSocketAndRecording(mediaStream);
+                    },
+                    function (error) {
+                        console.error('无法访问麦克风:', error);
+                        alert('无法访问麦克风，请检查权限设置或硬件连接');
+                    }
+                );
             }
         },
-        endRecording() {
-            console.log('this.recorder.getWAVBlob(): ', this.recorder.getWAVBlob());
-            this.recorder.stop();
-        },
-        initWebSocketAndRecording() {
+        initWebSocketAndRecording(mediaStream) {
             console.log('initWesocket==');
             // 建立WebSocket连接
             this.socket = new WebSocket(this.wsUrl);
 
             // 监听WebSocket的open事件，当连接打开时触发
-            this.socket.onopen = event => {
-                console.log('socket.onopen成功, 开始录音');
-                
-                // 保证socket连接成功再开始录音
-                this.showRecording = true;
-                if (this.recording) {
-                    this.addRecordingItem();
-                    this.item_index = 0;
-                    this.startTimer();
-                }
-                this.recorder.start(); // 开始录音
-                this.inRecording();
+            this.socket.onopen = (event) => {
+                console.log('socket.onopen成功');
+                this.recorder = new Recorder(mediaStream, this.socket);
 
-                //可删除，只是用来测试后端自动断开连接的时间
-                setInterval(() => {
-                    this.second++;
-                }, 1000);
+                // setInterval(() => {
+                //     this.socket.send("111111111111111111111");
+                //     this.socket.send("222222222222222222222");
+                // }, 1000);
             };
             // 监听WebSocket的message事件，当收到服务器消息时触发
-            this.socket.onmessage = event => {
-                console.log('socket.onmessage==', event.data);
+            this.socket.onmessage = (event) => {
+                var data = JSON.parse(event.data);
+                console.log(data)
+                switch (
+                    data.action //根据WebSocket返回值的某个字段，区分改做什么事情
+                ) {
+                    case 'started': // // {"type":"connect","data":"7f0000010b540000000a"}
+                        // 保证socket连接成功再开始录音
+                        console.log('recorder 开始录音');
+                        this.showRecording = true;
+                        if (this.recording) {
+                            this.addRecordingItem();
+                            this.item_index = 0;
+                            this.startTimer();
+                        }
+                        this.recorder.start();
+
+                        //可删除，只是用来测试后端自动断开连接的时间
+                        this.second = 0;
+                        setInterval(() => {
+                            this.second++;
+                        }, 1000);
+                    case 'xxx':
+                        //写你自己的逻辑
+                        break;
+                }
+
+                // console.log('socket.onmessage==', event.data);
                 // var data = JSON.parse(event.data);
                 // switch (
                 //     data.type //根据WebSocket返回值的某个字段，区分改做什么事情
@@ -567,15 +639,16 @@ export default {
                 // }
             };
             // 监听WebSocket的close事件，当连接关闭时触发
-            this.socket.onclose = event => {
+            this.socket.onclose = (event) => {
                 console.log('socket.onclose==');
                 console.log(`WebSocket连接${this.second}秒后关闭了`);
+                console.log('WebSocket is closed. Code: ' + event.code + ' Reason: ' + event.wasClean);
                 //连接关闭，就重新连接
                 // this.reconnect();
             };
 
             // 监听WebSocket的error事件，当发生错误时触发
-            this.socket.onerror = error => {
+            this.socket.onerror = (error) => {
                 console.error('socket.onerror:', error);
             };
         },
@@ -586,7 +659,7 @@ export default {
             this.socket = new WebSocket(this.wsUrl);
 
             // 监听WebSocket的open事件，当连接打开时触发
-            this.socket.onopen = event => {
+            this.socket.onopen = (event) => {
                 console.log('socket.onopen==');
 
                 //可删除，只是用来测试后端自动断开连接的时间
@@ -595,7 +668,7 @@ export default {
                 }, 1000);
             };
             // 监听WebSocket的message事件，当收到服务器消息时触发
-            this.socket.onmessage = event => {
+            this.socket.onmessage = (event) => {
                 console.log('socket.onmessage==', event.data);
                 var data = JSON.parse(event.data);
                 switch (
@@ -610,7 +683,7 @@ export default {
                 }
             };
             // 监听WebSocket的close事件，当连接关闭时触发
-            this.socket.onclose = event => {
+            this.socket.onclose = (event) => {
                 console.log('socket.onclose==');
                 console.log(`WebSocket连接${this.second}秒后关闭了`);
                 //连接关闭，就重新连接
@@ -618,7 +691,7 @@ export default {
             };
 
             // 监听WebSocket的error事件，当发生错误时触发
-            this.socket.onerror = error => {
+            this.socket.onerror = (error) => {
                 console.error('socket.onerror:', error);
             };
         },
@@ -631,15 +704,11 @@ export default {
             }
             that.lockReconnect = true;
             //没连接上会一直重连，设置延迟避免请求过多
-            setTimeout(function() {
+            setTimeout(function () {
                 //重新连接
                 that.initWebSocket();
                 that.lockReconnect = false;
             }, 5000);
-        },
-        send(msg) {
-            console.log('send msg: ', msg);
-            this.socket.send(msg);
         },
         closeWs() {
             this.socket.close();

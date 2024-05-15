@@ -6,7 +6,7 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: '/home'
+            redirect: '/transcript'
         },
         {
             path: '/',
@@ -44,6 +44,11 @@ export default new Router({
             path: '/voice-record',
             component: () => import(/* webpackChunkName: "voice-record" */ '../components/page/VoiceRecord.vue'),
             meta: { title: '语音记录'}
+        },
+        {
+            path: '/transcript',
+            component: () => import(/* webpackChunkName: "transcript" */ '../components/page/Transcript.vue'),
+            meta: { title: '记录'}
         },
         {
             path: '*',

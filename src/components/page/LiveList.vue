@@ -10,7 +10,7 @@
                     <div class="rounded-lg border">
                         <div class="flex">
                             <div
-                                class="flex w-10 items-center justify-center rounded-tl-lg rounded-bl-lg border-r border-gray-200 bg-white p-5"
+                              class="flex w-10 items-center justify-center rounded-tl-lg rounded-bl-lg border-r border-gray-200 bg-white p-5"
                             >
                                 <svg
                                     viewBox="0 0 20 20"

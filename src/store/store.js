@@ -15,6 +15,6 @@ export const useMyStore = defineStore({
 export const loginStore = defineStore({
   id: 'loginStore',
   state: () => ({
-    isLogin:false,
+    isLogin:true,
   }),
 });
