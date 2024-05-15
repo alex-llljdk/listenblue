@@ -247,7 +247,134 @@ import { quillEditor } from 'vue-quill-editor';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css';
-import Recorder from 'js-audio-recorder';
+
+
+//Recorder
+var Recorder = function(stream, socket) {
+    var sampleBits = 16; //输出采样数位 8, 16
+    var sampleRate = 16000; //输出采样率
+    console.log('sampleBits: ', sampleBits, 'sampleRate: ', sampleRate);
+    var context = new AudioContext();
+    var audioInput = context.createMediaStreamSource(stream);
+    var recorder = context.createScriptProcessor(1024, 1, 1);
+    var wholeAudioDataBuffer = []; // 整个录音过程的音频数据
+    var ws = socket;
+    var sendSize = 1280; // 每次send大小
+
+    var audioData = {
+        size: 0, //录音文件长度
+        buffer: [], //录音缓存
+        inputSampleRate: 24000, //输入采样率
+        inputSampleBits: 16, //输入采样数位 8, 16
+        outputSampleRate: sampleRate, //输出采样数位
+        oututSampleBits: sampleBits, //输出采样率
+        clear: function() {
+            this.buffer = [];
+            this.size = 0;
+        },
+        input: function(data) {
+            this.buffer.push(new Float32Array(data));
+            this.size += data.length;
+        },
+        compress: function() {
+            //合并压缩
+            //合并
+            var data = new Float32Array(this.size);
+            var offset = 0;
+            for (var i = 0; i < this.buffer.length; i++) {
+                data.set(this.buffer[i], offset);
+                offset += this.buffer[i].length;
+            }
+            //压缩
+            var compression = parseInt(this.inputSampleRate / this.outputSampleRate);
+            //console.log(compression)
+            var length = data.length / compression;
+            var result = new Float32Array(length);
+            var index = 0,
+                j = 0;
+            while (index < length) {
+                result[index] = data[j];
+                j += compression;
+                index++;
+            }
+            return result;
+        },
+        encodePCM: function() {
+            //这里不对采集到的数据进行其他格式处理，如有需要均交给服务器端处理。
+            var sampleRate = Math.min(this.inputSampleRate, this.outputSampleRate);
+            var sampleBits = Math.min(this.inputSampleBits, this.oututSampleBits);
+            var bytes = this.compress();
+            var dataLength = bytes.length * (sampleBits / 8);
+            var buffer = new ArrayBuffer(dataLength);
+            var data = new DataView(buffer);
+            var offset = 0;
+            for (var i = 0; i < bytes.length; i++, offset += 2) {
+                var s = Math.max(-1, Math.min(1, bytes[i]));
+                data.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+            }
+            return new Blob([data]);
+        }
+    };
+
+    var sendData = function() {
+        //对以获取的数据进行处理(分包)
+        var reader = new FileReader();
+        reader.onload = e => {
+            var outbuffer = e.target.result;
+            var arr = new Int8Array(outbuffer);
+            // console.log('arr: ', arr);
+            if (arr.length > 0) {
+                var tmparr = new Int8Array(sendSize);
+                var j = 0;
+                for (var i = 0; i < arr.byteLength; i++) {
+                    // wholeAudioDataBuffer.push(1);
+
+                    tmparr[j++] = arr[i];
+                    if ((i + 1) % sendSize == 0) {
+                        // console.log("tmparr: ", tmparr);
+                        ws.send(tmparr);
+
+                        if (arr.byteLength - i - 1 >= sendSize) {
+                            tmparr = new Int8Array(sendSize);
+                        } else {
+                            tmparr = new Int8Array(arr.byteLength - i - 1);
+                        }
+                        j = 0;
+                    }
+                    if (i + 1 == arr.byteLength && (i + 1) % sendSize != 0) {
+                        ws.send(tmparr);
+                    }
+                }
+            }
+        };
+        reader.readAsArrayBuffer(audioData.encodePCM());
+        audioData.clear(); //每次发送完成则清理掉旧数据
+    };
+
+    this.start = function() {
+        audioInput.connect(recorder);
+        recorder.connect(context.destination);
+    };
+
+    this.stop = function() {
+        recorder.disconnect();
+    };
+
+    this.getBlob = function() {
+        return audioData.encodePCM();
+    };
+    this.clear = function() {
+        audioData.clear();
+    };
+
+    recorder.onaudioprocess = function(e) {
+        var inputBuffer = e.inputBuffer.getChannelData(0);
+        audioData.input(inputBuffer);
+        sendData();
+        // console.log('wholeAudioDataBuffer: ', wholeAudioDataBuffer);
+        // console.log('发送音频流');
+    };
+};
 
 // toolbar标题
 const titleConfig = [
@@ -342,8 +469,9 @@ export default {
                 theme: 'snow', //主题 snow/bubble
                 syntax: true //语法检测
             },
-            wsUrl: 'ws://localhost:8765',
-            recorder: null //多媒体对象，用来处理音频
+            wsUrl: 'ws://localhost:8888',
+            recorder: null, //多媒体对象，用来处理音频
+            curVoiceIndex: 0 // 已读音频数据的下标
         };
     },
     mounted() {
@@ -351,9 +479,7 @@ export default {
         this.updateInfo();
         this.initTitle();
     },
-    created() {
-        this.initRecorder();
-    },
+    created() {},
     computed: {
         getYMDHMSTime() {
             const now = new Date();
@@ -442,9 +568,11 @@ export default {
                 this.startTimer();
                 this.addRecordingItem();
                 console.log(this.item_index);
+                this.recorder.start();
             } else {
                 this.stopTimer();
                 this.deleteItem();
+                this.recorder.stop();
             }
         },
         startTimer() {
@@ -480,62 +608,45 @@ export default {
         outDiv(index, event) {
             this.recording_items[index].isActive = false;
         },
-
-        //启动浏览器麦克风，开始录制
-        initRecorder() {
-            this.recorder = new Recorder({
-                sampleBits: 16, // 采样位数，支持 8 或 16，默认是16
-                sampleRate: 16000, // 采样率，支持 11025、16000、22050、24000、44100、48000，根据浏览器默认值，我的chrome是48000
-                numChannels: 1, // 声道，支持 1 或 2， 默认是1
-                compiling: true //(0.x版本中生效)  // 是否边录边转换，默认是false
-            });
-        },
         //启动录音
         startRecording() {
-            // 获取录音权限
-            Recorder.getPermission().then(
-                () => {
-                    // 麦克风可用，执行成功时的操作
-                    this.initWebSocketAndRecording();
-                },
-                error => {
-                    // 处理获取权限失败的情况
-                    console.error('无法访问麦克风:', error);
-                    alert('无法访问麦克风，请检查权限设置或硬件连接');
-                }
-            );
-        },
-        inRecording() {
-            try {
-                let That = this;
-                //获取录音数据
-                const blob = this.recorder.getWAVBlob();
-                //blob转为arrayBuffer
-                let reader = new FileReader();
-                reader.readAsArrayBuffer(blob);
-                reader.onload = function() {
-                    var outbuffer = this.result;
-                    var arr = new Int8Array(outbuffer);
-                    // //调用webSocket发送服务端
-                    That.send(arr);
-                };
-            } catch (e) {
-                console.log(e);
+            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+            if (!navigator.getUserMedia) {
+                console.error('无法访问麦克风:', error);
+                alert('无法访问麦克风，请检查权限设置或硬件连接');
+            } else {
+                var That = this;
+                navigator.getUserMedia(
+                    {
+                        audio: true
+                    },
+                    function(mediaStream) {
+                        // 麦克风可用，执行成功时的操作
+                        That.initWebSocketAndRecording(mediaStream);
+                    },
+                    function(error) {
+                        console.error('无法访问麦克风:', error);
+                        alert('无法访问麦克风，请检查权限设置或硬件连接');
+                    }
+                );
             }
         },
-        endRecording() {
-            console.log('this.recorder.getWAVBlob(): ', this.recorder.getWAVBlob());
-            this.recorder.stop();
-        },
-        initWebSocketAndRecording() {
+        initWebSocketAndRecording(mediaStream) {
             console.log('initWesocket==');
             // 建立WebSocket连接
             this.socket = new WebSocket(this.wsUrl);
 
             // 监听WebSocket的open事件，当连接打开时触发
             this.socket.onopen = event => {
-                console.log('socket.onopen成功, 开始录音');
-                
+                console.log('socket.onopen成功');
+                this.recorder = new Recorder(mediaStream, this.socket);
+                console.log('recorder 开始录音');
+
+                // setInterval(() => {
+                //     this.socket.send("111111111111111111111");
+                //     this.socket.send("222222222222222222222");
+                // }, 1000);
+
                 // 保证socket连接成功再开始录音
                 this.showRecording = true;
                 if (this.recording) {
@@ -543,10 +654,10 @@ export default {
                     this.item_index = 0;
                     this.startTimer();
                 }
-                this.recorder.start(); // 开始录音
-                this.inRecording();
+                this.recorder.start();
 
                 //可删除，只是用来测试后端自动断开连接的时间
+                this.second = 0;
                 setInterval(() => {
                     this.second++;
                 }, 1000);
@@ -570,6 +681,8 @@ export default {
             this.socket.onclose = event => {
                 console.log('socket.onclose==');
                 console.log(`WebSocket连接${this.second}秒后关闭了`);
+                console.log('WebSocket is closed. Code: ' + event.code + ' Reason: ' + event.wasClean);
+c
                 //连接关闭，就重新连接
                 // this.reconnect();
             };
@@ -636,10 +749,6 @@ export default {
                 that.initWebSocket();
                 that.lockReconnect = false;
             }, 5000);
-        },
-        send(msg) {
-            console.log('send msg: ', msg);
-            this.socket.send(msg);
         },
         closeWs() {
             this.socket.close();
