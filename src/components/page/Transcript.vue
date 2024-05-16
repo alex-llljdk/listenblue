@@ -124,7 +124,7 @@
         </div>
         <div class="flex h-full w-full" style="background: #f2f5fb">
             <div class="contentContainer w-full px-8 pt-6">
-                <div class="contentHeader w-full mb-2">
+                <div class="contentHeader w-full pb-2">
                     <div class="flex justify-between w-full">
                         <div>
                             <div class="hover_input focus_input">
@@ -193,7 +193,10 @@
                                 </div>
                             </el-popover>
                             <el-tooltip class="item" effect="dark" content="展开视频" placement="bottom" v-if="!isVideoOpen">
-                                <div class="tools-icon cursor-pointer w-10 h-10 rounded-lg flex items-center justify-center mr-3">
+                                <div
+                                    class="tools-icon cursor-pointer w-10 h-10 rounded-lg flex items-center justify-center mr-3"
+                                    @click="changeVideo"
+                                >
                                     <svg
                                         t="1715702308488"
                                         class="icon"
@@ -215,7 +218,10 @@
                             </el-tooltip>
 
                             <el-tooltip class="item" effect="dark" content="收起视频" placement="bottom" v-else>
-                                <div class="tools-icon cursor-pointer w-10 h-10 rounded-lg flex items-center justify-center mr-3">
+                                <div
+                                    class="tools-icon cursor-pointer w-10 h-10 rounded-lg flex items-center justify-center mr-3"
+                                    @click="changeVideo"
+                                >
                                     <svg
                                         t="1715702308488"
                                         class="icon"
@@ -279,57 +285,59 @@
                         </div>
                     </div>
                 </div>
-                <div class="h-96 w-full px-2">
-                    <video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="true" :options="playerOptions">
-                    </video-player>
-                </div>
-                <div class="dDPXpc" style="overflow: auto">
-                    <div class="dSJFEj" v-for="(item_recording, index) in recording_items" :key="index">
-                        <div class="jgzocF">
-                            <div class="jVabAE">
-                                <svg t="1714715933780" class="icon" viewBox="0 0 1024 1024" width="25" height="25">
-                                    <path
-                                        d="M111.8 596c-18.5 30.8-20.8 71.1-6.9 119.7 13.7 48.1 37.2 81.2 69.7 98.3 17.3 9.1 35 12.6 50.6 13.4-16.5-40.5-47.5-134.4-55.7-279.2-16.8 7.1-41.7 21.2-57.7 47.8zM854.8 548.4C846.3 683.9 814 785 798.2 827.3c15.9-0.7 34-4.2 51.5-13.5 32.3-17.2 55.7-50.2 69.4-98.2 13.9-48.7 11.6-88.9-6.9-119.7-15.9-26.3-40.6-40.4-57.4-47.5z"
-                                        fill="#A0D3F8"
-                                        p-id="9612"
-                                    />
-                                    <path
-                                        d="M939.4 579.1c-24.1-39.8-62.8-57.6-82.9-64.4 0.1-1.9 0.1-3.9 0.1-5.8 0-190-154.6-344.6-344.6-344.6S167.4 318.9 167.4 508.9c0 1.9 0 3.9 0.1 5.8-20.2 6.9-58.8 24.6-82.9 64.4-23.4 38.7-27 87.7-10.5 145.4 16.2 56.8 45 96.5 85.5 117.8 58.8 31 120.1 11.2 122.7 10.3 8.2-2.7 12.8-11.5 10.3-19.8l-6.5-21.8c-5.8-20.3-16.6-62-24.5-112.6-16.3-104.3-20.4-246.5 53-332.2 43.2-50.4 109.6-76 197.5-76s154.3 25.6 197.5 76c73.3 85.7 69.3 228 53 332.2-7.9 50.6-18.8 92.3-24.4 112.4l-6.6 22c-2.5 8.3 2.1 17 10.3 19.8 1.5 0.5 21.7 7 49.6 7 21.5 0 47.5-3.9 73.1-17.4 40.5-21.4 69.3-61 85.5-117.8 16.2-57.6 12.7-106.5-10.7-145.3zM174.6 814c-32.5-17.1-55.9-50.2-69.7-98.3-13.9-48.6-11.5-88.9 6.9-119.7 15.9-26.5 40.9-40.7 57.7-47.7 8.2 144.8 39.2 238.7 55.7 279.2-15.6-0.9-33.3-4.3-50.6-13.5z m600.1-16.5c6.3-24.7 13.5-57 19.3-94.1 17.4-110.9 21-263.1-60.3-358-49.5-57.9-124.1-87.2-221.8-87.2s-172.3 29.3-221.8 87.2c-81.2 95-77.6 247.1-60.2 358 6.9 44.1 15.9 81.5 22.2 105-16.6-43.2-46-137.8-51.8-280.8v-0.1-0.2l-0.4-5.4c-0.3-4.3-0.6-8.6-0.6-13 0-172.4 140.2-312.6 312.6-312.6s312.6 140.2 312.6 312.6c0 4.4-0.3 8.7-0.6 13l-0.4 5.4c0 0.8 0.2 1.5 0.3 2.2-5.5 121.4-32.1 217.5-49.1 268z m144.4-81.8c-13.7 48-37 81-69.4 98.2-17.6 9.3-35.7 12.7-51.5 13.5 15.9-42.4 48.2-143.5 56.6-278.9 16.8 7.1 41.5 21.2 57.3 47.6 18.5 30.7 20.9 71 7 119.6z"
-                                        fill="#108EE9"
-                                        p-id="9613"
-                                    />
-                                    <path
-                                        d="M368 605.5c-4.4 0-8 3.6-8 8v131.2c0 4.4 3.6 8 8 8s8-3.6 8-8V613.5c0-4.5-3.6-8-8-8zM320 653.5c-4.4 0-8 3.6-8 8v35.2c0 4.4 3.6 8 8 8s8-3.6 8-8v-35.2c0-4.5-3.6-8-8-8zM416 541.5c-4.4 0-8 3.6-8 8v259.2c0 4.4 3.6 8 8 8s8-3.6 8-8V549.5c0-4.5-3.6-8-8-8zM464 589.5c-4.4 0-8 3.6-8 8v163.2c0 4.4 3.6 8 8 8s8-3.6 8-8V597.5c0-4.5-3.6-8-8-8zM512 557.5c-4.4 0-8 3.6-8 8v227.2c0 4.4 3.6 8 8 8s8-3.6 8-8V565.5c0-4.5-3.6-8-8-8zM560 589.5c-4.4 0-8 3.6-8 8v163.2c0 4.4 3.6 8 8 8s8-3.6 8-8V597.5c0-4.5-3.6-8-8-8zM608 541.5c-4.4 0-8 3.6-8 8v259.2c0 4.4 3.6 8 8 8s8-3.6 8-8V549.5c0-4.5-3.6-8-8-8zM656 605.5c-4.4 0-8 3.6-8 8v131.2c0 4.4 3.6 8 8 8s8-3.6 8-8V613.5c0-4.5-3.6-8-8-8zM704 653.5c-4.4 0-8 3.6-8 8v35.2c0 4.4 3.6 8 8 8s8-3.6 8-8v-35.2c0-4.5-3.6-8-8-8z"
-                                        fill="#108EE9"
-                                        p-id="9614"
-                                    />
-                                </svg>
-                            </div>
-                            <div class="iHbjbC">
-                                <span>语音识别</span>
-                            </div>
-                            <div class="emHNMM">
-                                <span>{{ recording_items[index].time_stamp }}</span>
-                            </div>
-                        </div>
+                <div class="contentBody overflow-auto">
+                    <div class="w-full h-96 px-2" v-if="isVideoOpen">
+                        <d-player id="dplayer" class="h-full" :options="playerOptions"></d-player>
+                    </div>
 
-                        <div class="iwvckw">
-                            <div class="gnYZJU" :class="item_recording.isActive ? 'gnYZJU_focus ring-1 ring-purple-300' : 'gnYZJU'">
-                                <div class="jItVgd">
-                                    <div class="kCofWf">
-                                        <div
-                                            class="kFJVLr w-full"
-                                            contenteditable
-                                            @blur="updateContent(index, $event)"
-                                            @focusin="inDiv(index, $event)"
-                                            @focusout="outDiv(index, $event)"
-                                        ></div>
+                    <div class="scrollContainer overflow-auto" :style="{ height: isVideoOpen ? 'calc(100% - 384px)' : '100%' }">
+                        <div class="dSJFEj" v-for="(item_recording, index) in recording_items" :key="index">
+                            <div class="jgzocF">
+                                <div class="jVabAE">
+                                    <svg t="1714715933780" class="icon" viewBox="0 0 1024 1024" width="25" height="25">
+                                        <path
+                                            d="M111.8 596c-18.5 30.8-20.8 71.1-6.9 119.7 13.7 48.1 37.2 81.2 69.7 98.3 17.3 9.1 35 12.6 50.6 13.4-16.5-40.5-47.5-134.4-55.7-279.2-16.8 7.1-41.7 21.2-57.7 47.8zM854.8 548.4C846.3 683.9 814 785 798.2 827.3c15.9-0.7 34-4.2 51.5-13.5 32.3-17.2 55.7-50.2 69.4-98.2 13.9-48.7 11.6-88.9-6.9-119.7-15.9-26.3-40.6-40.4-57.4-47.5z"
+                                            fill="#A0D3F8"
+                                            p-id="9612"
+                                        />
+                                        <path
+                                            d="M939.4 579.1c-24.1-39.8-62.8-57.6-82.9-64.4 0.1-1.9 0.1-3.9 0.1-5.8 0-190-154.6-344.6-344.6-344.6S167.4 318.9 167.4 508.9c0 1.9 0 3.9 0.1 5.8-20.2 6.9-58.8 24.6-82.9 64.4-23.4 38.7-27 87.7-10.5 145.4 16.2 56.8 45 96.5 85.5 117.8 58.8 31 120.1 11.2 122.7 10.3 8.2-2.7 12.8-11.5 10.3-19.8l-6.5-21.8c-5.8-20.3-16.6-62-24.5-112.6-16.3-104.3-20.4-246.5 53-332.2 43.2-50.4 109.6-76 197.5-76s154.3 25.6 197.5 76c73.3 85.7 69.3 228 53 332.2-7.9 50.6-18.8 92.3-24.4 112.4l-6.6 22c-2.5 8.3 2.1 17 10.3 19.8 1.5 0.5 21.7 7 49.6 7 21.5 0 47.5-3.9 73.1-17.4 40.5-21.4 69.3-61 85.5-117.8 16.2-57.6 12.7-106.5-10.7-145.3zM174.6 814c-32.5-17.1-55.9-50.2-69.7-98.3-13.9-48.6-11.5-88.9 6.9-119.7 15.9-26.5 40.9-40.7 57.7-47.7 8.2 144.8 39.2 238.7 55.7 279.2-15.6-0.9-33.3-4.3-50.6-13.5z m600.1-16.5c6.3-24.7 13.5-57 19.3-94.1 17.4-110.9 21-263.1-60.3-358-49.5-57.9-124.1-87.2-221.8-87.2s-172.3 29.3-221.8 87.2c-81.2 95-77.6 247.1-60.2 358 6.9 44.1 15.9 81.5 22.2 105-16.6-43.2-46-137.8-51.8-280.8v-0.1-0.2l-0.4-5.4c-0.3-4.3-0.6-8.6-0.6-13 0-172.4 140.2-312.6 312.6-312.6s312.6 140.2 312.6 312.6c0 4.4-0.3 8.7-0.6 13l-0.4 5.4c0 0.8 0.2 1.5 0.3 2.2-5.5 121.4-32.1 217.5-49.1 268z m144.4-81.8c-13.7 48-37 81-69.4 98.2-17.6 9.3-35.7 12.7-51.5 13.5 15.9-42.4 48.2-143.5 56.6-278.9 16.8 7.1 41.5 21.2 57.3 47.6 18.5 30.7 20.9 71 7 119.6z"
+                                            fill="#108EE9"
+                                            p-id="9613"
+                                        />
+                                        <path
+                                            d="M368 605.5c-4.4 0-8 3.6-8 8v131.2c0 4.4 3.6 8 8 8s8-3.6 8-8V613.5c0-4.5-3.6-8-8-8zM320 653.5c-4.4 0-8 3.6-8 8v35.2c0 4.4 3.6 8 8 8s8-3.6 8-8v-35.2c0-4.5-3.6-8-8-8zM416 541.5c-4.4 0-8 3.6-8 8v259.2c0 4.4 3.6 8 8 8s8-3.6 8-8V549.5c0-4.5-3.6-8-8-8zM464 589.5c-4.4 0-8 3.6-8 8v163.2c0 4.4 3.6 8 8 8s8-3.6 8-8V597.5c0-4.5-3.6-8-8-8zM512 557.5c-4.4 0-8 3.6-8 8v227.2c0 4.4 3.6 8 8 8s8-3.6 8-8V565.5c0-4.5-3.6-8-8-8zM560 589.5c-4.4 0-8 3.6-8 8v163.2c0 4.4 3.6 8 8 8s8-3.6 8-8V597.5c0-4.5-3.6-8-8-8zM608 541.5c-4.4 0-8 3.6-8 8v259.2c0 4.4 3.6 8 8 8s8-3.6 8-8V549.5c0-4.5-3.6-8-8-8zM656 605.5c-4.4 0-8 3.6-8 8v131.2c0 4.4 3.6 8 8 8s8-3.6 8-8V613.5c0-4.5-3.6-8-8-8zM704 653.5c-4.4 0-8 3.6-8 8v35.2c0 4.4 3.6 8 8 8s8-3.6 8-8v-35.2c0-4.5-3.6-8-8-8z"
+                                            fill="#108EE9"
+                                            p-id="9614"
+                                        />
+                                    </svg>
+                                </div>
+                                <div class="iHbjbC">
+                                    <span>语音识别</span>
+                                </div>
+                                <div class="emHNMM">
+                                    <span>{{ recording_items[index].time_stamp }}</span>
+                                </div>
+                            </div>
+
+                            <div class="iwvckw">
+                                <div class="gnYZJU" :class="item_recording.isActive ? 'gnYZJU_focus ring-1 ring-purple-300' : 'gnYZJU'">
+                                    <div class="jItVgd">
+                                        <div class="kCofWf">
+                                            <div
+                                                class="kFJVLr w-full"
+                                                contenteditable
+                                                @blur="updateContent(index, $event)"
+                                                @focusin="inDiv(index, $event)"
+                                                @focusout="outDiv(index, $event)"
+                                            >
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="h-1 w-full"></div>
                 </div>
             </div>
             <div class="h-full w-1/2" style="background: #f2f5fb">
@@ -353,8 +361,8 @@ import { quillEditor } from 'vue-quill-editor';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css';
-import { videoPlayer } from 'vue-video-player';
-import 'video.js/dist/video-js.css';
+import VueDPlayer from 'vue-dplayer';
+import 'vue-dplayer/dist/vue-dplayer.css';
 // toolbar标题
 const titleConfig = [
     { Choice: '.ql-insertMetric', title: '跳转配置' },
@@ -404,65 +412,25 @@ const titleConfig = [
 ];
 
 export default {
-    components: { quillEditor, videoPlayer },
+    components: { quillEditor, 'd-player': VueDPlayer },
     data() {
         return {
             // recording_items 数组用于存储要动态生成的 div 元素的数据
-            recording_items: [],
+            recording_items: [{ time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
+                { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
+                { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
+                { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
+                { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
+                { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
+                { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false }
+            ],
             item_index: -1, // recording_items当前最大进行时item的下标
-
             currentTime: 0, // 当前时间，单位：秒
             maxTime: 3600, // 最大时间，单位：秒，即 01:00:00
             timer: null, // 定时器
-
-            isVideoOpen: true,
-            aiType: 0,
-            transType: 0,
-            showType: 0,
-            transOptions: [
-                {
-                    value: 0,
-                    label: '源语言'
-                },
-                {
-                    value: 1,
-                    label: '中英互译'
-                }
-            ],
-            playerOptions: {
-                playbackRates: [0.5, 1.0, 1.5, 2.0], // 可选的播放速度
-                autoplay: false, // 如果为true,浏览器准备好时开始回放。
-                muted: false, // 默认情况下将会消除任何音频。
-                loop: false, // 是否视频一结束就重新开始。
-                preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
-                language: 'zh-CN',
-                aspectRatio: '3:1', 
-                height:'100%',
-
-                // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
-                fluid: true, 
-                // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-                sources: [
-                    {
-                        type: 'video/mp4', // 类型
-                        src: 'http://www.w3school.com.cn/i/movie.mp4' // url地址
-                    }
-                ],
-                poster: '', // 封面地址
-                notSupportedMessage: '此视频暂无法播放，请稍后再试', // 允许覆盖Video.js无法播放媒体源时显示的默认信息。
-                controlBar: {
-                    timeDivider: true, // 当前时间和持续时间的分隔符
-                    durationDisplay: true, // 显示持续时间
-                    remainingTimeDisplay: false, // 是否显示剩余时间功能
-                    fullscreenToggle: true // 是否显示全屏按钮
-                }
-            },
-
             inputWidth: 204,
             recordInfo: '',
             savedTime: '',
-            language: '中文',
-            translation: '不翻译',
             content: null,
             editorOption: {
                 placeholder: '请在这里记录您的想法', //提示
@@ -487,6 +455,58 @@ export default {
                 readyOnly: false, //是否只读
                 theme: 'snow', //主题 snow/bubble
                 syntax: true //语法检测
+            },
+
+            isVideoOpen: true,
+            aiType: 0,
+            transType: 0,
+            showType: 0,
+            transOptions: [
+                {
+                    value: 0,
+                    label: '源语言'
+                },
+                {
+                    value: 1,
+                    label: '中英互译'
+                }
+            ],
+            playerOptions: {
+                container: document.getElementById('dplayer'), //播放器容器
+                mutex: false, //  防止同时播放多个用户，在该用户开始播放时暂停其他用户
+                theme: '#b7daff', // 风格颜色，例如播放条，音量条的颜色
+                loop: false, // 是否自动循环
+                lang: 'zh-cn', // 语言，'en', 'zh-cn', 'zh-tw'
+                // screenshot: true, // 是否允许截图（按钮），点击可以自动将截图下载到本地
+                hotkey: true, // 是否支持热键，调节音量，播放，暂停等
+                preload: 'auto', // 自动预加载
+                volume: 0.7, // 初始化音量
+                playbackSpeed: [0.5, 0.75, 1, 1.25, 1.5, 2, 3], //可选的播放速度，可自定义
+                video: {
+                    url: 'https://cesium.com/public/SandcastleSampleData/big-buck-bunny_trailer.mp4', // 播放视频的路径
+                    defaultQuality: 0 // 默认是高清
+                    // pic: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606462956126&di=2d87964d4faf656af55d09d938640d97&imgtype=0&src=http%3A%2F%2Fattachments.gfan.com%2Fforum%2Fattachments2%2F201310%2F10%2F150326y7dzdd8d4kpjjdsd.jpg', // 视频封面图片
+                    //  thumbnails: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606462956126&di=2d87964d4faf656af55d09d938640d97&imgtype=0&src=http%3A%2F%2Fattachments.gfan.com%2Fforum%2Fattachments2%2F201310%2F10%2F150326y7dzdd8d4kpjjdsd.jpg' // 进度条上的缩略图,需要通过dplayer-thumbnails来生成
+                },
+                subtitle: {
+                    //字幕
+                    url: '', //字幕网址
+                    color: '#fff', //字幕颜色
+                    fontSize: '20px',
+                    bottom: '40px'
+                },
+                highlight: [
+                    //进度条上的自定义时间标记
+                    // 进度条时间点高亮
+                    {
+                        text: '10M',
+                        time: 6
+                    },
+                    {
+                        text: '20M',
+                        time: 12
+                    }
+                ]
             }
         };
     },
@@ -608,6 +628,9 @@ export default {
         },
         outDiv(index, event) {
             this.recording_items[index].isActive = false;
+        },
+        changeVideo() {
+            this.isVideoOpen = !this.isVideoOpen;
         }
     }
 };
@@ -756,10 +779,6 @@ export default {
     padding: 50px 50px 100px;
     position: relative;
     z-index: 1;
-}
-
-.dDPXpc {
-    height: calc(100vh - 88px - 112px);
 }
 
 .kGnJQu {
@@ -987,4 +1006,9 @@ export default {
 .tools-icon:hover {
     background-color: #abbce067;
 }
+
+.contentBody {
+    height: 100%;
+}
+
 </style>

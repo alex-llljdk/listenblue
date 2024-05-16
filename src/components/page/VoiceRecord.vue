@@ -215,7 +215,7 @@ var Recorder = function (stream, socket) {
     var audioData = {
         size: 0, //录音文件长度
         buffer: [], //录音缓存
-        inputSampleRate: 24000, //输入采样率
+        inputSampleRate: 32000, //输入采样率
         inputSampleBits: 16, //输入采样数位 8, 16
         outputSampleRate: sampleRate, //输出采样数位
         oututSampleBits: sampleBits, //输出采样率
@@ -272,10 +272,10 @@ var Recorder = function (stream, socket) {
         var reader = new FileReader();
         reader.onload = (e) => {
             var outbuffer = e.target.result;
-            var arr = new Int8Array(outbuffer);
+            var arr = new Uint8Array(outbuffer);
             // console.log('arr: ', arr);
             if (arr.length > 0) {
-                var tmparr = new Int8Array(sendSize);
+                var tmparr = new Uint8Array(sendSize);
                 var j = 0;
                 for (var i = 0; i < arr.byteLength; i++) {
                     // wholeAudioDataBuffer.push(1);
@@ -286,9 +286,9 @@ var Recorder = function (stream, socket) {
                         ws.send(tmparr);
 
                         if (arr.byteLength - i - 1 >= sendSize) {
-                            tmparr = new Int8Array(sendSize);
+                            tmparr = new Uint8Array(sendSize);
                         } else {
-                            tmparr = new Int8Array(arr.byteLength - i - 1);
+                            tmparr = new Uint8Array(arr.byteLength - i - 1);
                         }
                         j = 0;
                     }
