@@ -3,17 +3,50 @@
         <div class="h-full" style="background: #e9efff">
             <el-aside width="80px">
                 <router-link to="/home">
-                    <div class="text-center mt-12">
-                        <div class="rounded-lg bg-white mx-3 mt-7" style="font-size: 32px">
-                            <i class="el-icon-arrow-left"></i>
+                     <div class="text-center mb-8 mt-8">
+                        <div class="rounded-xl bg-white mx-4 py-3 flex justify-center">
+                            <svg
+                                t="1715682947773"
+                                class="icon"
+                                viewBox="0 0 1024 1024"
+                                version="1.1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                p-id="14609"
+                                width="20"
+                                height="20"
+                            >
+                                <path
+                                    d="M238.208798 504.759085c114.078175 125.190257 330.334497 341.639984 441.040878 454.927143L785.790178 856.32207c-36.308951-36.902468-343.031681-348.783685-344.618828-358.506117 62.496379-64.083527 246.805082-251.967662 324.579423-339.65784l-95.228875-93.844342L238.208798 504.759085z"
+                                    fill="#272636"
+                                    p-id="14610"
+                                />
+                            </svg>
                         </div>
                     </div>
                 </router-link>
                 <div class="text-center mt-8">
-                    <div>
-                        <i class="el-icon-folder-checked text-4xl"></i>
+                                    <div class="aside-icon text-center mb-8 block px-4 cursor-pointer">
+                    <div class="flex justify-center mb-2">
+                        <svg
+                            t="1715676163293"
+                            class="icon"
+                            viewBox="0 0 1024 1024"
+                            version="1.1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            p-id="4267"
+                            width="30"
+                            height="30"
+                        >
+                            <path
+                                d="M925.248 356.928l-258.176-258.176a64 64 0 0 0-45.248-18.752H144a64 64 0 0 0-64 64v736a64 64 0 0 0 64 64h736a64 64 0 0 0 64-64V402.176a64 64 0 0 0-18.752-45.248zM288 144h192V256H288V144z m448 736H288V736h448v144z m144 0H800V704a32 32 0 0 0-32-32H256a32 32 0 0 0-32 32v176H144v-736H224V288a32 32 0 0 0 32 32h256a32 32 0 0 0 32-32V144h77.824l258.176 258.176V880z"
+                                p-id="4268"
+                            />
+                        </svg>
                     </div>
-                    <div class="text-base">保存</div>
+                    <div class="text-sm">
+                        <p>保存</p>
+                    </div>
+                </div>
                 </div>
             </el-aside>
         </div>
@@ -78,7 +111,8 @@
                                                     @blur="updateContent(index, $event)"
                                                     @focusin="inDiv(index, $event)"
                                                     @focusout="outDiv(index, $event)"
-                                                ></div>
+                                                >
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -381,14 +415,17 @@ export default {
     data() {
         return {
             // recording_items 数组用于存储要动态生成的 div 元素的数据
-            recording_items: [],
+            recording_items: [{ time_stamp: "12:05", content: '1111', isActive: false },
+                { time_stamp: "12:07", content: '1111', isActive: false },
+                { time_stamp: "12:09", content: '1111', isActive: false },
+            ],
             item_index: -1, // recording_items当前最大进行时item的下标
 
-            currentTime: 0, // 当前时间，单位：秒
+            currentTime: 123, // 当前时间，单位：秒
             maxTime: 3600, // 最大时间，单位：秒，即 01:00:00
             timer: null, // 定时器
 
-            showRecording: false, // 控制是否显示录音时的内容
+            showRecording: true, // 控制是否显示录音时的内容
             recording: true, // 是否正在录音
             inputWidth: 204,
             recordInfo: '',
@@ -736,7 +773,7 @@ export default {
 }
 
 .jphwIe {
-    width: 50%;
+    width: 65%;
     height: 100%;
     overflow: clip;
     display: flex;
@@ -845,9 +882,9 @@ export default {
 }
 /*激活样式*/
 ::v-deep .el-radio-button__orig-radio:checked + .el-radio-button__inner {
-    background: #29c8d6;
+    background: #409eff;
     border: 1 !important;
-    color: #696969;
+    color: #fdfdfd;
     font-size: 16px !important;
     font-weight: 500;
     line-height: 24px;

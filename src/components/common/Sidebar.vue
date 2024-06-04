@@ -115,37 +115,36 @@ export default {
                     title: '首页'
                 },
                 {
-                    icon: 'el-icon-lx-copy',
+                    icon: 'el-icon-video-camera',
                     index: '/livelist',
                     title: '直播',
                 },
-               
+               {
+                    icon: 'el-icon-news',
+                    index: '/livelist',
+                    title: '发现',
+                },
             ],
             my_items: [ 
                 {
-                    icon: 'el-icon-lx-calendar',
+                    icon: 'el-icon-share',
                     index: 'share',
                     title: '分享',
                 },
                 {
                     icon: 'el-icon-lx-calendar',
-                    index: 'share',
-                    title: '笔记',
+                    index: 'record',
+                    title: '记录',
                 },
                 {
-                    icon: 'el-icon-pie-chart',
-                    index: 'delete',
-                    title: '历史记录'
-                },
-                {
-                    icon: 'el-icon-lx-redpacket_fill',
-                    index: '/donate',
+                    icon: 'el-icon-star-off',
+                    index: '/collect',
                     title: '收藏'
                 },
                 {
-                    icon: 'el-icon-pie-chart',
+                    icon: 'el-icon-user',
                     index: 'delete',
-                    title: '通知'
+                    title: '主页'
                 }]
         };
     },

@@ -123,9 +123,9 @@
             </el-aside>
         </div>
         <div class="flex h-full w-full" style="background: #f2f5fb">
-            <div class="contentContainer w-full px-8 pt-6">
+            <div class="contentContainer w-full pt-6">
                 <div class="contentHeader w-full pb-2">
-                    <div class="flex justify-between w-full">
+                    <div class="flex justify-between w-full px-8">
                         <div>
                             <div class="hover_input focus_input">
                                 <input
@@ -286,11 +286,141 @@
                     </div>
                 </div>
                 <div class="contentBody overflow-auto">
-                    <div class="w-full h-96 px-2" v-if="isVideoOpen">
+                    <div class="w-full h-96 px-8" v-if="isVideoOpen">
                         <d-player id="dplayer" class="h-full" :options="playerOptions"></d-player>
                     </div>
 
-                    <div class="scrollContainer overflow-auto" :style="{ height: isVideoOpen ? 'calc(100% - 384px)' : '100%' }">
+                    <div class="scrollContainer overflow-auto py-2 px-8" :style="{ height: isVideoOpen ? 'calc(100% - 384px)' : '100%' }">
+                        <div class="AIDIV mb-2">
+                            <div class="zhinengsulan mb-3 select-none">
+                                <img src="../../assets/img/zhinengsulan.png" alt="" class="h-12 pointer-events-none" />
+                            </div>
+                            <div class="keyword">
+                                <div class="font-semibold text-sm text-black leading-6">关键词</div>
+                                <div class="flex select-none">
+                                    <div
+                                        class="keywordleft overflow-hidden w-full mb-4"
+                                        :style="{ height: openkeyword ? sourceDivHeight + 'px' : '40px' }"
+                                        style="height 0.3s ease 0s;"
+                                    >
+                                        <div id="keywordh" class="flex flex-wrap">
+                                            <div
+                                                v-for="tag in recent_tag"
+                                                :key="tag.id"
+                                                class="py-0.5 px-2 bg-blue-100 rounded font-normal text-sm text-blue-400 mr-2 mt-3 leading-5 text-center cursor-pointer block"
+                                            >
+                                                {{ tag }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="keywordright relative top-4 w-16 text-xs leading-5 text-right cursor-pointer text-blue-400">
+                                        <div class="" @click="changeKeyword">{{ keywordopentitle }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="abstract mb-2">
+                                <div class="font-semibold text-sm text-black leading-6">全文概要</div>
+                                <div class="mt-1">
+                                    <div class="relative">
+                                        <div class="relative flex mb-2">
+                                            <div :class="{ breakabstractword: !openAbstract, openabstractword: openAbstract }">
+                                                这是一部讲述关于兔子和三只田鼠之间故事的电影，在电影中他们之间将会发生激烈的对抗，电影即将上映。
+                                            </div>
+                                        </div>
+                                        <div class="text-xs text-blue-400 text-right">
+                                            <span class="cursor-pointer" @click="changeAbstract">{{ abstractopentitle }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="aisum">
+                                <div class="mb-2" style="width: 300px">
+                                    <el-menu
+                                        :default-active="aiSumActiveIndex"
+                                        class="el-menu-demo"
+                                        mode="horizontal"
+                                        background-color="rgb(0 0 0 / 0%)"
+                                        active-text-color="rgb(0 0 0)"
+                                    >
+                                        <el-menu-item index="1">章节速览</el-menu-item>
+                                        <el-menu-item index="2">发言总结</el-menu-item>
+                                        <el-menu-item index="3">要点回顾</el-menu-item>
+                                    </el-menu>
+                                </div>
+                                <div class="aisumContent mb-2">
+                                    <div class="relative">
+                                        <div class="relative flex">
+                                            <div class="leftAisumContent mr-4 relative">
+                                                <div class="h-10 flex items-center relative cursor-default select-none">
+                                                    <div class="w-11 text-xs text-black select-none">00:00</div>
+                                                    <div>
+                                                        <svg
+                                                            t="1716204788686"
+                                                            class="icon"
+                                                            viewBox="0 0 1024 1024"
+                                                            version="1.1"
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            p-id="2618"
+                                                            width="8"
+                                                            height="8"
+                                                        >
+                                                            <path
+                                                                d="M512 520.064m-414.464 0a3.238 3.238 0 1 0 828.928 0 3.238 3.238 0 1 0-828.928 0Z"
+                                                                fill="#1296db"
+                                                                p-id="2619"
+                                                                data-spm-anchor-id="a313x.search_index.0.i0.44783a81zqBcfd"
+                                                                class="selected"
+                                                            ></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="rightAisumContent block w-full pt-0.5 cursor-pointer">
+                                                <div class="min-h-10 mb-2 w-full bg-blue-100 rounded py-2 px-4 relative flex border">
+                                                    <div style="visibilit: visible">
+                                                        <div class="aisumtext mb-1" :class="{ breakaisum: !openEpSum }">
+                                                            这是一部讲述关于兔子和三只田鼠之间故事的电影，在电影中他们之间将会发生激烈的对抗，电影即将上映。
+                                                        </div>
+                                                        <div class="text-xs text-gray-400" v-if="openEpSum">111</div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-xs text-blue-400 cursor-pointer" @click="changeEp">{{ epopentitle }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="heng mt-4 mb-4">
+                                <div class="flex items-center w-full" style="justify-content: space-between;-webkit-box-align: center;">
+                                    <div class="sc-djXQSe ccTlNE" style="display: block;"></div>
+                                    <div class="text-sm text-gray-300">以上内容由蓝心AI大模型生成</div>
+                                    <div class="sc-jDba-dz jaCZOE" style="display: block;"></div>
+                                </div>
+                            </div>
+                            <div class="sourcetitle flex items-center">
+                                <div class="mr-2">
+                                    <svg
+                                        t="1716206486538"
+                                        class="icon"
+                                        viewBox="0 0 1024 1024"
+                                        version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        p-id="3656"
+                                        width="20"
+                                        height="20"
+                                    >
+                                        <path
+                                            d="M862.72 837.632c0 28.16-21.504 50.176-50.176 50.176h-10.24c6.656-13.312 10.24-26.624 10.24-41.984V178.176c0-14.848-3.584-30.208-10.24-41.984h10.24c28.16 0 50.176 21.504 50.176 50.176v651.264zM293.888 318.464c-17.92 0-33.28-11.776-33.28-25.088 0-13.312 15.36-25.088 33.28-25.088h355.328c17.92 0 33.28 11.776 33.28 25.088 0 13.312-15.36 25.088-33.28 25.088H293.888z m-8.704 168.448c-13.312 0-25.088-11.776-25.088-25.088 0-13.312 11.776-25.088 25.088-25.088h267.264c13.312 0 25.088 11.776 25.088 25.088 0 13.312-11.776 25.088-25.088 25.088H285.184z m0 152.064c-13.312 0-25.088-11.776-25.088-25.088s11.776-25.088 25.088-25.088h150.528c13.312 0 25.088 11.776 25.088 25.088s-11.776 25.088-25.088 25.088H285.184z m-81.92-552.448c-50.176 0-91.648 41.984-91.648 91.648v666.112c0 51.712 41.984 91.648 91.648 91.648h609.28c55.296 0 100.352-45.056 100.352-100.352V186.368c0-55.296-45.056-100.352-100.352-100.352h-609.28z"
+                                            fill="#1296db"
+                                            p-id="3657"
+                                        ></path>
+                                    </svg>
+                                </div>
+                                <div class=" text-lg font-semibold">
+                                    原文
+                                </div>
+                            </div>
+                        </div>
                         <div class="dSJFEj" v-for="(item_recording, index) in recording_items" :key="index">
                             <div class="jgzocF">
                                 <div class="jVabAE">
@@ -330,8 +460,7 @@
                                                 @blur="updateContent(index, $event)"
                                                 @focusin="inDiv(index, $event)"
                                                 @focusout="outDiv(index, $event)"
-                                            >
-                                            </div>
+                                            ></div>
                                         </div>
                                     </div>
                                 </div>
@@ -416,7 +545,8 @@ export default {
     data() {
         return {
             // recording_items 数组用于存储要动态生成的 div 元素的数据
-            recording_items: [{ time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
+            recording_items: [
+                { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
                 { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
                 { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
                 { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
@@ -432,6 +562,20 @@ export default {
             recordInfo: '',
             savedTime: '',
             content: null,
+            openkeyword: false,
+            keywordopentitle: '展开全部',
+            openAbstract: false,
+            abstractopentitle: '展开全部',
+            aiSumActiveIndex: '1',
+            openEpSum: false,
+            epopentitle: '查看章节摘要',
+            recent_tag: [
+                '电影',
+                '兔子',
+                '三只田鼠',
+                '报复'
+            ],
+
             editorOption: {
                 placeholder: '请在这里记录您的想法', //提示
                 modules: {
@@ -631,6 +775,31 @@ export default {
         },
         changeVideo() {
             this.isVideoOpen = !this.isVideoOpen;
+        },
+        changeKeyword() {
+            this.sourceDivHeight = document.getElementById('keywordh').offsetHeight;
+            this.openkeyword = !this.openkeyword;
+            if (this.openkeyword == true) {
+                this.keywordopentitle = '收起';
+            } else {
+                this.keywordopentitle = '展开全部';
+            }
+        },
+        changeAbstract() {
+            this.openAbstract = !this.openAbstract;
+            if (this.openAbstract == true) {
+                this.abstractopentitle = '收起';
+            } else {
+                this.abstractopentitle = '展开全部';
+            }
+        },
+        changeEp() {
+            this.openEpSum = !this.openEpSum;
+            if (this.openEpSum == true) {
+                this.epopentitle = '收起';
+            } else {
+                this.epopentitle = '查看章节摘要';
+            }
         }
     }
 };
@@ -1010,5 +1179,88 @@ export default {
 .contentBody {
     height: 100%;
 }
+.keywordleft {
+    height: 56px;
+}
 
+.breakabstractword {
+    font-size: 14px;
+    line-height: 24px;
+    overflow: hidden;
+    text-align: justify;
+    color: rgb(71, 70, 103);
+    transition: height 0.3s ease 0s;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    line-height: 1.2em;
+    word-break: break-all;
+    text-overflow: ellipsis;
+}
+
+.openabstractword {
+    font-size: 14px;
+    line-height: 24px;
+    overflow: hidden;
+    text-align: justify;
+    color: rgb(71, 70, 103);
+    transition: height 0.3s ease 0s;
+    line-height: 1.2em;
+    word-break: break-all;
+}
+
+.djVVR {
+    font-size: 14px;
+    line-height: 24px;
+    opacity: 0;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.aisumtext {
+    font-size: 14px;
+    letter-spacing: 0px;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+    position: relative;
+    z-index: 2;
+    color: rgb(39, 38, 77);
+    cursor: pointer;
+    -webkit-font-smoothing: antialiased;
+}
+
+.breakaisum {
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.heng > div > div:nth-child(2n+1) {
+    box-shadow: rgb(255, 255, 255) 0px 1px 0px;
+}
+
+.ccTlNE {
+    margin-right: 14px;
+    flex: 1 1 0%;
+    height: 1px;
+    background-color: rgba(39, 38, 77, 0.1);
+}
+
+.heng > div > div:nth-child(2n+1) {
+    box-shadow: rgb(255, 255, 255) 0px 1px 0px;
+}
+
+.jaCZOE {
+    margin-left: 14px;
+    flex: 1 1 0%;
+    height: 1px;
+    background-color: rgba(39, 38, 77, 0.1);
+}
 </style>

@@ -12,9 +12,18 @@ export const useMyStore = defineStore({
   }),
 });
 
-export const loginStore = defineStore({
-  id: 'loginStore',
+export const userStore = defineStore({
+  id: 'userStore',
   state: () => ({
-    isLogin:true,
+    isLoggedIn:false,
+    user_id:-1,
+    avatar:"",
+    name:"",
+    token:"",
   }),
+  getters:{
+    getToken:(state)=>{
+      return  state.token
+    },
+  }
 });

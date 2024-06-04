@@ -142,9 +142,9 @@
             class="w-full h-1/5 bottom-0 absolute bg-gradient-to-b from-transparent via-blue-50 to-blue-100"
         ></div>
         <div class="pl-20 pr-10 pb-10 z-1">
-            <div class="w-full h-32 flex px-28 py-4 text-6xl font-semibold mt-20">
-                <div class="flex h-full z-10">
-                    <div class="text-white select-none">ListenBlue,&nbsp&nbsp</div>
+            <div class="w-full h-32 flex px-20 py-4 text-6xl font-semibold mt-20">
+                <div class="flex h-full z-10 pl-20">
+                    <div class="text-white select-none">智简会学,&nbsp&nbsp</div>
                 </div>
                 <div class="scroll h-full z-10">
                     <div
@@ -308,7 +308,7 @@
                             <div class="flex changetotext">
                                 <div
                                     class="rencent_title w-full mr-5 select-none"
-                                >{{item}}1211111111111111111111111131232131232131111111111111111111111111111</div>
+                                >{{item}}</div>
 
                                 <div class="rec_icon collectIconWrap">
                                     <el-tooltip
@@ -526,7 +526,7 @@
             :visible="videoUploadDialogVisible"
             v-if="videoUploadDialogVisible"
             title="上传音视频"
-            width="30%"
+            width="31%"
             top="30vh"
             :close-on-click-modal="false"
             @close="closeVideoUploadDialog"
@@ -534,7 +534,7 @@
             :destroy-on-close="true"
         >
             <div class="flex">
-                <div class="overflow-hidden overflow-ellipsis">
+                <div class="overflow-ellipsis">
                     <el-upload
                         drag
                         class="upload-demo"
@@ -800,7 +800,7 @@
             :visible="createLiveDialogVisible"
             v-if="createLiveDialogVisible"
             title="创建房间"
-            width="20%"
+            width="21%"
             top="30vh"
             :close-on-click-modal="false"
             @close="closeCreateLiveDialog"
@@ -911,7 +911,7 @@
                     </div>
 
                     <div class="flex w-full items-center mb-2">
-                        <div class="w-1/6">房间密码:</div>
+                        <div class="w-1/6">密码:</div>
                         <div class="w-5/6">
                             <el-input
                                 class="w-full"
@@ -1020,6 +1020,7 @@
                 <button
                     class="w-full bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center text-white"
                     type="submit"
+                    @click="submitRegister('registerForm')"
                 >创建用户</button>
             </el-form>
         </el-dialog>
@@ -1028,8 +1029,9 @@
  
 <script>
 var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-import { loginStore } from '../../store/store';
-const loginstore = loginStore();
+import { userStore } from '../../store/store';
+import * from '../../api/user'
+const userstore = userStore();
 export default {
     mounted() {
         setInterval(this.startPlay, 7000);
@@ -1048,10 +1050,13 @@ export default {
         return {
             ulList: [{ msg: '高效开会！' }, { msg: '轻松学习！' }, { msg: '随手总结！' }],
             play: false,
-            rencent_items: ['你问我为何时常沉默，有的人无话可说，有的话无人可说.你问我为何时常沉默，有的人无话可说，有的话无人可说.', '2'],
+            rencent_items: ['这是一部讲述关于兔子和三只田鼠之间故事的电影，在电影中他们之间将会发生激烈的对抗，电影即将上映。', '小时候，幸福是一件东西，拥有就幸福；长大后，幸福是一个目标，达到就幸福；成熟后，发现幸福原来是一种心态，领悟就幸福。'],
             time: '',
             date: '',
-            recent_tag: ['音乐', '音乐', 'dasdsa', '音乐dasd', '音乐dsa', '音乐ds'],
+            recent_tag: ['电影',
+                '兔子',
+                '三只田鼠',
+                '报复'],
             period: '02:14',
             record_date: '04-25 16:11',
             videoDialogVisible: false,
@@ -1165,7 +1170,7 @@ export default {
             return (zero + num).slice(-digit);
         },
         rename() {
-            if (!loginstore.isLogin) {
+            if (!userstore.isLogin) {
                 this.loginDialogVisible = true;
                 return;
             }
@@ -1293,7 +1298,7 @@ export default {
             });
         },
         opendialog(name) {
-            if (!loginstore.isLogin) {
+            if (!userstore.isLogin) {
                 this.loginDialogVisible = true;
                 return;
             }
@@ -1301,7 +1306,7 @@ export default {
             this[variable] = true;
         },
         goToVoiceRecord() {
-            if (!loginstore.isLogin) {
+            if (!userstore.isLogin) {
                 this.loginDialogVisible = true;
                 return;
             }
@@ -1313,7 +1318,20 @@ export default {
                 return;
             }
             this.logintab = 1;
-        }
+        },
+        submitRegister(formName){
+            this.$refs[formName].validate((valid) => {
+            if (valid) {
+                //注册成功
+            userRequest.Register
+            alert('submit!');
+          } else {
+            //注册失败
+            console.log('error submit!!');
+            return false;
+          }
+        });
+      },
     }
 };
 </script>

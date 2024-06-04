@@ -46,7 +46,7 @@
                         <el-card :body-style="{ padding: '0px' }">
                             <img
                                 src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                                class="w-full h-60 block"
+                                class="w-full h-48 block"
                             />
                             <div class="p-4 flex w-full">
                                 <div class="avatar w-1/5">
