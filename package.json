@@ -19,6 +19,7 @@
     "js-audio-recorder": "^1.0.7",
     "mavon-editor": "^2.6.17",
     "pinia": "^2.1.7",
+    "pinia-plugin-persist": "^1.0.0",
     "postcss": "^7.0.39",
     "socket.io-client": "^4.7.5",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",

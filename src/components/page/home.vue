@@ -1,12 +1,11 @@
 <template>
     <div class="w-full h-full overflow-auto">
         <div class="bg"></div>
-        <div class="right-0 top-60 z-10 fixed flex flex-col select-none" v-if="isUpload===true">
+        <div class="right-0 top-60 z-10 fixed flex flex-col select-none" v-if="isUpload === true">
             <div class="relative flex flex-col">
                 <div
                     class="h-14 w-64 flex px-4 items-center bg-white justify-between rounded-lg cursor-pointer mr-0 shadow-2xl border"
-                    :class="[{'hoverTrans': (openTrans===false)},
-                    {'closeTrans': (openTrans===false)}]"
+                    :class="[{ hoverTrans: openTrans === false }, { closeTrans: openTrans === false }]"
                     @click="clickTrans"
                 >
                     <div class="flex items-center">
@@ -41,31 +40,23 @@
                             width="20"
                             height="20"
                         >
-                            <path
-                                d="M510.182608 762.39791 71.456449 261.260306 952.544575 261.260306Z"
-                                fill="#8a8a8a"
-                                p-id="4546"
-                            />
+                            <path d="M510.182608 762.39791 71.456449 261.260306 952.544575 261.260306Z" fill="#8a8a8a" p-id="4546" />
                         </svg>
                     </div>
                 </div>
 
                 <div
                     class="top-full right-0 mt-2.5 ml-1.5 max-h-96 overflow-y-scroll w-80 absolute flex bg-white rounded-lg border"
-                    v-if="openTrans===true"
+                    v-if="openTrans === true"
                 >
                     <div class="transListContainer relative w-full">
                         <div class="pt-5 pl-5 text-xs h-11">
-                            <el-checkbox
-                                :indeterminate="isIndeterminate"
-                                v-model="checkAll"
-                                @change="handleCheckAllChange"
-                            >全选</el-checkbox>
+                            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"
+                                >全选</el-checkbox
+                            >
                         </div>
                         <ul class="mb-0 pb-4 list-none">
-                            <div
-                                class="w-full inline-block m-0 p-0 leading-normal text-sm text-black text-opacity-80"
-                            >
+                            <div class="w-full inline-block m-0 p-0 leading-normal text-sm text-black text-opacity-80">
                                 <li class="flex list-none m-0 pr-6 pl-5">
                                     <div class="flex pt-3.5">
                                         <div class="list-none mr-2">
@@ -82,12 +73,7 @@
                                                 width="20"
                                                 height="20"
                                             >
-                                                <path
-                                                    d="M0 0h1024v1024H0V0z"
-                                                    fill="#202425"
-                                                    opacity=".01"
-                                                    p-id="3241"
-                                                />
+                                                <path d="M0 0h1024v1024H0V0z" fill="#202425" opacity=".01" p-id="3241" />
                                                 <path
                                                     d="M955.733333 512c0 245.077333-198.656 443.733333-443.733333 443.733333S68.266667 757.077333 68.266667 512 266.922667 68.266667 512 68.266667s443.733333 198.656 443.733333 443.733333z"
                                                     fill="#11AA66"
@@ -138,9 +124,7 @@
             </div>
         </div>
 
-        <div
-            class="w-full h-1/5 bottom-0 absolute bg-gradient-to-b from-transparent via-blue-50 to-blue-100"
-        ></div>
+        <div class="w-full h-1/5 bottom-0 absolute bg-gradient-to-b from-transparent via-blue-50 to-blue-100"></div>
         <div class="pl-20 pr-10 pb-10 z-1">
             <div class="w-full h-32 flex px-20 py-4 text-6xl font-semibold mt-20">
                 <div class="flex h-full z-10 pl-20">
@@ -152,7 +136,9 @@
                         :key="item.id"
                         :class="!index && play ? 'toUp' : ''"
                         class="truncate h-full text-blue-500 select-none"
-                    >{{ item.msg }}</div>
+                    >
+                        {{ item.msg }}
+                    </div>
                 </div>
             </div>
             <div class="flex select-none">
@@ -162,16 +148,12 @@
                             <div
                                 class="hcard transform transition duration-300 hover:scale-110 rounded-2xl shadow-xl h-64 hover:shadow-xl flex cursor-pointer bg-gradient-to-br bg-blue-100 hover:from-blue-300 hover:via-blue-400 hover:to-blue-500 text-black hover:text-white"
                             >
-                                <div
-                                    class="w-1/2 h-full meet_bg bg-cover bg-no-repeat rounded-l-2xl"
-                                ></div>
+                                <div class="w-1/2 h-full meet_bg bg-cover bg-no-repeat rounded-l-2xl"></div>
                                 <div class="w-1/2 h-full rounded-r-2xl p-4 bx_sd">
                                     <div class="font-semibold text-2xl">会议、课堂实时记录</div>
                                     <div class="font-medium text-base leading-7 mt-3">实时语音转文字</div>
                                     <div class="font-medium text-base leading-7">同步翻译，智能总结要点</div>
-                                    <div
-                                        class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0"
-                                    >
+                                    <div class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0">
                                         <svg
                                             t="1714583281873"
                                             class="icon"
@@ -203,9 +185,7 @@
                                 <div class="font-semibold text-2xl">音视频上传记录总结</div>
                                 <div class="font-medium text-base leading-7 mt-3">音视频转文字</div>
                                 <div class="font-medium text-base leading-7">章节速览总结，一键导出</div>
-                                <div
-                                    class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0"
-                                >
+                                <div class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0">
                                     <svg
                                         t="1714583281873"
                                         class="icon"
@@ -236,9 +216,7 @@
                                 <div class="font-semibold text-2xl">文档、图片一键提取</div>
                                 <div class="font-medium text-base leading-7 mt-3">文档、图片总结归纳</div>
                                 <div class="font-medium text-base leading-7">拍照上传，轻松阅读</div>
-                                <div
-                                    class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0"
-                                >
+                                <div class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0">
                                     <svg
                                         t="1714583281873"
                                         class="icon"
@@ -268,9 +246,7 @@
                                 <div class="font-semibold text-2xl">实时直播,实时记录</div>
                                 <div class="font-medium text-base leading-7 mt-3">直播总结，实时笔记</div>
                                 <div class="font-medium text-base leading-7">双语翻译，实时字幕</div>
-                                <div
-                                    class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0"
-                                >
+                                <div class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0">
                                     <svg
                                         t="1714583281873"
                                         class="icon"
@@ -306,17 +282,10 @@
                             class="relative h-40 w-80 mb-2 rounded-md shadow-lg py-4 px-6 border text-base font-semibold hover_card cursor-pointer"
                         >
                             <div class="flex changetotext">
-                                <div
-                                    class="rencent_title w-full mr-5 select-none"
-                                >{{item}}</div>
+                                <div class="rencent_title w-full mr-5 select-none">{{ item }}</div>
 
                                 <div class="rec_icon collectIconWrap">
-                                    <el-tooltip
-                                        class="item"
-                                        effect="dark"
-                                        content="收藏"
-                                        placement="bottom"
-                                    >
+                                    <el-tooltip class="item" effect="dark" content="收藏" placement="bottom">
                                         <svg
                                             t="1655195283445"
                                             class="cardTitleImg cardTitleImgShow collectHover"
@@ -359,29 +328,16 @@
                                 </div>
                             </div>
                             <div class="mt-5 overflow-hidden flex-wrap flex select-none h-6">
-                                <el-tag
-                                    v-for="tag in recent_tag"
-                                    :key="tag.id"
-                                    class="flex mr-1"
-                                >{{tag}}</el-tag>
+                                <el-tag v-for="tag in recent_tag" :key="tag.id" class="flex mr-1">{{ tag }}</el-tag>
                             </div>
-                            <div
-                                class="mt-4 flex justify-between text-xs font-normal text-gray-400 select-none"
-                            >
-                                <div>{{period}}</div>
-                                <div>{{record_date}}</div>
+                            <div class="mt-4 flex justify-between text-xs font-normal text-gray-400 select-none">
+                                <div>{{ period }}</div>
+                                <div>{{ record_date }}</div>
                             </div>
                             <div class="absolute bottom-0 left-0 w-full z-1">
-                                <div
-                                    class="h-8 flex justify-between px-14 bg-white label_b opacity-0 cursor-default"
-                                >
+                                <div class="h-8 flex justify-between px-14 bg-white label_b opacity-0 cursor-default">
                                     <div class="text-black cursor-pointer" @click="rename">
-                                        <el-tooltip
-                                            class="item"
-                                            effect="dark"
-                                            content="重命名"
-                                            placement="bottom"
-                                        >
+                                        <el-tooltip class="item" effect="dark" content="重命名" placement="bottom">
                                             <svg
                                                 t="1655194314953"
                                                 class="HoverImg"
@@ -400,12 +356,7 @@
                                     </div>
 
                                     <div class="text-black cursor-pointer">
-                                        <el-tooltip
-                                            class="item"
-                                            effect="dark"
-                                            content="导出"
-                                            placement="bottom"
-                                        >
+                                        <el-tooltip class="item" effect="dark" content="导出" placement="bottom">
                                             <svg
                                                 t="1714569161423"
                                                 class="icon"
@@ -425,12 +376,7 @@
                                         </el-tooltip>
                                     </div>
                                     <div class="text-black cursor-pointer">
-                                        <el-tooltip
-                                            class="item"
-                                            effect="dark"
-                                            content="删除"
-                                            placement="bottom"
-                                        >
+                                        <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
                                             <svg
                                                 t="1714569254710"
                                                 class="icon"
@@ -471,7 +417,10 @@
             <div class="items-center">
                 <div
                     class="videodialogcard flex items-center bg-purple-100 bg-opacity-95 hover:bg-purple-200 cursor-pointer"
-                    @click="videoDialogVisible = false;videoUploadDialogVisible = true"
+                    @click="
+                        videoDialogVisible = false;
+                        videoUploadDialogVisible = true;
+                    "
                 >
                     <svg
                         t="1714675464716"
@@ -496,7 +445,10 @@
 
                 <div
                     class="videodialogcard flex items-center bg-blue-100 bg-opacity-95 hover:bg-blue-200 cursor-pointer"
-                    @click="videoDialogVisible = false;videoLinkUploadDialogVisible = true"
+                    @click="
+                        videoDialogVisible = false;
+                        videoLinkUploadDialogVisible = true;
+                    "
                 >
                     <svg
                         t="1714675580159"
@@ -557,7 +509,7 @@
                         </div>
                         <div class="el-upload__tip flex justify-between" slot="tip">
                             <div>目前仅支持mp4，mp3文件，文件时长最长为1小时</div>
-                            <div>{{fileCount}}/5</div>
+                            <div>{{ fileCount }}/5</div>
                         </div>
                     </el-upload>
                 </div>
@@ -574,12 +526,7 @@
                     <div class="mb-5">
                         <div class>翻译</div>
                         <el-select v-model="transValue">
-                            <el-option
-                                v-for="item in uploadOptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value"
-                            ></el-option>
+                            <el-option v-for="item in uploadOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                         <div></div>
                     </div>
@@ -606,7 +553,7 @@
         >
             <div>
                 <el-input
-                    :autosize="{ minRows: 12, maxRows: 12}"
+                    :autosize="{ minRows: 12, maxRows: 12 }"
                     resize="none"
                     v-model="videoUrl"
                     min="1"
@@ -641,13 +588,13 @@
                     background-color="#fff"
                     mode="horizontal"
                     @select="handleDocTypeSelect"
-                    style="border-bottom: 0px !important;"
+                    style="border-bottom: 0px !important"
                 >
                     <el-menu-item index="0">文档阅读</el-menu-item>
                     <el-menu-item index="1">网页阅读</el-menu-item>
                 </el-menu>
             </div>
-            <div class="w-full flex justify-center mt-2" v-if="docUploadDialogAcitveIndex==='0'">
+            <div class="w-full flex justify-center mt-2" v-if="docUploadDialogAcitveIndex === '0'">
                 <el-upload
                     drag
                     class="upload-demo"
@@ -667,11 +614,7 @@
                     <div class="el-upload__tip" slot="tip">
                         <div class="flex justify-between mb-2">
                             <div class="w-5/6">
-                                <el-input
-                                    v-model="pdfUrl"
-                                    min="1"
-                                    placeholder="输入包含文档的URL，后缀需为XXX.pdf"
-                                ></el-input>
+                                <el-input v-model="pdfUrl" min="1" placeholder="输入包含文档的URL，后缀需为XXX.pdf"></el-input>
                             </div>
                             <div>
                                 <el-button>添加</el-button>
@@ -700,7 +643,7 @@
             <div v-else class="select-none">
                 <div class="mb-3">
                     <el-input
-                        :autosize="{ minRows: 12, maxRows: 12}"
+                        :autosize="{ minRows: 12, maxRows: 12 }"
                         resize="none"
                         v-model="htmlUrl"
                         min="1"
@@ -733,7 +676,11 @@
             <div class="w-full flex mt-2 justify-between">
                 <div
                     class="w-2/5 bg-blue-300 h-40 ml-8 rounded-xl flex justify-center items-center hover:bg-blue-500 cursor-pointer"
-                    @click="liveDialogVisible = false; createLiveDialogVisible = true; roomNumber = generateRandomString()"
+                    @click="
+                        liveDialogVisible = false;
+                        createLiveDialogVisible = true;
+                        roomNumber = generateRandomString();
+                    "
                 >
                     <div>
                         <div class="text-xl text-white">开启直播</div>
@@ -764,7 +711,10 @@
                 </div>
                 <div
                     class="w-2/5 bg-purple-300 hover:bg-purple-500 h-40 mr-8 rounded-xl flex justify-center items-center cursor-pointer"
-                    @click="liveDialogVisible = false; inLiveDialogVisible = true"
+                    @click="
+                        liveDialogVisible = false;
+                        inLiveDialogVisible = true;
+                    "
                 >
                     <div>
                         <div class="text-xl text-white">加入房间</div>
@@ -830,7 +780,7 @@
                     </div>
                 </div>
 
-                <div class="flex items-center w-full mb-5" v-if="openLiveRadio==='1'">
+                <div class="flex items-center w-full mb-5" v-if="openLiveRadio === '1'">
                     <div class="w-1/6">密码:</div>
                     <div class="w-5/6">
                         <el-input
@@ -855,7 +805,7 @@
                 <div class="flex items-center w-full mb-5">
                     <div class="flex">
                         <div class="mr-2">房间号:</div>
-                        <div id="roomNumber" class="mr-1">{{roomNumber}}</div>
+                        <div id="roomNumber" class="mr-1">{{ roomNumber }}</div>
                         <div class="cursor-pointer" @click="copyRoomNumber">
                             <svg
                                 t="1715003398431"
@@ -941,7 +891,7 @@
             class="select-none"
             :destroy-on-close="true"
         >
-            <el-form :model="loginForm" :rules="rules" ref="loginForm" v-if="logintab===0">
+            <el-form :model="loginForm" :rules="rules" ref="loginForm" class="demo-ruleForm" v-if="logintab === 0">
                 <p class="form-title">请登录账户</p>
                 <el-form-item label="邮箱" prop="email">
                     <el-input
@@ -962,7 +912,10 @@
                 <button
                     class="mt-2 w-full bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center text-white"
                     type="submit"
-                >登录</button>
+                    @click="submitLogin('loginForm')"
+                >
+                    登录
+                </button>
 
                 <p class="signup-link mt-1">
                     没有帐户?
@@ -970,21 +923,13 @@
                 </p>
             </el-form>
 
-            <el-form
-                :model="registerForm"
-                :rules="rules"
-                ref="registerForm"
-                class="demo-ruleForm"
-                v-else
-            >
-                <p
-                    class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl"
-                >注册用户</p>
-                <el-form-item label="用户名" prop="userName">
+            <el-form :model="registerForm" :rules="rules" ref="registerForm" class="demo-ruleForm" v-else>
+                <p class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">注册用户</p>
+                <el-form-item label="用户名" prop="name">
                     <el-input
                         class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full"
                         min="1"
-                        v-model="registerForm.userName"
+                        v-model="registerForm.name"
                         placeholder="请输入用户名"
                     ></el-input>
                 </el-form-item>
@@ -1021,7 +966,9 @@
                     class="w-full bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center text-white"
                     type="submit"
                     @click="submitRegister('registerForm')"
-                >创建用户</button>
+                >
+                    创建用户
+                </button>
             </el-form>
         </el-dialog>
     </div>
@@ -1030,33 +977,40 @@
 <script>
 var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 import { userStore } from '../../store/store';
-import * from '../../api/user'
+import { Login, Register } from '../../api/user';
+import { Message } from 'element-ui';
+import bus from '../common/bus';
 const userstore = userStore();
 export default {
     mounted() {
         setInterval(this.startPlay, 7000);
         setInterval(this.updateTime, 1000);
     },
+    created() {
+        bus.$on('openLogin', (msg) => {
+            this.loginDialogVisible = msg;
+        });
+    },
     data() {
         var validatePass2 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'));
-        } else if (value !== this.registerForm.password) {
-          callback(new Error('两次输入密码不一致!'));
-        } else {
-          callback();
-        }
-      };
+            if (value === '') {
+                callback(new Error('请再次输入密码'));
+            } else if (value !== this.registerForm.password) {
+                callback(new Error('两次输入密码不一致!'));
+            } else {
+                callback();
+            }
+        };
         return {
             ulList: [{ msg: '高效开会！' }, { msg: '轻松学习！' }, { msg: '随手总结！' }],
             play: false,
-            rencent_items: ['这是一部讲述关于兔子和三只田鼠之间故事的电影，在电影中他们之间将会发生激烈的对抗，电影即将上映。', '小时候，幸福是一件东西，拥有就幸福；长大后，幸福是一个目标，达到就幸福；成熟后，发现幸福原来是一种心态，领悟就幸福。'],
+            rencent_items: [
+                '这是一部讲述关于兔子和三只田鼠之间故事的电影，在电影中他们之间将会发生激烈的对抗，电影即将上映。',
+                '小时候，幸福是一件东西，拥有就幸福；长大后，幸福是一个目标，达到就幸福；成熟后，发现幸福原来是一种心态，领悟就幸福。'
+            ],
             time: '',
             date: '',
-            recent_tag: ['电影',
-                '兔子',
-                '三只田鼠',
-                '报复'],
+            recent_tag: ['电影', '兔子', '三只田鼠', '报复'],
             period: '02:14',
             record_date: '04-25 16:11',
             videoDialogVisible: false,
@@ -1089,13 +1043,14 @@ export default {
                 password: ''
             },
             registerForm: {
-                userName: '',
+                name: '',
                 email: '',
                 password: '',
-                confirmPassword: ''
+                confirmPassword: '',
+                avatar: ''
             },
             rules: {
-                userName: [
+                name: [
                     { required: true, message: '请输入用户名', trigger: 'blur' },
                     { min: 1, max: 5, message: '长度在 1 到 5 个字符', trigger: 'blur' }
                 ],
@@ -1104,9 +1059,7 @@ export default {
                     { min: 1, max: 10, message: '长度在 1 到 10 个字符', trigger: 'blur' }
                 ],
                 email: [{ type: 'email', required: true, message: '请输入正确邮箱格式', trigger: 'blur' }],
-                confirmPassword: [
-                    { validator: validatePass2, trigger: 'blur' },
-                ],
+                confirmPassword: [{ validator: validatePass2, trigger: 'blur' }]
             },
             uploadOptions: [
                 {
@@ -1248,10 +1201,10 @@ export default {
             this.loading = true;
             // 调用后端服务器的接口
             uploadFile(file.file)
-                .then(resp => {
+                .then((resp) => {
                     this.form.installImgUrl = resp.url;
                 })
-                .catch(e => {
+                .catch((e) => {
                     this.$message.error(e.message);
                     this.$refs.upload.clearFiles();
                 });
@@ -1267,7 +1220,8 @@ export default {
             }
         },
         isValidUrl() {
-            const regex = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
+            const regex =
+                /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/;
             return regex.test(this.link);
         },
         handleDocTypeSelect(key, keyPath) {
@@ -1293,12 +1247,12 @@ export default {
         },
         copyRoomNumber() {
             const value = document.getElementById('roomNumber').innerText;
-            this.$copyText(value).then(e => {
+            this.$copyText(value).then((e) => {
                 console.log('复制成功：', e);
             });
         },
         opendialog(name) {
-            if (!userstore.isLogin) {
+            if (!userstore.isLoggedIn) {
                 this.loginDialogVisible = true;
                 return;
             }
@@ -1306,7 +1260,7 @@ export default {
             this[variable] = true;
         },
         goToVoiceRecord() {
-            if (!userstore.isLogin) {
+            if (!userstore.isLoggedIn) {
                 this.loginDialogVisible = true;
                 return;
             }
@@ -1319,19 +1273,60 @@ export default {
             }
             this.logintab = 1;
         },
-        submitRegister(formName){
+        submitRegister(formName) {
             this.$refs[formName].validate((valid) => {
-            if (valid) {
-                //注册成功
-            userRequest.Register
-            alert('submit!');
-          } else {
-            //注册失败
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
+                if (valid) {
+                    //注册成功
+                    Register(this.loginForm.email, this.loginForm.password).then(() => {
+                        Message.success('注册成功');
+                        this.closeLoginDialog();
+                        this.resetRgisterForm();
+                    });
+                } else {
+                    //注册失败
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        submitLogin(formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    //登录成功
+                    Login(this.loginForm.email, this.loginForm.password).then((response) => {
+                        Message.success('登录成功');
+                        this.closeLoginDialog();
+                        this.resetLoginForm();
+                        userstore.isLoggedIn = true;
+                        userstore.user_id = response.UserId;
+                        // userstore.avatar = response.Avatar
+                        userstore.avatar = 'https://img2.baidu.com/it/u=1195773901,4039087122&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=750';
+                        userstore.name = response.Name;
+                        userstore.token = response.Token.access_token;
+                        window.location.reload();
+                    });
+                } else {
+                    //登录失败
+                    console.log('error submit!!');
+                    return false;
+                }
+            });
+        },
+        resetLoginForm() {
+            this.loginForm = {
+                email: '',
+                password: ''
+            };
+        },
+        resetRgisterForm() {
+            this.registerForm = {
+                name: '',
+                email: '',
+                password: '',
+                confirmPassword: '',
+                avatar: ''
+            };
+        }
     }
 };
 </script>
@@ -1570,4 +1565,5 @@ border-radius: 10px;
 .signup-link a {
     text-decoration: underline;
 }
+
 </style>

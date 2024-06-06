@@ -1,25 +1,23 @@
 import axios from 'axios';
-import {loginStore} from '../store/store'
+import {userStore} from '../store/store'
 import { Message } from 'element-ui';
 import { error } from 'autoprefixer/lib/utils';
 import router from '../router';
-const loginstore = loginStore()
+const userstore = userStore()
 
 const service = axios.create({
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
     // easy-mock服务挂了，暂时不使用了
     // baseURL: 'https://www.easy-mock.com/mock/592501a391470c0ac1fab128',
-    baseURL: '127.0.0.1:8080',
+    baseURL: 'http://127.0.0.1:10001',
     timeout: 15000,
-    headers: {
-        "content-type": "application/json",
-    },
 });
 
 //请求拦截器
 service.interceptors.request.use(
     config => {
-        const token = loginstore.token
+        console.log('config:',config)
+        const token = userstore.token
         if (token) {
             config.headers.Authorization = token
         }
@@ -34,20 +32,23 @@ service.interceptors.request.use(
 //响应拦截器
 service.interceptors.response.use(
     response => {
-        if (response.status === 200) {
+        console.log("rsp",response )
+        if (response.data.code === 200) {
             return response.data;
         } else if (response.status ===401){
-            Message.error(response.data.status_message + ",请重新登录")
-            loginstore.user_id=-1
-            loginstore.avatar=""
-            loginstore.name=""
+            Message.error(response.data.message + ",请重新登录")
+            userstore.isLoggedIn = false
+            userstore.user_id=-1
+            userstore.avatar=""
+            userstore.name=""
+            userstore.token=""
             router.push("/home")
             window.location.reload()
             return Promise.reject();
         }
         else {
-            Message.error(response.data.status_message)
-            Promise.reject();
+            Message.error(response.data.message)
+            return Promise.reject();
         }
     },
     error => {

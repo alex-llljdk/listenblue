@@ -201,7 +201,7 @@
 <script>
 import flvjs from 'flv.js';
 import DPlayer from 'dplayer';
-import { loginStore } from '../../store/store';
+import { userStore } from '../../store/store';
 import { quillEditor } from 'vue-quill-editor';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
@@ -467,7 +467,7 @@ export default {
     },
     computed: {
         isLogin() {
-            return loginStore().isLogin;
+            return userStore().isLogin;
         },
         editor() {
             return this.$refs.myQuillEditor.quill;

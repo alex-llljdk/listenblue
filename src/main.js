@@ -17,9 +17,12 @@ import 'quill/dist/quill.bubble.css'
 import VueClipBoard from 'vue-clipboard2'
 import VueDPlayer from "vue-dplayer";
 import "vue-dplayer/dist/vue-dplayer.css";
-import {createPinia} from 'pinia'
+import {createPinia, PiniaVuePlugin} from 'pinia'
+import piniaPluginPersist from 'pinia-plugin-persist'
 
+Vue.use(PiniaVuePlugin)
 const pinia = createPinia()//需要挂载在实例上
+pinia.use(piniaPluginPersist)
 Vue.use(pinia)
 Vue.use(VueDPlayer);
 Vue.use(VueClipBoard)
@@ -61,6 +64,6 @@ new Vue({
     router,
     i18n,
     pinia,
-    render: h => h(App)
+    render: (h) => h(App)
 }).$mount('#app');
 
