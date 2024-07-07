@@ -779,7 +779,9 @@ export default {
 
             replaceNum: 0,
             centerDialogVisible: false,
-            saveFileName: ''
+            saveFileName: '',
+
+            mediaStream: null
         };
     },
     mounted() {
@@ -835,6 +837,16 @@ export default {
         next();
     },
     methods: {
+        closeMicrophone() {
+            if (this.mediaStream) {
+                let tracks = this.mediaStream.getAudioTracks();
+                tracks.forEach((track) => track.stop());
+                this.mediaStream = null;
+                console.log('麦克风已关闭');
+            } else {
+                console.log('没有麦克风需要关闭');
+            }
+        },
         clearRecorderAndCloseSocket() {
             if (this.recorder !== null) {
                 this.recorder.stop();
@@ -854,11 +866,15 @@ export default {
             const seconds = String(now.getSeconds()).padStart(2, '0');
             return `${hours}:${minutes}:${seconds}`;
         },
+        getCurSavedTime() {
+            const hms = this.getHMSTime();
+            return `已保存于 ${hms}`;
+        },
         updateInfo() {
             const ymd_hms = this.getYMDHMSTime;
             const hms = this.getHMSTime();
             this.recordInfo = `${ymd_hms} 记录`;
-            this.savedTime = `已保存于 ${hms}`;
+            this.savedTime = this.getCurSavedTime();
         },
         handleInput(event) {
             const padding = 8;
@@ -1134,6 +1150,7 @@ export default {
                     },
                     function (mediaStream) {
                         // 麦克风可用，执行成功时的操作
+                        That.mediaStream = mediaStream;
                         That.initWebSocketAndRecording(mediaStream);
                     },
                     function (error) {
@@ -1246,67 +1263,7 @@ export default {
                 console.error('socket.onerror:', error);
             };
         },
-        initWebSocket() {
-            console.log('initWesocket==');
 
-            // 建立WebSocket连接
-            this.socket = new WebSocket(this.wsUrl);
-
-            // 监听WebSocket的open事件，当连接打开时触发
-            this.socket.onopen = (event) => {
-                console.log('socket.onopen==');
-
-                //可删除，只是用来测试后端自动断开连接的时间
-                setInterval(() => {
-                    this.second++;
-                }, 1000);
-            };
-            // 监听WebSocket的message事件，当收到服务器消息时触发
-            this.socket.onmessage = (event) => {
-                console.log('socket.onmessage==', event.data);
-                var data = JSON.parse(event.data);
-                switch (
-                    data.type //根据WebSocket返回值的某个字段，区分改做什么事情
-                ) {
-                    case 'connect': // // {"type":"connect","data":"7f0000010b540000000a"}
-                        //写你自己的逻辑
-                        break;
-                    case 'xxx':
-                        //写你自己的逻辑
-                        break;
-                }
-            };
-            // 监听WebSocket的close事件，当连接关闭时触发
-            this.socket.onclose = (event) => {
-                console.log('socket.onclose==');
-                console.log(`WebSocket连接${this.second}秒后关闭了`);
-                //连接关闭，就重新连接
-                // this.reconnect();
-            };
-
-            // 监听WebSocket的error事件，当发生错误时触发
-            this.socket.onerror = (error) => {
-                console.error('socket.onerror:', error);
-            };
-        },
-        reconnect() {
-            //断线重新连接
-            console.log('断线重新连接==');
-            var that = this;
-            if (that.lockReconnect) {
-                return;
-            }
-            that.lockReconnect = true;
-            //没连接上会一直重连，设置延迟避免请求过多
-            setTimeout(function () {
-                //重新连接
-                that.initWebSocket();
-                that.lockReconnect = false;
-            }, 5000);
-        },
-        closeWs() {
-            this.socket.close();
-        },
         async allReplace() {
             if (this.originText === '') {
                 this.$message({
@@ -1546,63 +1503,52 @@ export default {
                 element.scrollIntoView({ behavior: 'smooth' });
             }
         },
+        uploadVoiceRecord() {
+            this.closeMicrophone();
+            let buffer = this.recorder.getBufferAll();
+            let f32buffer = this.float32Flatten(buffer);
+            let int16buffer = this.FloatArray2Int16(f32buffer);
+            let blob = this.encodeMono(1, 48000, int16buffer);
 
+            const formData = new FormData();
+            formData.append('file', blob); //文件
+            formData.append('filename', this.saveFileName); //文件名
+            formData.append('user_id', userstore.user_id);
+            formData.append('type', 0);
+            let text = {
+                record_timestamp: this.recordInfo,
+                source_language: this.sourceLanguage,
+                dest_language: this.destLanguage,
+                content: this.content,
+                savedTime: this.getCurSavedTime()
+            };
+            let tmp_recordings = [];
+            for (let i = 0; i < this.recording_items.length; ++i) {
+                tmp_recordings.push({
+                    timestamp: this.recording_items[i].time_stamp,
+                    content: this.concatContent(this.recording_items[i].content)
+                });
+                console.log(this.recording_items[i].time_stamp);
+            }
+            formData.append('inner_Html', JSON.stringify(text));
+            formData.append('content', JSON.stringify(tmp_recordings));
+            console.log('text: ', text);
+
+            saveVoice(formData) //调用api
+                .then((res) => {
+                    if (res.code === 200) {
+                        console.log('保存上传成功 res', res);
+                    } else {
+                        console.log('保存上传失败 res', res);
+                    }
+                });
+        },
         handleSave() {
             this.$confirm('保存并退出？')
                 .then(async (_) => {
-                    console.log('1111111111111');
-                    // let voiceUint8Array = new Uint8Array(voiceArray);
-                    // console.log(voiceUint8Array);
-                    // const blob = new Blob([voiceUint8Array], { type: 'audio/mpeg' });
-                    // voiceUint8Array = null;
-                    // const blob = this.recorder.getBlob();
-                    // console.log(blob);
-                    // blob = this.convertToMp3(blob);
-                    // console.log(blob);
-                    
-                    let buffer = this.recorder.getBufferAll();
-                    let f32buffer = this.float32Flatten(buffer)
-                    console.log(buffer);
-                    let int16buffer = this.FloatArray2Int16(f32buffer);
-                    console.log('1111111111111');
-                    let blob = this.encodeMono(1, 48000, int16buffer);
-
-                    const formData = new FormData();
-                    formData.append('file', blob); //文件
-                    formData.append('filename', this.saveFileName); //文件名
-                    formData.append('user_id', userstore.user_id);
-                    formData.append('type', 0);
-
-                    let text = {};
-                    text['record_timestamp'] = this.recordInfo;
-                    text['source_language'] = this.sourceLanguage;
-                    text['dest_language'] = this.destLanguage;
-                    text['content'] = this.content;
-
-                    let tmp_timestamps = [];
-                    let tmp_recordings = [];
-                    for (let i = 0; i < this.recording_items.length; ++i) {
-                        tmp_recordings.push(this.concatContent(this.recording_items[i].content));
-                        tmp_timestamps.push(this.recording_items[i].record_timestamp);
-                    }
-                    text['tmp_timestamps'] = tmp_timestamps;
-                    text['recording_items'] = tmp_recordings;
-                    formData.append('inner_Html', text);
-                    formData.append('content', tmp_recordings);
-                    console.log('text: ', text);
-
-                    saveVoice(formData) //调用api
-                        .then((res) => {
-                            if (res.code === 200) {
-                                console.log('保存上传成功 res', res);
-                            } else {
-                                console.log('保存上传失败 res', res);
-                            }
-                        });
-                    console.log(11111111111);
+                    this.uploadVoiceRecord();
                     this.$router.push('/home');
                 })
-                .catch((_) => {});
         },
         noSaveClose() {
             this.centerDialogVisible = false;
@@ -1610,6 +1556,7 @@ export default {
         },
         saveClose() {
             this.centerDialogVisible = false;
+            this.uploadVoiceRecord();
             this.$router.push('/home');
         },
         FloatArray2Int16(floatbuffer) {
