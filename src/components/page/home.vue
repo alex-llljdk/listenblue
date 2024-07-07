@@ -447,7 +447,7 @@
                     class="videodialogcard flex items-center bg-blue-100 bg-opacity-95 hover:bg-blue-200 cursor-pointer"
                     @click="
                         videoDialogVisible = false;
-                        videoLinkUploadDialogVisible = true;
+                        videoUrlUploadDialogVisible = true;
                     "
                 >
                     <svg
@@ -478,7 +478,7 @@
             :visible="videoUploadDialogVisible"
             v-if="videoUploadDialogVisible"
             title="上传音视频"
-            width="31%"
+            width="34%"
             top="30vh"
             :close-on-click-modal="false"
             @close="closeVideoUploadDialog"
@@ -486,20 +486,20 @@
             :destroy-on-close="true"
         >
             <div class="flex">
-                <div class="overflow-ellipsis">
+                <div class="overflow-hidden">
                     <el-upload
+                        ref="videoUpload"
                         drag
-                        class="upload-demo"
                         action="#"
-                        ref="upload"
                         multiple
                         :limit="5"
                         :auto-upload="false"
-                        :on-exceed="handleExceed"
-                        :file-list="fileList"
-                        :http-request="handleFileUpload"
-                        :on-change="handleChange"
-                        :on-remove="handleRemove"
+                        :on-exceed="handleVideoExceed"
+                        :file-list="videoFileList"
+                        :http-request="handleVideoFileUpload"
+                        :on-change="handleVideoChange"
+                        :on-remove="handleVideoRemove"
+                        :on-success="handleVideoSuccess"
                         accept=".mp3, .mp4"
                     >
                         <i class="el-icon-upload"></i>
@@ -508,8 +508,8 @@
                             <em>点击上传</em>
                         </div>
                         <div class="el-upload__tip flex justify-between" slot="tip">
-                            <div>目前仅支持mp4，mp3文件，文件时长最长为1小时</div>
-                            <div>{{ fileCount }}/5</div>
+                            <div>目前仅支持mp4，mp3文件，文件时长最长为1小时,不超过500M</div>
+                            <div>{{ videoFileCount }}/5</div>
                         </div>
                     </el-upload>
                 </div>
@@ -531,7 +531,7 @@
                         <div></div>
                     </div>
                     <div class="flex justify-center">
-                        <el-button class="w-1/2" type="primary">
+                        <el-button class="w-1/2" type="primary" @click.stop="clickUploadVideo">
                             上传
                             <i class="el-icon-upload el-icon--right"></i>
                         </el-button>
@@ -541,13 +541,13 @@
         </el-dialog>
 
         <el-dialog
-            :visible="videoLinkUploadDialogVisible"
-            v-if="videoLinkUploadDialogVisible"
+            :visible="videoUrlUploadDialogVisible"
+            v-if="videoUrlUploadDialogVisible"
             title="上传音视频链接"
             width="30%"
             top="30vh"
             :close-on-click-modal="false"
-            @close="closeVideoLinkUploadDialog"
+            @close="closeVideoUrlUploadDialog"
             class="select-none"
             :destroy-on-close="true"
         >
@@ -563,7 +563,7 @@
             </div>
 
             <div class="flex justify-center mt-5">
-                <el-button class="w-1/4" type="primary">
+                <el-button class="w-1/4" type="primary" @click.stop="submitVideoUrl">
                     上传
                     <i class="el-icon-upload el-icon--right"></i>
                 </el-button>
@@ -978,8 +978,11 @@
 var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 import { userStore } from '../../store/store';
 import { Login, Register } from '../../api/user';
+import { uploadVideo, uploadLargeVideo, uploadVideoUrl, mergeVideo } from '../../api/videoTrans';
 import { Message } from 'element-ui';
 import bus from '../common/bus';
+import SparkMD5 from 'spark-md5';
+import { fileToBuffer } from '../../utils/util';
 const userstore = userStore();
 export default {
     mounted() {
@@ -1015,17 +1018,21 @@ export default {
             record_date: '04-25 16:11',
             videoDialogVisible: false,
             videoUploadDialogVisible: false,
-            videoLinkUploadDialogVisible: false,
+            videoUrlUploadDialogVisible: false,
             docUploadDialogVisible: false,
             liveDialogVisible: false,
             createLiveDialogVisible: false,
             inLiveDialogVisible: false,
             loginDialogVisible: false,
             logintab: 0,
+            videoFileList: [],
             fileList: [],
-            fileCount: 0,
-            lang: 0,
-            transValue: 0,
+            videoFileCount: 0,
+
+            //上传音视频参数
+            lang: 0, //视频语言类型
+            transValue: 0, //是否翻译
+
             videoUrl: '',
             htmlUrl: '',
             docType: 0,
@@ -1153,14 +1160,14 @@ export default {
         },
         closeVideoUploadDialog() {
             this.videoUploadDialogVisible = false;
-            // this.uploadOptions[1].label = '英语';
-            // this.lang = 0;
-            // this.transValue = 0;
-            // this.fileCount = 0;
+            this.uploadOptions[1].label = '英语';
+            this.lang = 0;
+            this.transValue = 0;
+            this.fileCount = 0;
         },
-        closeVideoLinkUploadDialog() {
-            this.videoLinkUploadDialogVisible = false;
-            this.link = '';
+        closeVideoUrlUploadDialog() {
+            this.videoUrlUploadDialogVisible = false;
+            this.videoUrl = '';
         },
         closeDocUploadDialog() {
             this.docUploadDialogVisible = false;
@@ -1184,30 +1191,20 @@ export default {
             this.logintab = 0;
         },
         // 处理移除操作
-        handleChange(file, fileList) {
-            this.fileCount = fileList.length;
+        async handleVideoChange(file, fileList) {
+            this.videoFileCount = fileList.length;
         },
-        handleRemove(file, fileList) {
-            this.fileCount = fileList.length;
+        async handleVideoRemove(file, fileList) {
+            this.videoFileCount = fileList.length;
+        },
+        handleVideoSuccess() {
+            this.$refs.upload.clearFiles();
         },
         // 处理超出图片个数操作
-        handleExceed(files, fileList) {
+        handleVideoExceed(files, fileList) {
             this.$message.warning(
                 `当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`
             );
-        },
-        // 处理文件上传操作
-        handleFileUpload(file) {
-            this.loading = true;
-            // 调用后端服务器的接口
-            uploadFile(file.file)
-                .then((resp) => {
-                    this.form.installImgUrl = resp.url;
-                })
-                .catch((e) => {
-                    this.$message.error(e.message);
-                    this.$refs.upload.clearFiles();
-                });
         },
         submitUpload() {
             this.$refs.upload.submit();
@@ -1326,6 +1323,184 @@ export default {
                 confirmPassword: '',
                 avatar: ''
             };
+        },
+        // 上传(同时选择多个文件时会多次上传该文件)
+        async handleVideoFileUpload(item) {
+            let file = item.file;
+            this.disabled = true;
+            this.videoFileList = [...this.videoFileList, file]; //用于展示进度
+            this.uploadModal = true; // 展示进度弹窗
+            // 文件大于5mb时分片上传
+            if (file.size / 1024 / 1024 < 5) {
+                const formData = new FormData();
+                formData.append('file', file); //文件
+                formData.append('filename', file.name); //文件名
+                formData.append('user_id', userstore.user_id);
+                if (file.type === 'audio/mpeg' || file.type === 'audio/mp3') {
+                    formData.append('type', 0);
+                } else {
+                    formData.append('type', 1);
+                }
+                var spark = new SparkMD5.ArrayBuffer();
+                function getMd5(file) {
+                    return new Promise((resolve) => {
+                        // 对文件对象的处理
+                        var fileReader = new FileReader();
+                        fileReader.readAsArrayBuffer(file);
+                        // fileReader.onload为异步函数，要放到Promise对象中，等待状态的变更后再返回生成的md5值
+                        fileReader.onload = function (e) {
+                            spark.append(e.target.result);
+                            resolve(spark.end());
+                        };
+                    });
+                }
+                let md5 = await getMd5(file); 
+                formData.append('md5', md5);
+                uploadVideo(formData) //调用api
+                    .then((res) => {
+                        if (res.code === 200) {
+                            console.log('res', res);
+                            Message.success(`${file.name}：转写完成`);
+                        } else {
+                            this.videoFileList.forEach((item) => {
+                                //进度条报错
+                                if (item.name === file.name) {
+                                    item.typeProgress = 1;
+                                }
+                            });
+                        }
+                    });
+                // .finally(() => {
+                //     this.disabled = false;
+                // });
+            } else {
+                const size = 5 * 1024 * 1024; // 5MB 每个分片大小
+                let current = 0; // 当前分片index(从0开始)
+                let total = Math.ceil(file.size / size); // 分片总数
+                let startByte = 0;
+                let that = this;
+                // 通过文件获取对应的md5值
+                let dataFileStart = file.slice(0, size); // 第一片文件
+                let dataFileEnd = file.slice(size * (total - 1), file.size); // 最后一片文件
+                var spark = new SparkMD5.ArrayBuffer();
+                function getMd5(file) {
+                    return new Promise((resolve) => {
+                        // 对文件对象的处理
+                        var fileReader = new FileReader();
+                        fileReader.readAsArrayBuffer(file);
+                        // fileReader.onload为异步函数，要放到Promise对象中，等待状态的变更后再返回生成的md5值
+                        fileReader.onload = function (e) {
+                            spark.append(e.target.result);
+                            resolve(spark.end());
+                        };
+                    });
+                }
+                //获取文件二进制数据
+                let md5Start = await getMd5(dataFileStart); // 第一片的md5值
+                let md5End = await getMd5(dataFileEnd); // 最后一片的md5值
+                let md5 = md5Start + md5End;
+
+                //上传一次
+                uploadChunk();
+                // 文件完整性检测，完整则合并
+                let mergeTime = 0;
+                let type
+                if (file.type === 'audio/mpeg' || file.type === 'audio/mp3') {
+                    type = "0"
+                } else {
+                    type = "1"
+                }
+                function merge() {
+                    mergeVideo(md5,total.toString(),file.name,userstore.user_id.toString(),type)
+                    .then((res) => {
+                        if (res.idx != -1) {
+                            current = res.idx; // 当前服务器应该上传的分片下标
+                            startByte = size * current;
+                            uploadChunk();
+                            if (mergeTime <= 5) {
+                                mergeTime += 1;
+                                merge();
+                            } else {
+                                Message.error('文件合并失败,请重新上传');
+                                return;
+                            }
+                        } 
+                    });
+                }
+                // .finally(() => {
+                //     this.disabled = false;
+                // });
+
+                // 编辑上传参数并上传文件
+                function uploadChunk() {
+                    const formData = new FormData();
+                    const endByte = Math.min(startByte + size, file.size);
+                    const chunk = file.slice(startByte, endByte); // 当前分片文件
+                    formData.append('file', chunk);
+                    formData.append('filename', file.name);
+                    formData.append('current', current);
+                    formData.append('total', total);
+                    formData.append('md5', md5);
+                    formData.append('lang', that.lang);
+                    formData.append('trans', that.transValue);
+                    formData.append('user_id', userstore.user_id);
+                    if (file.type === 'audio/mpeg' || file.type === 'audio/mp3') {
+                        formData.append('type', 0);
+                    } else {
+                        formData.append('type', 1);
+                    }
+
+                    uploadLargeVideo(formData)
+                        .then((res) => {
+                            console.log('res', res);
+                            if (res.code === 200) {
+                                //前一个文件片上传成功
+                                console.log('前一个上传成功');
+                                // that.list.forEach((item) => {
+                                //     if (item.name === file.name) {
+                                //         item.percent = Math.floor(((Number(current) + 1) * 100) / total);
+                                //     }
+                                // });
+                                // that.list = [...that.list];
+                                startByte = endByte;
+                                if (startByte < file.size) {
+                                    current++;
+                                    uploadChunk();
+                                } else {
+                                    Message.success(`${file.name}：上传完成`);
+                                                    merge();
+                                }
+                            } else {
+                                that.list.forEach((item) => {
+                                    //设置进度条
+                                    if (item.name === file.name) {
+                                        item.typeProgress = 1;
+                                    }
+                                });
+                            }
+                        })
+                        .finally(() => {
+                            that.disabled = false;
+                        });
+                }
+            }
+            return false;
+        },
+        clickUploadVideo() {
+            console.log('点击');
+            this.$refs.videoUpload.submit();
+        },
+        submitVideoUrl(){
+            console.log(this.videoUrl)
+            uploadVideoUrl(this.videoUrl, userstore.user_id).then((response) => {
+                if (response.code === 200){
+                    Message.success('转写成功');
+                }else{
+                    Message.Error(response.Msg)
+                }
+                 
+            });
+            this.closeVideoUrlUploadDialog();
         }
     }
 };
@@ -1565,5 +1740,4 @@ border-radius: 10px;
 .signup-link a {
     text-decoration: underline;
 }
-
 </style>

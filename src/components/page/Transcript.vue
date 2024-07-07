@@ -142,26 +142,259 @@
                         </div>
 
                         <div class="flex text-lg items-center">
-                            <el-popover placement="bottom-end" width="280" trigger="hover" visible-arrow="false">
-                                <div class="p-2 select-none">
-                                    <div class="font-semibold text-black text-sm leading-6">翻译</div>
-                                    <div class="flex items-center mb-2">
-                                        <div class="text-xs whitespace-nowrap mr-3">选择语言</div>
-                                        <el-select v-model="transType" placeholder="请选择">
-                                            <el-option
-                                                v-for="item in transOptions"
-                                                :key="item.value"
-                                                :label="item.label"
-                                                :value="item.value"
+                            <el-tooltip
+                                effect="dark"
+                                content="搜索"
+                                placement="bottom"
+                                v-if="!isSearchContent"
+                            >
+                                <div
+                                    class="tools-icon cursor-pointer w-10 h-10 rounded-lg flex items-center justify-center mr-3"
+                                    @click="changeSearchStatus"
+                                >
+                                    <svg
+                                        t="1719539453197"
+                                        class="icon"
+                                        viewBox="0 0 1024 1024"
+                                        version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        p-id="8356"
+                                        width="26"
+                                        height="26"
+                                    >
+                                        <path
+                                            d="M944.951334 875.009893L777.542121 707.703008c48.605976-64.978515 77.564905-145.306286 77.564904-232.797042 0-215.401219-174.776856-389.973419-390.280404-389.973419C249.425402 85.034876 74.750874 259.607075 74.750874 475.008294S249.425402 864.981713 464.92895 864.981713c97.825922 0 186.953932-36.224243 255.411612-95.574698l165.055661 165.055661c8.18627 8.18627 18.930748 12.381733 29.777555 12.381733 10.846807 0 21.488958-4.195463 29.777556-12.381733 16.372539-16.474868 16.372539-43.080244 0-59.452783z m-480.022384-94.039772c-168.841811 0-306.268812-137.222344-306.268812-306.064155s137.427001-305.961827 306.268812-305.961827S771.197762 306.268812 771.197762 475.008294s-137.427001 305.961827-306.268812 305.961827z"
+                                            p-id="8357"
+                                        />
+                                    </svg>
+                                </div>
+                            </el-tooltip>
+                            <div class="search-top" v-else>
+                                <div
+                                    class="search-top-left"
+                                    :class="{ focus: isSearchInputFocused }"
+                                >
+                                    <div class="search-input">
+                                        <div>
+                                            <svg
+                                                height="14"
+                                                viewBox="0 0 14 14"
+                                                width="14"
+                                                data-spm-anchor-id="5176.28158893.0.i62.22f86ac59e5h91"
                                             >
-                                            </el-option>
-                                        </el-select>
+                                                <mask id="a" fill="#fff">
+                                                    <path
+                                                        d="m0 0h16v16h-16z"
+                                                        fill="#fff"
+                                                        fill-rule="evenodd"
+                                                    />
+                                                </mask>
+                                                <path
+                                                    d="m7 1.33333333c3.1296136 0 5.6666667 2.53705309 5.6666667 5.66666667 0 1.11726311-.3233397 2.15900619-.8815482 3.0367583l2.6695352 2.6703485-1.4142136 1.4142135-2.6099677-2.6106211c-.95224777.7253155-2.14106801 1.1559675-3.4304724 1.1559675-3.12961358 0-5.66666667-2.5370531-5.66666667-5.6666667 0-3.12961358 2.53705309-5.66666667 5.66666667-5.66666667zm0 2c-2.02504408 0-3.66666667 1.64162259-3.66666667 3.66666667s1.64162259 3.6666667 3.66666667 3.6666667 3.6666667-1.64162262 3.6666667-3.6666667-1.64162262-3.66666667-3.6666667-3.66666667z"
+                                                    fill="#7d7d94"
+                                                    fill-rule="evenodd"
+                                                    mask="url(#a)"
+                                                    transform="translate(-1 -1)"
+                                                />
+                                            </svg>
+                                        </div>
+
+                                        <input
+                                            width="450"
+                                            type="text"
+                                            placeholder="输入内容回车进行搜索"
+                                            class="search-input-field"
+                                            v-model="searchInfo"
+                                            @input="handleSearchInputChange"
+                                            @focus="isSearchInputFocused = true"
+                                            @blur="isSearchInputFocused = false"
+                                            @keydown.enter="handleSearchEnterKey"
+                                        />
+
+                                        <div style="width: 14px;"></div>
+
+                                        <div
+                                            class="clear-searchInfo"
+                                            @click="clearSearchInfo"
+                                            v-if="isShowClearSearchInfo"
+                                        >
+                                            <svg
+                                                t="1719557095120"
+                                                class="icon"
+                                                viewBox="0 0 1024 1024"
+                                                version="1.1"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                p-id="13728"
+                                                width="14"
+                                                height="14"
+                                            >
+                                                <path
+                                                    d="M512 1024c-285.257143 0-512-226.742857-512-512s226.742857-512 512-512 512 226.742857 512 512-226.742857 512-512 512z m-7.314286-585.142857l-146.285714-146.285714c-21.942857-21.942857-51.2-21.942857-73.142857 0-21.942857 21.942857-21.942857 51.2 0 73.142857l146.285714 146.285714-146.285714 146.285714c-21.942857 21.942857-21.942857 51.2 0 73.142857 21.942857 21.942857 51.2 21.942857 73.142857 0l146.285714-146.285714 146.285715 146.285714c21.942857 21.942857 51.2 21.942857 73.142857 0s21.942857-51.2 0-73.142857l-146.285715-146.285714 146.285715-146.285714c21.942857-21.942857 21.942857-51.2 0-73.142857s-51.2-21.942857-65.828572 0L504.685714 438.857143z"
+                                                    fill="#B9B9B9"
+                                                    p-id="13729"
+                                                />
+                                            </svg>
+                                        </div>
+
+                                        <div class="switchover" v-if="isShowSwitchButton">
+                                            <span class="search-line"></span>
+                                            <div
+                                                class="switchover-button"
+                                                @click="leftSwitchButton"
+                                            >
+                                                <svg
+                                                    height="12"
+                                                    viewBox="0 0 8 12"
+                                                    width="8"
+                                                    class="inputArrow"
+                                                >
+                                                    <mask id="a" fill="#fff">
+                                                        <path
+                                                            d="m0 0h16v16h-16z"
+                                                            fill="#fff"
+                                                            fill-rule="evenodd"
+                                                        />
+                                                    </mask>
+                                                    <path
+                                                        d="m11.8314211 3.91089519-1.5236962-1.45765507-4.93481912 4.94280601c-.37038971.36600473-.37394444.96297037-.0079397 1.33336008.00131535.00133111.00263466.00265831.00395792.00398156l.01473341.01473341 4.92406959 4.92407112 1.5236941-1.4672563-3.92681553-3.74462761-.00082918-.00084419c-.21621338-.22012815-.21584362-.57300593.00083061-.79268047z"
+                                                        fill="#7d7d94"
+                                                        mask="url(#a)"
+                                                        transform="translate(-4.529672 -2.125432)"
+                                                    />
+                                                </svg>
+                                            </div>
+                                            <span class="switchover-inputNum">
+                                                <span
+                                                    style="color: rgba(39, 38, 77, 0.65);"
+                                                >{{ searchedCurNum }}</span>
+                                                <span>/</span>
+                                                <span>{{ searchedTotalNum }}</span>
+                                            </span>
+                                            <div
+                                                class="switchover-button"
+                                                @click="rightSwitchButton"
+                                            >
+                                                <svg
+                                                    height="12"
+                                                    viewBox="0 0 8 12"
+                                                    width="8"
+                                                    class="inputArrow"
+                                                    style="transform: rotate(180deg);"
+                                                >
+                                                    <mask id="a" fill="#fff">
+                                                        <path
+                                                            d="m0 0h16v16h-16z"
+                                                            fill="#fff"
+                                                            fill-rule="evenodd"
+                                                        />
+                                                    </mask>
+                                                    <path
+                                                        d="m11.8314211 3.91089519-1.5236962-1.45765507-4.93481912 4.94280601c-.37038971.36600473-.37394444.96297037-.0079397 1.33336008.00131535.00133111.00263466.00265831.00395792.00398156l.01473341.01473341 4.92406959 4.92407112 1.5236941-1.4672563-3.92681553-3.74462761-.00082918-.00084419c-.21621338-.22012815-.21584362-.57300593.00083061-.79268047z"
+                                                        fill="#7d7d94"
+                                                        mask="url(#a)"
+                                                        transform="translate(-4.529672 -2.125432)"
+                                                    />
+                                                </svg>
+                                            </div>
+                                        </div>
+
+                                        <div class="search-error" v-if="isSearchInputError">
+                                            <span class="search-line"></span>请输入内容
+                                        </div>
+
+                                        <div class="search-error" v-if="isSearchNone">
+                                            <span class="search-line"></span>搜索无结果
+                                        </div>
+
+                                        <span class="cancel">
+                                            <span class="line"></span>
+                                            <span class="cancelText" @click="cancelSearchStatus">取消</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <el-popover
+                                placement="bottom-end"
+                                width="280"
+                                trigger="hover"
+                                visible-arrow="false"
+                            >
+                                <div class="p-2 select-none space-y-2">
+                                    <div class="font-semibold text-black text-sm leading-6">一键替换</div>
+                                    <div class="flex items-center">
+                                        <div class="text-xs whitespace-nowrap mr-3">原文本</div>
+                                        <el-input
+                                            v-model="originText"
+                                            placeholder="请输入原文本内容"
+                                            append-slot="suffix"
+                                        >
+                                            <template #suffix>
+                                                <div class="flex items-center h-full">
+                                                    <span
+                                                        class="font-bold text-yellow-500"
+                                                    >{{ replaceNum }}</span>
+                                                </div>
+                                            </template>
+                                        </el-input>
                                     </div>
                                     <div class="flex items-center">
-                                        <div class="text-xs mr-3">显示语言</div>
+                                        <div class="text-xs whitespace-nowrap mr-3">替换为</div>
+                                        <el-input v-model="replaceText" placeholder="请输入替换内容"></el-input>
+                                    </div>
+
+                                    <div class="flex items-center">
+                                        <div class="text-xs whitespace-nowrap mr-12"></div>
+                                        <el-button
+                                            :plain="true"
+                                            :class="{'bg-blue-500 text-white': isReplaceAvailable, 'bg-gray-500 text-white': !isReplaceAvailable}"
+                                            @click="allReplace"
+                                            class="custom-rounded w-48"
+                                        >一键替换</el-button>
+                                    </div>
+                                </div>
+                                <div
+                                    class="tools-icon cursor-pointer w-10 h-10 rounded-lg flex items-center justify-center mr-3"
+                                    slot="reference"
+                                >
+                                    <svg
+                                        t="1719737321919"
+                                        class="icon"
+                                        viewBox="0 0 1024 1024"
+                                        version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        p-id="2326"
+                                        width="26"
+                                        height="26"
+                                    >
+                                        <path
+                                            d="M461.72 472.43h-267a36 36 0 0 1-36-36v-267a36 36 0 0 1 36-36h267a36 36 0 0 1 36 36v267a36 36 0 0 1-36 36z m-231-72h195v-195h-195zM829.24 890.53h-267a36 36 0 0 1-36-36v-267a36 36 0 0 1 36-36h267a36 36 0 0 1 36 36v267a36 36 0 0 1-36 36z m-231-72h195v-195h-195zM848.8 480.18a36 36 0 0 1-36-36c0-124-100.89-224.91-224.91-224.91a36 36 0 0 1 0-72A296.9 296.9 0 0 1 884.8 444.18a36 36 0 0 1-36 36z"
+                                            p-id="2327"
+                                        />
+                                        <path
+                                            d="M848.8 480.18H718.35a36 36 0 0 1 0-72H848.8a36 36 0 0 1 0 72zM436.11 876.73A296.9 296.9 0 0 1 139.2 579.82a36 36 0 0 1 72 0c0 124 100.89 224.91 224.91 224.91a36 36 0 1 1 0 72z"
+                                            p-id="2328"
+                                        />
+                                        <path
+                                            d="M305.65 615.82H175.2a36 36 0 1 1 0-72h130.45a36 36 0 0 1 0 72z"
+                                            p-id="2329"
+                                        />
+                                    </svg>
+                                </div>
+                            </el-popover>
+                            <el-popover
+                                placement="bottom-end"
+                                width="280"
+                                trigger="hover"
+                                visible-arrow="false"
+                            >
+                                <div class="p-2 select-none">
+                                    <div class="font-semibold text-black text-sm leading-6">翻译</div>
+                                    <div class="flex items-center">
                                         <el-radio-group v-model="showType">
-                                            <el-radio-button label="0">双语显示</el-radio-button>
+                                            <el-radio-button label="0">源语言显示</el-radio-button>
                                             <el-radio-button label="1">纯译文显示</el-radio-button>
+                                            <el-radio-button label="2">双语显示</el-radio-button>
                                         </el-radio-group>
                                     </div>
                                 </div>
@@ -192,7 +425,13 @@
                                     </svg>
                                 </div>
                             </el-popover>
-                            <el-tooltip class="item" effect="dark" content="展开视频" placement="bottom" v-if="!isVideoOpen">
+                            <el-tooltip
+                                class="item"
+                                effect="dark"
+                                content="展开视频"
+                                placement="bottom"
+                                v-if="!isVideoOpen"
+                            >
                                 <div
                                     class="tools-icon cursor-pointer w-10 h-10 rounded-lg flex items-center justify-center mr-3"
                                     @click="changeVideo"
@@ -217,7 +456,13 @@
                                 </div>
                             </el-tooltip>
 
-                            <el-tooltip class="item" effect="dark" content="收起视频" placement="bottom" v-else>
+                            <el-tooltip
+                                class="item"
+                                effect="dark"
+                                content="收起视频"
+                                placement="bottom"
+                                v-else
+                            >
                                 <div
                                     class="tools-icon cursor-pointer w-10 h-10 rounded-lg flex items-center justify-center mr-3"
                                     @click="changeVideo"
@@ -243,12 +488,17 @@
                                 </div>
                             </el-tooltip>
 
-                            <el-popover placement="bottom-end" width="260" trigger="hover" visible-arrow="false">
+                            <el-popover
+                                placement="bottom-end"
+                                width="260"
+                                trigger="hover"
+                                visible-arrow="false"
+                            >
                                 <div class="p-1">
                                     <div class="font-semibold text-black text-sm leading-6">AI改写</div>
-                                    <div class="font-normal text-xs text-gray-400 leading-5">
-                                        在保留原文的要点内容基础上，将原文内容进行精简和改写
-                                    </div>
+                                    <div
+                                        class="font-normal text-xs text-gray-400 leading-5"
+                                    >在保留原文的要点内容基础上，将原文内容进行精简和改写</div>
                                     <div class="flex aiRadio mt-2">
                                         <div class="whitespace-nowrap">显示内容：</div>
                                         <el-radio-group v-model="aiType">
@@ -290,10 +540,17 @@
                         <d-player id="dplayer" class="h-full" :options="playerOptions"></d-player>
                     </div>
 
-                    <div class="scrollContainer overflow-auto py-2 px-8" :style="{ height: isVideoOpen ? 'calc(100% - 384px)' : '100%' }">
+                    <div
+                        class="scrollContainer overflow-auto py-2 px-8"
+                        :style="{ height: isVideoOpen ? 'calc(100% - 384px)' : '100%' }"
+                    >
                         <div class="AIDIV mb-2">
                             <div class="zhinengsulan mb-3 select-none">
-                                <img src="../../assets/img/zhinengsulan.png" alt="" class="h-12 pointer-events-none" />
+                                <img
+                                    src="../../assets/img/zhinengsulan.png"
+                                    alt
+                                    class="h-12 pointer-events-none"
+                                />
                             </div>
                             <div class="keyword">
                                 <div class="font-semibold text-sm text-black leading-6">关键词</div>
@@ -308,13 +565,13 @@
                                                 v-for="tag in recent_tag"
                                                 :key="tag.id"
                                                 class="py-0.5 px-2 bg-blue-100 rounded font-normal text-sm text-blue-400 mr-2 mt-3 leading-5 text-center cursor-pointer block"
-                                            >
-                                                {{ tag }}
-                                            </div>
+                                            >{{ tag }}</div>
                                         </div>
                                     </div>
-                                    <div class="keywordright relative top-4 w-16 text-xs leading-5 text-right cursor-pointer text-blue-400">
-                                        <div class="" @click="changeKeyword">{{ keywordopentitle }}</div>
+                                    <div
+                                        class="keywordright relative top-4 w-16 text-xs leading-5 text-right cursor-pointer text-blue-400"
+                                    >
+                                        <div class @click="changeKeyword">{{ keywordopentitle }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -323,12 +580,15 @@
                                 <div class="mt-1">
                                     <div class="relative">
                                         <div class="relative flex mb-2">
-                                            <div :class="{ breakabstractword: !openAbstract, openabstractword: openAbstract }">
-                                                这是一部讲述关于兔子和三只田鼠之间故事的电影，在电影中他们之间将会发生激烈的对抗，电影即将上映。
-                                            </div>
+                                            <div
+                                                :class="{ breakabstractword: !openAbstract, openabstractword: openAbstract }"
+                                            >这是一部讲述关于兔子和三只田鼠之间故事的电影，在电影中他们之间将会发生激烈的对抗，电影即将上映。</div>
                                         </div>
                                         <div class="text-xs text-blue-400 text-right">
-                                            <span class="cursor-pointer" @click="changeAbstract">{{ abstractopentitle }}</span>
+                                            <span
+                                                class="cursor-pointer"
+                                                @click="changeAbstract"
+                                            >{{ abstractopentitle }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -343,16 +603,19 @@
                                         active-text-color="rgb(0 0 0)"
                                     >
                                         <el-menu-item index="1">章节速览</el-menu-item>
-                                        <el-menu-item index="2">发言总结</el-menu-item>
-                                        <el-menu-item index="3">要点回顾</el-menu-item>
+                                        <el-menu-item index="2">要点回顾</el-menu-item>
                                     </el-menu>
                                 </div>
                                 <div class="aisumContent mb-2">
                                     <div class="relative">
                                         <div class="relative flex">
                                             <div class="leftAisumContent mr-4 relative">
-                                                <div class="h-10 flex items-center relative cursor-default select-none">
-                                                    <div class="w-11 text-xs text-black select-none">00:00</div>
+                                                <div
+                                                    class="h-10 flex items-center relative cursor-default select-none"
+                                                >
+                                                    <div
+                                                        class="w-11 text-xs text-black select-none"
+                                                    >00:00</div>
                                                     <div>
                                                         <svg
                                                             t="1716204788686"
@@ -370,28 +633,42 @@
                                                                 p-id="2619"
                                                                 data-spm-anchor-id="a313x.search_index.0.i0.44783a81zqBcfd"
                                                                 class="selected"
-                                                            ></path>
+                                                            />
                                                         </svg>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="rightAisumContent block w-full pt-0.5 cursor-pointer">
-                                                <div class="min-h-10 mb-2 w-full bg-blue-100 rounded py-2 px-4 relative flex border">
+                                            <div
+                                                class="rightAisumContent block w-full pt-0.5 cursor-pointer"
+                                            >
+                                                <div
+                                                    class="min-h-10 mb-2 w-full bg-blue-100 rounded py-2 px-4 relative flex border"
+                                                >
                                                     <div style="visibilit: visible">
-                                                        <div class="aisumtext mb-1" :class="{ breakaisum: !openEpSum }">
-                                                            这是一部讲述关于兔子和三只田鼠之间故事的电影，在电影中他们之间将会发生激烈的对抗，电影即将上映。
-                                                        </div>
-                                                        <div class="text-xs text-gray-400" v-if="openEpSum">111</div>
+                                                        <div
+                                                            class="aisumtext mb-1"
+                                                            :class="{ breakaisum: !openEpSum }"
+                                                        >这是一部讲述关于兔子和三只田鼠之间故事的电影，在电影中他们之间将会发生激烈的对抗，电影即将上映。</div>
+                                                        <div
+                                                            class="text-xs text-gray-400"
+                                                            v-if="openEpSum"
+                                                        >111</div>
                                                     </div>
                                                 </div>
-                                                <div class="text-xs text-blue-400 cursor-pointer" @click="changeEp">{{ epopentitle }}</div>
+                                                <div
+                                                    class="text-xs text-blue-400 cursor-pointer"
+                                                    @click="changeEp"
+                                                >{{ epopentitle }}</div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="heng mt-4 mb-4">
-                                <div class="flex items-center w-full" style="justify-content: space-between;-webkit-box-align: center;">
+                                <div
+                                    class="flex items-center w-full"
+                                    style="justify-content: space-between;-webkit-box-align: center;"
+                                >
                                     <div class="sc-djXQSe ccTlNE" style="display: block;"></div>
                                     <div class="text-sm text-gray-300">以上内容由蓝心AI大模型生成</div>
                                     <div class="sc-jDba-dz jaCZOE" style="display: block;"></div>
@@ -413,18 +690,26 @@
                                             d="M862.72 837.632c0 28.16-21.504 50.176-50.176 50.176h-10.24c6.656-13.312 10.24-26.624 10.24-41.984V178.176c0-14.848-3.584-30.208-10.24-41.984h10.24c28.16 0 50.176 21.504 50.176 50.176v651.264zM293.888 318.464c-17.92 0-33.28-11.776-33.28-25.088 0-13.312 15.36-25.088 33.28-25.088h355.328c17.92 0 33.28 11.776 33.28 25.088 0 13.312-15.36 25.088-33.28 25.088H293.888z m-8.704 168.448c-13.312 0-25.088-11.776-25.088-25.088 0-13.312 11.776-25.088 25.088-25.088h267.264c13.312 0 25.088 11.776 25.088 25.088 0 13.312-11.776 25.088-25.088 25.088H285.184z m0 152.064c-13.312 0-25.088-11.776-25.088-25.088s11.776-25.088 25.088-25.088h150.528c13.312 0 25.088 11.776 25.088 25.088s-11.776 25.088-25.088 25.088H285.184z m-81.92-552.448c-50.176 0-91.648 41.984-91.648 91.648v666.112c0 51.712 41.984 91.648 91.648 91.648h609.28c55.296 0 100.352-45.056 100.352-100.352V186.368c0-55.296-45.056-100.352-100.352-100.352h-609.28z"
                                             fill="#1296db"
                                             p-id="3657"
-                                        ></path>
+                                        />
                                     </svg>
                                 </div>
-                                <div class=" text-lg font-semibold">
-                                    原文
-                                </div>
+                                <div class="text-lg font-semibold">原文</div>
                             </div>
                         </div>
-                        <div class="dSJFEj" v-for="(item_recording, index) in recording_items" :key="index">
+                        <div
+                            class="dSJFEj"
+                            v-for="(item_recording, index) in recording_items"
+                            :key="index"
+                        >
                             <div class="jgzocF">
                                 <div class="jVabAE">
-                                    <svg t="1714715933780" class="icon" viewBox="0 0 1024 1024" width="25" height="25">
+                                    <svg
+                                        t="1714715933780"
+                                        class="icon"
+                                        viewBox="0 0 1024 1024"
+                                        width="25"
+                                        height="25"
+                                    >
                                         <path
                                             d="M111.8 596c-18.5 30.8-20.8 71.1-6.9 119.7 13.7 48.1 37.2 81.2 69.7 98.3 17.3 9.1 35 12.6 50.6 13.4-16.5-40.5-47.5-134.4-55.7-279.2-16.8 7.1-41.7 21.2-57.7 47.8zM854.8 548.4C846.3 683.9 814 785 798.2 827.3c15.9-0.7 34-4.2 51.5-13.5 32.3-17.2 55.7-50.2 69.4-98.2 13.9-48.7 11.6-88.9-6.9-119.7-15.9-26.3-40.6-40.4-57.4-47.5z"
                                             fill="#A0D3F8"
@@ -451,21 +736,50 @@
                             </div>
 
                             <div class="iwvckw">
-                                <div class="gnYZJU" :class="item_recording.isActive ? 'gnYZJU_focus ring-1 ring-purple-300' : 'gnYZJU'">
-                                    <div class="jItVgd">
+                                <div
+                                    class="gnYZJU"
+                                    :class="item_recording.isActive ? 'gnYZJU_focus ring-1 ring-purple-300' : 'gnYZJU'"
+                                >
+                                    <div v-if="(showType === '0' || showType === '2')  && !rewriteAI" class="jItVgd">
                                         <div class="kCofWf">
                                             <div
                                                 class="kFJVLr w-full"
                                                 contenteditable
-                                                @blur="updateContent(index, $event)"
                                                 @focusin="inDiv(index, $event)"
                                                 @focusout="outDiv(index, $event)"
-                                            ></div>
+                                                @input="onContentChange(index, $event)"
+                                                @compositionstart="onCompositionStart"
+                                                @compositionend="onCompositionEnd(index, $event)"
+                                                :ref="'editableDiv' + index"
+                                            >
+                                                <span
+                                                    v-for="(item_content, content_index) in recording_items[index].content"
+                                                    :key="content_index"
+                                                    :id="generateSpanID(index, content_index)"
+                                                    :class="computeSearchSpanClass('content', index, content_index)"
+                                                >{{item_content}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div v-if="(showType === '2') && !rewriteAI" class="solid-line"></div>
+
+                                    <div v-if="(showType === '1' || showType === '2') && !rewriteAI" class="jItVgd">
+                                        <div class="kCofWf">
+                                            <div class="kFJVLr w-full">
+                                                <span
+                                                    v-for="(trans_item_content, trans_content_index) in recording_items[index].transContent"
+                                                    :key="trans_content_index"
+                                                    :id="generateTransSpanID(index, trans_content_index)"
+                                                    :class="computeSearchSpanClass('trans', index, trans_content_index)"
+                                                >{{trans_item_content}}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="h-1 w-full"></div>
                     </div>
                 </div>
             </div>
@@ -487,11 +801,16 @@
 
 <script>
 import { quillEditor } from 'vue-quill-editor';
+import { voiceTrans } from '../../api/voiceTrans';
+import { saveVoice } from '../../api/voiceTrans';
+import { userStore } from '../../store/store';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css';
 import VueDPlayer from 'vue-dplayer';
 import 'vue-dplayer/dist/vue-dplayer.css';
+
+const userstore = userStore();
 // toolbar标题
 const titleConfig = [
     { Choice: '.ql-insertMetric', title: '跳转配置' },
@@ -541,27 +860,21 @@ const titleConfig = [
 ];
 
 export default {
-    components: { quillEditor, 'd-player': VueDPlayer },
+    components: { quillEditor, 'd-player': VueDPlayer},
     data() {
         return {
             // recording_items 数组用于存储要动态生成的 div 元素的数据
-            recording_items: [
-                { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
-                { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
-                { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
-                { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
-                { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
-                { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false },
-                { time_stamp: this.formatTime(this.currentTime), content: '1111', isActive: false }
-            ],
-            item_index: -1, // recording_items当前最大进行时item的下标
+            recording_items: [],
             currentTime: 0, // 当前时间，单位：秒
-            maxTime: 3600, // 最大时间，单位：秒，即 01:00:00
             timer: null, // 定时器
             inputWidth: 204,
             recordInfo: '',
             savedTime: '',
             content: null,
+            sourceLanguage: '',
+            destLanguage: '',
+            resource_type: '',
+
             openkeyword: false,
             keywordopentitle: '展开全部',
             openAbstract: false,
@@ -569,12 +882,7 @@ export default {
             aiSumActiveIndex: '1',
             openEpSum: false,
             epopentitle: '查看章节摘要',
-            recent_tag: [
-                '电影',
-                '兔子',
-                '三只田鼠',
-                '报复'
-            ],
+            recent_tag: ['电影', '兔子', '三只田鼠', '报复'],
 
             editorOption: {
                 placeholder: '请在这里记录您的想法', //提示
@@ -603,18 +911,9 @@ export default {
 
             isVideoOpen: true,
             aiType: 0,
-            transType: 0,
-            showType: 0,
-            transOptions: [
-                {
-                    value: 0,
-                    label: '源语言'
-                },
-                {
-                    value: 1,
-                    label: '中英互译'
-                }
-            ],
+            showType: '0', // 0源语言显示, 1纯译文显示, 2双语显示
+            rewriteAI: false, // AI改写时, 只显示AI改写的内容, showType将会被屏蔽
+
             playerOptions: {
                 container: document.getElementById('dplayer'), //播放器容器
                 mutex: false, //  防止同时播放多个用户，在该用户开始播放时暂停其他用户
@@ -651,25 +950,89 @@ export default {
                         time: 12
                     }
                 ]
-            }
+            },
+
+            originText: '', // 原文本内容
+            replaceText: '', // 替换文本
+
+            isSearchInputFocused: false, // 搜索框聚焦状态产生的变化, 不需要关心
+            isSearchContent: false, // 显示搜索框
+            searchInfo: '', // 搜索框里面的内容
+            isSearchInputError: false, // 搜索框为空时起作用
+            isSearchNone: false, // 搜索结果为None时
+            isShowClearSearchInfo: false, // 当搜索框不为空时，显示清除图案
+            isShowSwitchButton: false, // 搜索到有内容, 就有可切换状态
+            searchedCurNum: 1,
+            searchedTotalNum: 1,
+            dictSpanClass: {}, // {id: class}
+            dictIndexID: {}, // {index: id}
+            replaceNum: 0,
         };
     },
     mounted() {
-        this.updateInfo();
         this.initTitle();
+
+        let data = {
+            type: 0,
+            inner_Html: {
+                recordInfo: '2024-07-07 10:42 记录',
+                savedTime: '已保存于 13:12:10',
+                source_language: 'zh-CHS',
+                dest_language: 'en',
+                content: '可编辑的富文本框',
+                record_timestamps: ['00:00', '00:01', '00:02', '00:03', '00:04'],
+                recording_items: ['这是一个录音框', '这是第二个录音框', '这是第三个录音框', '这是第四个录音框', '这是第五个录音框']
+            }
+        };
+
+        this.recordInfo = data['inner_Html']['recordInfo'];
+        this.savedTime = data['inner_Html']['savedTime'];
+        this.content = data['inner_Html']['content'];
+        this.sourceLanguage = data['inner_Html']['source_language'];
+        this.destLanguage = data['inner_Html']['dest_language'];
+        this.resource_type = data['type'];
+
+        for (let i = 0; i < data['inner_Html']['recording_items'].length; ++i) {
+            this.addRecordingItem(data['inner_Html']['record_timestamps'][i], data['inner_Html']['recording_items'][i]);
+        }
     },
     computed: {
-        getYMDHMSTime() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const date = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            return `${year}-${month}-${date} ${hours}:${minutes}`;
+        getCurSavedTime() {
+            const hms = this.getHMSTime();
+            return `已保存于 ${hms}`;
         },
         editor() {
             return this.$refs.myQuillEditor.quill;
+        },
+        isReplaceAvailable() {
+            return false;
+        }
+    },
+    watch: {
+        originText(newValue) {
+            this.replaceNum = 0;
+            this.cancelSearchStatus();
+            this.searchInfo = newValue;
+            if (this.calcSearchContentInfo()) {
+                this.replaceNum = this.searchedTotalNum;
+            } else {
+                this.replaceNum = 0;
+            }
+        },
+        async showType(newValue) {
+            if(newValue === '0') {
+                console.log('newValue: ', newValue);
+            } else if(newValue === '1' || newValue === '2') {
+                console.log('newValue: ', newValue);
+                for (let i = 0; i < this.recording_items.length; i++) {
+                    let i_content = this.concatContent(this.recording_items[i].content);
+                    voiceTrans(i_content, this.sourceLanguage, this.destLanguage).then(response => {
+                        this.recording_items[i].transContent = [response.data];
+                    });
+                    await this.customSleep(50);
+                    console.log('i_content: ', i_content);
+                }
+            }
         }
     },
     methods: {
@@ -679,12 +1042,6 @@ export default {
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
             return `${hours}:${minutes}:${seconds}`;
-        },
-        updateInfo() {
-            const ymd_hms = this.getYMDHMSTime;
-            const hms = this.getHMSTime();
-            this.recordInfo = `${ymd_hms} 记录`;
-            this.savedTime = `已保存于 ${hms}`;
         },
         handleInput(event) {
             const padding = 8;
@@ -717,6 +1074,63 @@ export default {
             this.content = editor.html;
             console.log(editor);
         },
+        onCompositionStart() {
+            this.isComposing = true;
+        },
+        onCompositionEnd(index, event) {
+            this.isComposing = false;
+            this.onContentChange(index, event); // 输入法完成时触发内容变化处理
+        },
+        generateTransSpanID(index, trans_content_index) {
+            return `trans-${index}-${trans_content_index}`;
+        },
+        generateSpanID(index, content_index) {
+            return `content-${index}-${content_index}`;
+        },
+        scrollToSpanID(span_id) {
+            const element = document.getElementById(span_id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        },
+        computeSearchSpanClass(prefix, one_index, two_index) {
+            let span_id = `${prefix}-${one_index}-${two_index}`;
+            if (this.dictSpanClass.hasOwnProperty(span_id)) {
+                return this.dictSpanClass[span_id];
+            } else {
+                return '';
+            }
+        },
+        onContentChange(index, event) {
+            if (this.isComposing) {
+                return; // 如果正在输入法输入，则不处理
+            }
+            // this.recording_items[index].content = [event.target.innerText];
+            const context = this.$refs['editableDiv' + index][0];
+            const caretPosition = this.getCaretPosition(context);
+
+            // Update the model
+            const contentArray = Array.from(context.childNodes).map(node => node.textContent);
+            this.recording_items[index].content = contentArray;
+
+            this.$nextTick(() => {
+                this.setCaretPosition(context, caretPosition);
+                this.scrollToBottom();
+            });
+
+            if (this.searchInfo !== '') {
+                if (this.calcSearchContentInfo()) {
+                    this.isShowClearSearchInfo = true;
+                    this.isShowSwitchButton = true;
+                    this.isSearchNone = false;
+                    this.isSearchInputError = false;
+                } else {
+                    this.scrollToSpanID(this.dictIndexID[this.searchedCurNum]);
+                    this.isShowSwitchButton = false;
+                    this.isSearchNone = true;
+                }
+            }
+        },
         initTitle() {
             document.getElementsByClassName('ql-editor')[0].dataset.placeholder = '请在这里记录您的想法';
             for (let item of titleConfig) {
@@ -725,28 +1139,20 @@ export default {
                 tip.setAttribute('title', item.title);
             }
         },
-        addRecordingItem() {
-            // 添加一个新的item到数组中
-            this.recording_items.push({ time_stamp: this.formatTime(this.currentTime), content: '', isActive: false });
-            this.item_index++;
-        },
-        deleteItem() {
-            // 检查数组长度是否大于0
-            if (this.recording_items.length > 0) {
-                // 检查最后一个item的content是否为空, 删除最后一个item
-                if (this.recording_items[this.recording_items.length - 1].content.length === 0) {
-                    this.recording_items.pop();
-                    this.item_index--;
-                }
+        concatContent(curContent) {
+            let result_content = '';
+            for (let i = 0; i < curContent.length; i++) {
+                result_content += curContent[i];
             }
+            return result_content;
         },
-        startTimer() {
-            this.timer = setInterval(() => {
-                this.currentTime++;
-            }, 1000); // Increment time every second
-        },
-        stopTimer() {
-            clearInterval(this.timer);
+        addRecordingItem(item_timestamp, item_content) {
+            // 添加一个新的item到数组中
+            this.recording_items.push({
+                time_stamp: item_timestamp,
+                content: [item_content],
+                transContent: ['']
+            });
         },
         formatTime(seconds) {
             // Convert seconds to HH:MM:SS format
@@ -800,6 +1206,238 @@ export default {
             } else {
                 this.epopentitle = '查看章节摘要';
             }
+        },
+
+        changeSearchStatus() {
+            this.dictIndexID = {};
+            this.dictSpanClass = {};
+            this.searchInfo = '';
+            this.isSearchContent = true;
+        },
+
+        handleSearchInputChange() {
+            if (this.searchInfo === '') {
+                this.isSearchInputError = false;
+                this.isShowClearSearchInfo = false;
+                this.isShowSwitchButton = false;
+                this.isSearchNone = false;
+            } else {
+                this.isShowClearSearchInfo = true;
+            }
+        },
+        handleSearchEnterKey() {
+            if (this.searchInfo === '') {
+                this.dictIndexID = {};
+                this.dictSpanClass = {};
+                this.isSearchInputError = true;
+            } else {
+                if (this.calcSearchContentInfo()) {
+                    this.isShowClearSearchInfo = true;
+                    this.isShowSwitchButton = true;
+                    this.isSearchNone = false;
+                    this.isSearchInputError = false;
+                } else {
+                    this.scrollToSpanID(this.dictIndexID[this.searchedCurNum]);
+                    this.isShowSwitchButton = false;
+                    this.isSearchNone = true;
+                }
+            }
+        },
+        calcSearchContentInfo() {
+            if (this.searchInfo === '') {
+                return false;
+            } else {
+                this.searchedCurNum = 1;
+                let prefix_index = 0;
+                let cur_index = 0;
+                let cur_span_id = '';
+                for (let i = 0; i < this.recording_items.length; i++) {
+                    prefix_index = i;
+                    let content_suffix_index = -1;
+                    let trans_suffix_index = -1;
+
+                    let i_content = this.concatContent(this.recording_items[i].content);
+                    let i_trans_content = this.concatContent(this.recording_items[i].transContent);
+                    if (i_content === '') continue;
+
+                    // 源语言文本
+                    if((this.showType === '0' || this.showType === '2') && !this.rewriteAI) {
+                        let result_content = [];
+                        let preIndex = 0;
+                        let curIndex = 0;
+                        while ((curIndex = i_content.indexOf(this.searchInfo, curIndex)) !== -1) {
+                            result_content.push(i_content.substring(preIndex, curIndex));
+                            content_suffix_index = content_suffix_index + 1;
+                            cur_span_id = this.generateSpanID(prefix_index, content_suffix_index);
+                            this.dictSpanClass[cur_span_id] = '';
+    
+                            result_content.push(i_content.substring(curIndex, curIndex + this.searchInfo.length));
+                            content_suffix_index = content_suffix_index + 1;
+                            cur_index = cur_index + 1;
+                            cur_span_id = this.generateSpanID(prefix_index, content_suffix_index);
+                            if (cur_index === this.searchedCurNum) {
+                                this.dictSpanClass[cur_span_id] = 'searched-actived';
+                            } else {
+                                this.dictSpanClass[cur_span_id] = 'searched';
+                            }
+                            this.dictIndexID[cur_index] = cur_span_id;
+    
+                            curIndex += this.searchInfo.length; // 继续搜索下一个匹配位置
+                            preIndex = curIndex;
+                        }
+                        result_content.push(i_content.substring(preIndex, i_content.length));
+                        content_suffix_index = content_suffix_index + 1;
+                        cur_span_id = this.generateSpanID(prefix_index, content_suffix_index);
+                        this.dictSpanClass[cur_span_id] = '';
+                        this.recording_items[i].content = result_content;
+                    }
+
+                    // 翻译文本
+                    if ((this.showType === '1' || this.showType === '2') && !this.rewriteAI) {
+                        let trans_result_content = [];
+                        let trans_preIndex = 0;
+                        let trans_curIndex = 0;
+                        while ((trans_curIndex = i_trans_content.indexOf(this.searchInfo, trans_curIndex)) !== -1) {
+                            trans_result_content.push(i_trans_content.substring(trans_preIndex, trans_curIndex));
+                            trans_suffix_index = trans_suffix_index + 1;
+                            cur_span_id = this.generateTransSpanID(prefix_index, trans_suffix_index);
+                            this.dictSpanClass[cur_span_id] = '';
+
+                            trans_result_content.push(i_trans_content.substring(trans_curIndex, trans_curIndex + this.searchInfo.length));
+                            trans_suffix_index = trans_suffix_index + 1;
+                            cur_index = cur_index + 1;
+                            cur_span_id = this.generateTransSpanID(prefix_index, trans_suffix_index);
+                            if (cur_index === this.searchedCurNum) {
+                                this.dictSpanClass[cur_span_id] = 'searched-actived';
+                            } else {
+                                this.dictSpanClass[cur_span_id] = 'searched';
+                            }
+                            this.dictIndexID[cur_index] = cur_span_id;
+
+                            trans_curIndex += this.searchInfo.length; // 继续搜索下一个匹配位置
+                            trans_preIndex = trans_curIndex;
+                        }
+                        trans_result_content.push(i_trans_content.substring(trans_preIndex, i_trans_content.length));
+                        trans_suffix_index = trans_suffix_index + 1;
+                        cur_span_id = this.generateSpanID(prefix_index, trans_suffix_index);
+                        this.dictSpanClass[cur_span_id] = '';
+                        this.recording_items[i].transContent = trans_result_content;
+                    }
+                }
+
+                if (cur_index > 0) {
+                    this.searchedTotalNum = cur_index;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        },
+        clearSearchInfo() {
+            this.isShowClearSearchInfo = false;
+            this.isShowSwitchButton = false;
+            this.isSearchNone = false;
+            this.searchInfo = '';
+            this.dictIndexID = {};
+            this.dictSpanClass = {};
+        },
+        leftSwitchButton() {
+            let origin_searchedCurNum = this.searchedCurNum;
+            if (this.searchedCurNum === 1) {
+                this.searchedCurNum = this.searchedTotalNum;
+            } else {
+                this.searchedCurNum = this.searchedCurNum - 1;
+            }
+            this.dictSpanClass[this.dictIndexID[origin_searchedCurNum]] = 'searched';
+            this.dictSpanClass[this.dictIndexID[this.searchedCurNum]] = 'searched-actived';
+            this.scrollToSpanID(this.dictIndexID[this.searchedCurNum]);
+        },
+        rightSwitchButton() {
+            let origin_searchedCurNum = this.searchedCurNum;
+            this.searchedCurNum = (this.searchedCurNum % this.searchedTotalNum) + 1;
+            this.dictSpanClass[this.dictIndexID[origin_searchedCurNum]] = 'searched';
+            this.dictSpanClass[this.dictIndexID[this.searchedCurNum]] = 'searched-actived';
+            this.scrollToSpanID(this.dictIndexID[this.searchedCurNum]);
+        },
+        cancelSearchStatus() {
+            this.isSearchContent = false;
+            this.isSearchInputError = false;
+            this.isShowClearSearchInfo = false;
+            this.isShowSwitchButton = false;
+            this.isSearchNone = false;
+            this.searchInfo = '';
+
+            for (let i = 0; i < this.recording_items.length; i++) {
+                let i_content = this.concatContent(this.recording_items[i].content);
+                this.recording_items[i].content = [i_content];
+            }
+
+            if ((this.showType === '1' || this.showType === '2') && !this.rewriteAI) {
+                for (let i = 0; i < this.recording_items.length; i++) {
+                    let i_trans_content = this.concatContent(this.recording_items[i].transContent);
+                    this.recording_items[i].transContent = [i_trans_content];
+                }
+            }
+
+            this.dictIndexID = {};
+            this.dictSpanClass = {};
+        },
+        customSleep(ms) {
+            return new Promise(resolve => {
+                setTimeout(resolve, ms);
+            });
+        },
+        async allReplace() {
+            if (this.originText === '') {
+                this.$message({
+                    message: '请输入要替换的原文本内容',
+                    type: 'error',
+                    offset: 500
+                });
+            } else if (this.replaceNum === 0) {
+                this.$message({
+                    message: '没有可替换的文本内容',
+                    type: 'info',
+                    offset: 500
+                });
+            } else {
+                for (let i = 0; i < this.recording_items.length; i++) {
+                    let i_replace = false;
+                    if((this.showType === '0' || this.showType === '2') && !this.rewriteAI) {
+                        for (let j = 0; j < this.recording_items[i].content.length; j++) {
+                            if (this.recording_items[i].content[j] === this.originText) {
+                                this.recording_items[i].content[j] = this.replaceText;
+                                i_replace = true;
+                            }
+                        }
+                    }
+
+                    if(this.showType === '1' && !this.rewriteAI) {
+                        for (let j = 0; j < this.recording_items[i].transContent.length; j++) {
+                            if (this.recording_items[i].transContent[j] === this.originText) {
+                                this.recording_items[i].transContent[j] = this.replaceText;
+                                i_replace = true;
+                            }
+                        }
+                    }
+
+                    if (i_replace && this.showType === '2' && !this.rewriteAI) {
+                        await this.customSleep(50);
+                        let i_content = this.concatContent(this.recording_items[i].content);
+                        voiceTrans(i_content, this.sourceLanguage, this.destLanguage).then(response => {
+                            this.recording_items[i].transContent = [response.data];
+                        });
+                    }
+                }
+                this.$message({
+                    message: '一键替换成功',
+                    type: 'success',
+                    offset: 500
+                });
+            }
+            this.replaceNum = 0;
+            this.dictIndexID = {};
+            this.dictSpanClass = {};
         }
     }
 };
@@ -1128,6 +1766,13 @@ export default {
     border-color: #9491ee !important;
 }
 
+.solid-line {
+    border-top: 1px solid #e9e1e1;
+    width: calc(100% - 26px);
+    height: 1px;
+    margin: 0;
+}
+
 .jItVgd {
     display: flex;
     align-items: flex-start;
@@ -1242,7 +1887,7 @@ export default {
     -webkit-box-orient: vertical;
 }
 
-.heng > div > div:nth-child(2n+1) {
+.heng > div > div:nth-child(2n + 1) {
     box-shadow: rgb(255, 255, 255) 0px 1px 0px;
 }
 
@@ -1253,7 +1898,7 @@ export default {
     background-color: rgba(39, 38, 77, 0.1);
 }
 
-.heng > div > div:nth-child(2n+1) {
+.heng > div > div:nth-child(2n + 1) {
     box-shadow: rgb(255, 255, 255) 0px 1px 0px;
 }
 
@@ -1262,5 +1907,141 @@ export default {
     flex: 1 1 0%;
     height: 1px;
     background-color: rgba(39, 38, 77, 0.1);
+}
+
+.search-top {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.search-top-left {
+    border-radius: 10px;
+    border: 2px solid rgba(96, 92, 229, 0);
+}
+
+.search-top-left:hover {
+    border-color: rgba(102, 62, 166, 0.493);
+}
+.search-top-left.focus {
+    border-color: rgba(105, 59, 179, 0.764);
+    box-shadow: 0px 0px 8px rgba(105, 59, 179, 0.4); /* 添加更强的模糊效果 */
+}
+
+.search-input {
+    width: 400px;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 20px;
+    height: 36px;
+    border: 1px solid rgb(233, 233, 237);
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    background: rgb(255, 255, 255);
+}
+
+.cancel {
+    font-size: 12px;
+    color: rgba(39, 38, 77, 0.65);
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    height: 18px;
+    width: 42px;
+    margin-left: 7px;
+    cursor: pointer;
+}
+
+.line {
+    display: inline-block;
+    width: 1px;
+    height: 18px;
+    background-color: rgb(233, 233, 237);
+    margin-right: 12px;
+    border: 0px;
+}
+
+.cancelText {
+    cursor: pointer;
+    display: block;
+    width: 29px;
+    font-size: 14px;
+    font-weight: 400;
+}
+.cancelText:hover {
+    color: rgb(86, 24, 187); /* 悬停时的字体颜色 */
+}
+
+.search-input-field {
+    width: 300px;
+    background: none;
+    margin: 0px 7px;
+    outline: none;
+    border: 0px solid rgb(204, 204, 204);
+    font-weight: 400;
+    font-size: 14px;
+    color: rgb(39, 38, 77);
+}
+
+.search-error {
+    width: 131px;
+    font-size: 12px;
+    color: rgb(255, 128, 128);
+    display: flex;
+}
+
+.search-line {
+    width: 1px;
+    height: 18px;
+    background-color: rgb(233, 233, 237);
+    margin-left: 12px;
+    margin-right: 10px;
+}
+
+.switchover {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.switchover-button {
+    width: 24px;
+    height: 24px;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    display: flex;
+    cursor: pointer;
+}
+
+.switchover-inputNum {
+    font-weight: 400;
+    font-size: 12px;
+    color: rgba(39, 38, 77, 0.45);
+    height: 24px;
+    line-height: 24px;
+    user-select: none;
+}
+
+.clear-searchInfo {
+    cursor: pointer;
+}
+
+.clear-searchInfo:hover path {
+    fill: #888; /* 悬停时颜色加深 */
+}
+
+.searched {
+    background-color: rgb(255, 223, 164);
+    color: rgba(39, 38, 77, 0.85);
+}
+
+.searched-actived {
+    background-color: rgba(159, 156, 238, 0.6);
+    color: rgba(74, 77, 38, 0.85);
 }
 </style>

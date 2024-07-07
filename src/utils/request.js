@@ -9,7 +9,7 @@ const service = axios.create({
     // process.env.NODE_ENV === 'development' 来判断是否开发环境
     // easy-mock服务挂了，暂时不使用了
     // baseURL: 'https://www.easy-mock.com/mock/592501a391470c0ac1fab128',
-    baseURL: 'http://127.0.0.1:10001',
+    baseURL: 'http://127.0.0.1',
     timeout: 15000,
 });
 
@@ -32,11 +32,11 @@ service.interceptors.request.use(
 //响应拦截器
 service.interceptors.response.use(
     response => {
-        console.log("rsp",response )
+        console.log("rsp",response)
         if (response.data.code === 200) {
             return response.data;
         } else if (response.status ===401){
-            Message.error(response.data.message + ",请重新登录")
+            Message.info(response.data.message + ",请重新登录")
             userstore.isLoggedIn = false
             userstore.user_id=-1
             userstore.avatar=""

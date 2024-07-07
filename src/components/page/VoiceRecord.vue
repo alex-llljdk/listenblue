@@ -3,7 +3,7 @@
         <div class="h-full" style="background: #e9efff">
             <el-aside width="80px">
                 <router-link to="/home">
-                     <div class="text-center mb-8 mt-8">
+                    <div class="text-center mb-8 mt-8">
                         <div class="rounded-xl bg-white mx-4 py-3 flex justify-center">
                             <svg
                                 t="1715682947773"
@@ -24,54 +24,250 @@
                         </div>
                     </div>
                 </router-link>
-                <div class="text-center mt-8">
-                                    <div class="aside-icon text-center mb-8 block px-4 cursor-pointer">
-                    <div class="flex justify-center mb-2">
-                        <svg
-                            t="1715676163293"
-                            class="icon"
-                            viewBox="0 0 1024 1024"
-                            version="1.1"
-                            xmlns="http://www.w3.org/2000/svg"
-                            p-id="4267"
-                            width="30"
-                            height="30"
-                        >
-                            <path
-                                d="M925.248 356.928l-258.176-258.176a64 64 0 0 0-45.248-18.752H144a64 64 0 0 0-64 64v736a64 64 0 0 0 64 64h736a64 64 0 0 0 64-64V402.176a64 64 0 0 0-18.752-45.248zM288 144h192V256H288V144z m448 736H288V736h448v144z m144 0H800V704a32 32 0 0 0-32-32H256a32 32 0 0 0-32 32v176H144v-736H224V288a32 32 0 0 0 32 32h256a32 32 0 0 0 32-32V144h77.824l258.176 258.176V880z"
-                                p-id="4268"
-                            />
-                        </svg>
+                <div v-if="showRecording" class="text-center mt-8" @click="handleSave">
+                    <div class="aside-icon text-center mb-8 block px-4 cursor-pointer">
+                        <div class="flex justify-center mb-2">
+                            <svg
+                                t="1715676163293"
+                                class="icon"
+                                viewBox="0 0 1024 1024"
+                                version="1.1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                p-id="4267"
+                                width="30"
+                                height="30"
+                            >
+                                <path
+                                    d="M925.248 356.928l-258.176-258.176a64 64 0 0 0-45.248-18.752H144a64 64 0 0 0-64 64v736a64 64 0 0 0 64 64h736a64 64 0 0 0 64-64V402.176a64 64 0 0 0-18.752-45.248zM288 144h192V256H288V144z m448 736H288V736h448v144z m144 0H800V704a32 32 0 0 0-32-32H256a32 32 0 0 0-32 32v176H144v-736H224V288a32 32 0 0 0 32 32h256a32 32 0 0 0 32-32V144h77.824l258.176 258.176V880z"
+                                    p-id="4268"
+                                />
+                            </svg>
+                        </div>
+                        <div class="text-sm">
+                            <p>保存</p>
+                        </div>
                     </div>
-                    <div class="text-sm">
-                        <p>保存</p>
-                    </div>
-                </div>
                 </div>
             </el-aside>
         </div>
         <div class="flex h-full w-full" style="background: #f2f5fb">
             <div class="jphwIe">
                 <div class="WFeMQ">
-                    <div>
-                        <div class="hover_input focus_input">
-                            <input
-                                type="text"
-                                class="hip fip -ml-2 pl-2 font-semibold text-lg bg-transparent border-2 border-blue-50 border-opacity-30 focus:border-2 focus:outline-none rounded-md max-w-lg"
-                                v-model="recordInfo"
-                                :style="{ width: inputWidth + 'px' }"
-                                @input="handleInput"
-                            />
+                    <div class="flex justify-between w-full">
+                        <div>
+                            <div class="hover_input focus_input">
+                                <input
+                                    type="text"
+                                    class="hip fip pl-2 font-semibold text-lg bg-transparent border-2 border-blue-50 border-opacity-30 focus:border-2 focus:outline-none rounded-md max-w-lg"
+                                    v-model="recordInfo"
+                                    :style="{ width: inputWidth + 'px' }"
+                                    @input="handleInput"
+                                />
+                            </div>
+                            <div v-if="showRecording">
+                                <span class="text-xs text-gray-400 select-none ml-2">{{ savedTime }}</span>
+                            </div>
+                            <div v-else class="select-none ml-2">&nbsp;</div>
                         </div>
 
-                        <div>
-                            <span class="text-xs text-gray-400" style="user-select: none">{{ savedTime }}</span>
+                        <div v-if="showRecording" class="flex text-lg items-center">
+                            <el-tooltip effect="dark" content="搜索" placement="bottom" v-if="!isSearchContent">
+                                <div
+                                    class="tools-icon cursor-pointer w-10 h-10 rounded-lg flex items-center justify-center mr-3"
+                                    @click="changeSearchStatus"
+                                >
+                                    <svg
+                                        t="1719539453197"
+                                        class="icon"
+                                        viewBox="0 0 1024 1024"
+                                        version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        p-id="8356"
+                                        width="26"
+                                        height="26"
+                                    >
+                                        <path
+                                            d="M944.951334 875.009893L777.542121 707.703008c48.605976-64.978515 77.564905-145.306286 77.564904-232.797042 0-215.401219-174.776856-389.973419-390.280404-389.973419C249.425402 85.034876 74.750874 259.607075 74.750874 475.008294S249.425402 864.981713 464.92895 864.981713c97.825922 0 186.953932-36.224243 255.411612-95.574698l165.055661 165.055661c8.18627 8.18627 18.930748 12.381733 29.777555 12.381733 10.846807 0 21.488958-4.195463 29.777556-12.381733 16.372539-16.474868 16.372539-43.080244 0-59.452783z m-480.022384-94.039772c-168.841811 0-306.268812-137.222344-306.268812-306.064155s137.427001-305.961827 306.268812-305.961827S771.197762 306.268812 771.197762 475.008294s-137.427001 305.961827-306.268812 305.961827z"
+                                            p-id="8357"
+                                        />
+                                    </svg>
+                                </div>
+                            </el-tooltip>
+                            <div class="search-top" v-else>
+                                <div class="search-top-left" :class="{ focus: isSearchInputFocused }">
+                                    <div class="search-input">
+                                        <div>
+                                            <svg
+                                                height="14"
+                                                viewBox="0 0 14 14"
+                                                width="14"
+                                                data-spm-anchor-id="5176.28158893.0.i62.22f86ac59e5h91"
+                                            >
+                                                <mask id="a" fill="#fff">
+                                                    <path d="m0 0h16v16h-16z" fill="#fff" fill-rule="evenodd" />
+                                                </mask>
+                                                <path
+                                                    d="m7 1.33333333c3.1296136 0 5.6666667 2.53705309 5.6666667 5.66666667 0 1.11726311-.3233397 2.15900619-.8815482 3.0367583l2.6695352 2.6703485-1.4142136 1.4142135-2.6099677-2.6106211c-.95224777.7253155-2.14106801 1.1559675-3.4304724 1.1559675-3.12961358 0-5.66666667-2.5370531-5.66666667-5.6666667 0-3.12961358 2.53705309-5.66666667 5.66666667-5.66666667zm0 2c-2.02504408 0-3.66666667 1.64162259-3.66666667 3.66666667s1.64162259 3.6666667 3.66666667 3.6666667 3.6666667-1.64162262 3.6666667-3.6666667-1.64162262-3.66666667-3.6666667-3.66666667z"
+                                                    fill="#7d7d94"
+                                                    fill-rule="evenodd"
+                                                    mask="url(#a)"
+                                                    transform="translate(-1 -1)"
+                                                />
+                                            </svg>
+                                        </div>
+
+                                        <input
+                                            width="450"
+                                            type="text"
+                                            placeholder="输入内容回车进行搜索"
+                                            class="search-input-field"
+                                            v-model="searchInfo"
+                                            @input="handleSearchInputChange"
+                                            @focus="isSearchInputFocused = true"
+                                            @blur="isSearchInputFocused = false"
+                                            @keydown.enter="handleSearchEnterKey"
+                                        />
+
+                                        <div style="width: 14px"></div>
+
+                                        <div class="clear-searchInfo" @click="clearSearchInfo" v-if="isShowClearSearchInfo">
+                                            <svg
+                                                t="1719557095120"
+                                                class="icon"
+                                                viewBox="0 0 1024 1024"
+                                                version="1.1"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                p-id="13728"
+                                                width="14"
+                                                height="14"
+                                            >
+                                                <path
+                                                    d="M512 1024c-285.257143 0-512-226.742857-512-512s226.742857-512 512-512 512 226.742857 512 512-226.742857 512-512 512z m-7.314286-585.142857l-146.285714-146.285714c-21.942857-21.942857-51.2-21.942857-73.142857 0-21.942857 21.942857-21.942857 51.2 0 73.142857l146.285714 146.285714-146.285714 146.285714c-21.942857 21.942857-21.942857 51.2 0 73.142857 21.942857 21.942857 51.2 21.942857 73.142857 0l146.285714-146.285714 146.285715 146.285714c21.942857 21.942857 51.2 21.942857 73.142857 0s21.942857-51.2 0-73.142857l-146.285715-146.285714 146.285715-146.285714c21.942857-21.942857 21.942857-51.2 0-73.142857s-51.2-21.942857-65.828572 0L504.685714 438.857143z"
+                                                    fill="#B9B9B9"
+                                                    p-id="13729"
+                                                />
+                                            </svg>
+                                        </div>
+
+                                        <div class="switchover" v-if="isShowSwitchButton">
+                                            <span class="search-line"></span>
+                                            <div class="switchover-button" @click="leftSwitchButton">
+                                                <svg height="12" viewBox="0 0 8 12" width="8" class="inputArrow">
+                                                    <mask id="a" fill="#fff">
+                                                        <path d="m0 0h16v16h-16z" fill="#fff" fill-rule="evenodd" />
+                                                    </mask>
+                                                    <path
+                                                        d="m11.8314211 3.91089519-1.5236962-1.45765507-4.93481912 4.94280601c-.37038971.36600473-.37394444.96297037-.0079397 1.33336008.00131535.00133111.00263466.00265831.00395792.00398156l.01473341.01473341 4.92406959 4.92407112 1.5236941-1.4672563-3.92681553-3.74462761-.00082918-.00084419c-.21621338-.22012815-.21584362-.57300593.00083061-.79268047z"
+                                                        fill="#7d7d94"
+                                                        mask="url(#a)"
+                                                        transform="translate(-4.529672 -2.125432)"
+                                                    />
+                                                </svg>
+                                            </div>
+                                            <span class="switchover-inputNum">
+                                                <span style="color: rgba(39, 38, 77, 0.65)">{{ searchedCurNum }}</span>
+                                                <span>/</span>
+                                                <span>{{ searchedTotalNum }}</span>
+                                            </span>
+                                            <div class="switchover-button" @click="rightSwitchButton">
+                                                <svg
+                                                    height="12"
+                                                    viewBox="0 0 8 12"
+                                                    width="8"
+                                                    class="inputArrow"
+                                                    style="transform: rotate(180deg)"
+                                                >
+                                                    <mask id="a" fill="#fff">
+                                                        <path d="m0 0h16v16h-16z" fill="#fff" fill-rule="evenodd" />
+                                                    </mask>
+                                                    <path
+                                                        d="m11.8314211 3.91089519-1.5236962-1.45765507-4.93481912 4.94280601c-.37038971.36600473-.37394444.96297037-.0079397 1.33336008.00131535.00133111.00263466.00265831.00395792.00398156l.01473341.01473341 4.92406959 4.92407112 1.5236941-1.4672563-3.92681553-3.74462761-.00082918-.00084419c-.21621338-.22012815-.21584362-.57300593.00083061-.79268047z"
+                                                        fill="#7d7d94"
+                                                        mask="url(#a)"
+                                                        transform="translate(-4.529672 -2.125432)"
+                                                    />
+                                                </svg>
+                                            </div>
+                                        </div>
+
+                                        <div class="search-error" v-if="isSearchInputError">
+                                            <span class="search-line"></span>请输入内容
+                                        </div>
+
+                                        <div class="search-error" v-if="isSearchNone"><span class="search-line"></span>搜索无结果</div>
+
+                                        <span class="cancel">
+                                            <span class="line"></span>
+                                            <span class="cancelText" @click="cancelSearchStatus">取消</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <el-popover placement="bottom-end" width="280" trigger="hover" visible-arrow="false">
+                                <div class="p-2 select-none space-y-2">
+                                    <div class="font-semibold text-black text-sm leading-6">一键替换</div>
+                                    <div class="flex items-center">
+                                        <div class="text-xs whitespace-nowrap mr-3">原文本</div>
+                                        <el-input v-model="originText" placeholder="请输入原文本内容" append-slot="suffix">
+                                            <template #suffix>
+                                                <div class="flex items-center h-full">
+                                                    <span class="font-bold text-yellow-500">{{ replaceNum }}</span>
+                                                </div>
+                                            </template>
+                                        </el-input>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="text-xs whitespace-nowrap mr-3">替换为</div>
+                                        <el-input v-model="replaceText" placeholder="请输入替换内容"></el-input>
+                                    </div>
+
+                                    <div class="flex items-center">
+                                        <div class="text-xs whitespace-nowrap mr-12"></div>
+                                        <el-button
+                                            :plain="true"
+                                            :class="{
+                                                'bg-blue-500 text-white': isReplaceAvailable,
+                                                'bg-gray-500 text-white': !isReplaceAvailable
+                                            }"
+                                            @click="allReplace"
+                                            class="custom-rounded w-48"
+                                            >一键替换</el-button
+                                        >
+                                    </div>
+                                </div>
+                                <div
+                                    class="tools-icon cursor-pointer w-10 h-10 rounded-lg flex items-center justify-center mr-3"
+                                    slot="reference"
+                                >
+                                    <svg
+                                        t="1719737321919"
+                                        class="icon"
+                                        viewBox="0 0 1024 1024"
+                                        version="1.1"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        p-id="2326"
+                                        width="26"
+                                        height="26"
+                                    >
+                                        <path
+                                            d="M461.72 472.43h-267a36 36 0 0 1-36-36v-267a36 36 0 0 1 36-36h267a36 36 0 0 1 36 36v267a36 36 0 0 1-36 36z m-231-72h195v-195h-195zM829.24 890.53h-267a36 36 0 0 1-36-36v-267a36 36 0 0 1 36-36h267a36 36 0 0 1 36 36v267a36 36 0 0 1-36 36z m-231-72h195v-195h-195zM848.8 480.18a36 36 0 0 1-36-36c0-124-100.89-224.91-224.91-224.91a36 36 0 0 1 0-72A296.9 296.9 0 0 1 884.8 444.18a36 36 0 0 1-36 36z"
+                                            p-id="2327"
+                                        />
+                                        <path
+                                            d="M848.8 480.18H718.35a36 36 0 0 1 0-72H848.8a36 36 0 0 1 0 72zM436.11 876.73A296.9 296.9 0 0 1 139.2 579.82a36 36 0 0 1 72 0c0 124 100.89 224.91 224.91 224.91a36 36 0 1 1 0 72z"
+                                            p-id="2328"
+                                        />
+                                        <path d="M305.65 615.82H175.2a36 36 0 1 1 0-72h130.45a36 36 0 0 1 0 72z" p-id="2329" />
+                                    </svg>
+                                </div>
+                            </el-popover>
                         </div>
                     </div>
                 </div>
                 <div class="h-full w-full">
                     <div v-if="showRecording" class="h-full w-full">
-                        <div class="dDPXpc" style="overflow: auto">
+                        <div class="dDPXpc" style="overflow: auto" ref="scrollableDiv">
                             <div class="dSJFEj" v-for="(item_recording, index) in recording_items" :key="index">
                                 <div class="jgzocF">
                                     <div class="jVabAE">
@@ -108,10 +304,39 @@
                                                 <div
                                                     class="kFJVLr w-full"
                                                     contenteditable
-                                                    @blur="updateContent(index, $event)"
                                                     @focusin="inDiv(index, $event)"
                                                     @focusout="outDiv(index, $event)"
+                                                    @input="onContentChange(index, $event)"
+                                                    @compositionstart="onCompositionStart"
+                                                    @compositionend="onCompositionEnd(index, $event)"
+                                                    :ref="'editableDiv' + index"
                                                 >
+                                                    <span
+                                                        v-for="(item_content, content_index) in recording_items[index].content"
+                                                        :key="content_index"
+                                                        :id="generateSpanID(index, content_index)"
+                                                        :class="computeSearchSpanClass('content', index, content_index)"
+                                                        >{{ item_content }}</span
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div v-if="!item_recording.isDivTrans" class="solid-line"></div> -->
+
+                                        <div v-if="translation === '0' && !item_recording.isDivTrans" class="solid-line"></div>
+
+                                        <div v-if="translation === '0'" :class="item_recording.isDivTrans ? 'transJItVgd' : 'jItVgd'">
+                                            <div class="kCofWf">
+                                                <div class="kFJVLr w-full">
+                                                    <span
+                                                        v-for="(trans_item_content, trans_content_index) in recording_items[index]
+                                                            .transContent"
+                                                        :key="trans_content_index"
+                                                        :id="generateTransSpanID(index, trans_content_index)"
+                                                        :class="computeSearchSpanClass('trans', index, trans_content_index)"
+                                                        >{{ trans_item_content }}</span
+                                                    >
                                                 </div>
                                             </div>
                                         </div>
@@ -142,7 +367,7 @@
                                     </div>
                                 </div>
                                 <div class="right-btn">
-                                    <div class="red_container" title="结束录音">
+                                    <div class="red_container" title="结束录音" @click="centerDialogVisible = true">
                                         <svg t="1714747107927" class="icon" viewBox="0 0 1024 1024" width="25" height="25">
                                             <path
                                                 d="M718.9248 239.328c24.1984 17.2096 45.7152 36.704 64.5376 58.4896s34.9568 45.312 48.4032 70.592c13.4464 25.28 23.6608 52.032 30.6496 80.2688 6.9952 28.2368 10.4896 56.8704 10.4896 85.9136 0 50.016-9.5424 96.9408-28.64 140.7744-19.0848 43.8336-44.9088 82.016-77.4464 114.5536s-70.7264 58.3552-114.5536 77.4464C608.5376 886.4576 561.6192 896 511.5968 896c-49.472 0-96.1344-9.5424-139.9616-28.64-43.8336-19.0848-82.1504-44.9088-114.9568-77.4464s-58.6176-70.7264-77.4464-114.5536-28.2368-90.7584-28.2368-140.7744c0-28.4992 3.36-56.4736 10.0864-83.8976 6.72-27.4304 16.2624-53.5104 28.64-78.2464 12.3712-24.7424 27.6928-47.872 45.984-69.376 18.2848-21.5168 38.72-40.8768 61.3056-58.0928 11.84-8.6016 24.608-11.8272 38.3232-9.6768 13.7152 2.1504 24.8704 8.8768 33.472 20.1664 8.608 11.296 11.84 23.936 9.6896 37.92-2.1568 13.984-8.8768 25.28-20.1728 33.8816C324.4352 352 298.4896 382.3872 280.4736 418.4192c-18.016 36.032-27.0336 74.7584-27.0336 116.1664 0 35.5008 6.7264 68.9728 20.1728 100.4352 13.4464 31.4624 31.8656 58.8928 55.2576 82.2848 23.3984 23.392 50.8224 41.952 82.2848 55.6608 31.4624 13.7216 64.9344 20.576 100.4288 20.576 35.5008 0 68.9792-6.8544 100.4352-20.576 31.4624-13.7152 58.8928-32.2688 82.2848-55.6608 23.3984-23.392 41.952-50.8224 55.6608-82.2848 13.7216-31.4624 20.576-64.9344 20.576-100.4352 0-41.952-9.6832-81.6128-29.0432-118.9888s-46.5216-68.1664-81.472-92.3712c-11.84-8.064-18.9632-19.0912-21.3824-33.0688-2.4192-13.9904 0.4032-26.8928 8.4672-38.7264 8.0704-11.296 19.0912-18.1504 33.0752-20.5696C694.1824 228.4352 707.0912 231.264 718.9248 239.328L718.9248 239.328zM511.5968 537.0048c-13.984 0-25.9456-4.9728-35.8912-14.9184-9.952-9.952-14.9248-21.92-14.9248-35.904L460.7808 179.6288c0-13.984 4.9728-26.08 14.9248-36.3008S497.6128 128 511.5968 128c14.528 0 26.7648 5.1072 36.704 15.328 9.9584 10.2208 14.9312 22.3168 14.9312 36.3008l0 306.5536c0 13.984-4.9728 25.952-14.9312 35.904C538.3552 532.032 526.1184 537.0048 511.5968 537.0048L511.5968 537.0048zM511.5968 537.0048"
@@ -151,6 +376,20 @@
                                             />
                                         </svg>
                                     </div>
+
+                                    <el-dialog
+                                        title="结束录音"
+                                        :visible.sync="centerDialogVisible"
+                                        width="16%"
+                                        top="40vh"
+                                        class="font-bold"
+                                    >
+                                        <span>结束后无法在本记录继续录音</span>
+                                        <span slot="footer" class="dialog-footer">
+                                            <el-button @click="noSaveClose">直接退出</el-button>
+                                            <el-button type="primary" @click="saveClose">保存并退出</el-button>
+                                        </span>
+                                    </el-dialog>
 
                                     <div class="blue_container" v-if="recording" @click="toggleDivs" title="暂停录音">
                                         <svg t="1714749774206" class="icon" viewBox="0 0 1024 1024" width="25" height="25">
@@ -188,8 +427,8 @@
                                 </div>
                                 <div class="pb-3 pt-1 w-full">
                                     <el-radio-group v-model="language" class="w-full">
-                                        <el-radio-button label="中文" class="w-1/2"></el-radio-button>
-                                        <el-radio-button label="英文" class="w-1/2"></el-radio-button>
+                                        <el-radio-button label="0" class="w-1/2">中文</el-radio-button>
+                                        <el-radio-button label="1" class="w-1/2">英文</el-radio-button>
                                     </el-radio-group>
                                 </div>
 
@@ -198,8 +437,8 @@
                                 </div>
                                 <div class="pb-7 pt-1 w-full">
                                     <el-radio-group v-model="translation" class="w-full">
-                                        <el-radio-button label="翻译" class="w-1/2"></el-radio-button>
-                                        <el-radio-button label="不翻译" class="w-1/2"></el-radio-button>
+                                        <el-radio-button label="0" class="w-1/2">翻译</el-radio-button>
+                                        <el-radio-button label="1" class="w-1/2">不翻译</el-radio-button>
                                     </el-radio-group>
                                 </div>
                             </div>
@@ -230,10 +469,15 @@
 
 <script>
 import { quillEditor } from 'vue-quill-editor';
+import { voiceTrans } from '../../api/voiceTrans';
+import { saveVoice } from '../../api/voiceTrans';
+import { userStore } from '../../store/store';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css';
-
+import lamejs from 'lamejs';
+const userstore = userStore();
+var voiceArray = [];
 //Recorder
 var Recorder = function (stream, socket) {
     var sampleBits = 16; //输出采样数位 8, 16
@@ -248,6 +492,8 @@ var Recorder = function (stream, socket) {
 
     var audioData = {
         size: 0, //录音文件长度
+        allSize: 0,
+        allbuffer: [], //所有
         buffer: [], //录音缓存
         inputSampleRate: 32000, //输入采样率
         inputSampleBits: 16, //输入采样数位 8, 16
@@ -259,7 +505,9 @@ var Recorder = function (stream, socket) {
         },
         input: function (data) {
             this.buffer.push(new Float32Array(data));
+            this.allbuffer.push(new Float32Array(data));
             this.size += data.length;
+            this.allSize += data.length;
         },
         compress: function () {
             //合并压缩
@@ -298,6 +546,48 @@ var Recorder = function (stream, socket) {
                 data.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
             }
             return new Blob([data]);
+        },
+
+        compressAll: function () {
+            //合并压缩
+            //合并
+            var data = new Float32Array(this.allSize);
+            console.log(this.allSize);
+            console.log(this.allbuffer.length);
+            var offset = 0;
+            for (var i = 0; i < this.allbuffer.length; i++) {
+                data.set(this.allbuffer[i], offset);
+                offset += this.allbuffer[i].length;
+            }
+            console.log(122211);
+            //压缩
+            var compression = parseInt(this.inputSampleRate / this.outputSampleRate);
+            //console.log(compression)
+            var length = data.length / compression;
+            var result = new Float32Array(length);
+            var index = 0,
+                j = 0;
+            while (index < length) {
+                result[index] = data[j];
+                j += compression;
+                index++;
+            }
+            return result;
+        },
+        encodePCMAll: function () {
+            //这里不对采集到的数据进行其他格式处理，如有需要均交给服务器端处理。
+            var sampleRate = Math.min(this.inputSampleRate, this.outputSampleRate);
+            var sampleBits = Math.min(this.inputSampleBits, this.oututSampleBits);
+            var bytes = this.compressAll();
+            var dataLength = bytes.length * (sampleBits / 8);
+            var buffer = new ArrayBuffer(dataLength);
+            var data = new DataView(buffer);
+            var offset = 0;
+            for (var i = 0; i < bytes.length; i++, offset += 2) {
+                var s = Math.max(-1, Math.min(1, bytes[i]));
+                data.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+            }
+            return new Blob([data]);
         }
     };
 
@@ -313,7 +603,7 @@ var Recorder = function (stream, socket) {
                 var j = 0;
                 for (var i = 0; i < arr.byteLength; i++) {
                     // wholeAudioDataBuffer.push(1);
-
+                    voiceArray.push(arr[i]);
                     tmparr[j++] = arr[i];
                     if ((i + 1) % sendSize == 0) {
                         // console.log("tmparr: ", tmparr);
@@ -345,8 +635,12 @@ var Recorder = function (stream, socket) {
         recorder.disconnect();
     };
 
+    this.getBufferAll = function () {
+        return audioData.allbuffer;
+    };
+
     this.getBlob = function () {
-        return audioData.encodePCM();
+        return audioData.encodePCMAll();
     };
     this.clear = function () {
         audioData.clear();
@@ -415,23 +709,33 @@ export default {
     data() {
         return {
             // recording_items 数组用于存储要动态生成的 div 元素的数据
-            recording_items: [{ time_stamp: "12:05", content: '1111', isActive: false },
-                { time_stamp: "12:07", content: '1111', isActive: false },
-                { time_stamp: "12:09", content: '1111', isActive: false },
-            ],
+            recording_items: [],
             item_index: -1, // recording_items当前最大进行时item的下标
+            curSentences: [], // 当前item_index正在识别的句子数组
+            isAddItem: true, // curSentences最后一个句子必须是onebest状态才可以添加recording_item
+            isVar: false, // curSentences最后一个元素是否是var状态
+            activeTime: 0, // curSentences最后一个句子的时间戳
 
-            currentTime: 123, // 当前时间，单位：秒
+            originText: '', // 原文本内容
+            replaceText: '', // 替换文本
+
+            currentTime: 0, // 当前时间，单位：秒
             maxTime: 3600, // 最大时间，单位：秒，即 01:00:00
             timer: null, // 定时器
 
-            showRecording: true, // 控制是否显示录音时的内容
+            showRecording: false, // 控制是否显示录音时的内容
             recording: true, // 是否正在录音
             inputWidth: 204,
             recordInfo: '',
             savedTime: '',
-            language: '中文',
-            translation: '不翻译',
+            isComposing: false, // 标志位，用于跟踪输入法输入状态
+
+            language: '0', // 0 中文, 1 英文
+            translation: '0', // 0 翻译, 1 不翻译
+            sourceLanguage: 'zh-CHS',
+            destLanguage: 'en',
+            transTimer: null, // 用于翻译的毫秒定时器
+
             content: null,
             editorOption: {
                 placeholder: '请在这里记录您的想法', //提示
@@ -457,18 +761,46 @@ export default {
                 theme: 'snow', //主题 snow/bubble
                 syntax: true //语法检测
             },
-            wsUrl: 'ws://localhost:8889',
+            wsUrl: 'ws://localhost:10003/voice/ws',
             recorder: null, //多媒体对象，用来处理音频
-            curVoiceIndex: 0 // 已读音频数据的下标
+            curVoiceIndex: 0, // 已读音频数据的下标
+
+            isSearchInputFocused: false, // 搜索框聚焦状态产生的变化, 不需要关心
+            isSearchContent: false, // 显示搜索框
+            searchInfo: '', // 搜索框里面的内容
+            isSearchInputError: false, // 搜索框为空时起作用
+            isSearchNone: false, // 搜索结果为None时
+            isShowClearSearchInfo: false, // 当搜索框不为空时，显示清除图案
+            isShowSwitchButton: false, // 搜索到有内容, 就有可切换状态
+            searchedCurNum: 1,
+            searchedTotalNum: 1,
+            dictSpanClass: {}, // {id: class}
+            dictIndexID: {}, // {index: id}
+
+            replaceNum: 0,
+            centerDialogVisible: false,
+            saveFileName: ''
         };
     },
     mounted() {
         document.title = 'ListenBlue-会议记录';
         this.updateInfo();
         this.initTitle();
+        this.saveFileName = this.getSaveFileName;
     },
     created() {},
     computed: {
+        getSaveFileName() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const date = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
+            return `${year}-${month}-${date}-${hours}-${minutes}-${seconds}-${milliseconds}`;
+        },
         getYMDHMSTime() {
             const now = new Date();
             const year = now.getFullYear();
@@ -480,9 +812,41 @@ export default {
         },
         editor() {
             return this.$refs.myQuillEditor.quill;
+        },
+        isReplaceAvailable() {
+            return false;
         }
     },
+    watch: {
+        originText(newValue) {
+            this.replaceNum = 0;
+            this.cancelSearchStatus();
+            this.searchInfo = newValue;
+            if (this.calcSearchContentInfo()) {
+                this.replaceNum = this.searchedTotalNum;
+            } else {
+                this.replaceNum = 0;
+            }
+        }
+    },
+    beforeRouteLeave(to, from, next) {
+        console.log('Leaving the route...');
+        this.clearRecorderAndCloseSocket();
+        next();
+    },
     methods: {
+        clearRecorderAndCloseSocket() {
+            if (this.recorder !== null) {
+                this.recorder.stop();
+                this.recorder.clear();
+                if (this.socket.readyState === WebSocket.CLOSED) {
+                    console.log('Socket is closed');
+                } else {
+                    console.log('Socket is not closed');
+                    this.socket.close();
+                }
+            }
+        },
         getHMSTime() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
@@ -535,20 +899,50 @@ export default {
                 tip.setAttribute('title', item.title);
             }
         },
+        scrollToBottom() {
+            const div = this.$refs.scrollableDiv;
+            div.scrollTop = div.scrollHeight;
+        },
         addRecordingItem() {
             // 添加一个新的item到数组中
-            this.recording_items.push({ time_stamp: this.formatTime(this.currentTime), content: '', isActive: false });
-            this.item_index++;
+            if (this.isAddItem) {
+                this.curSentences = [];
+                this.recording_items.push({
+                    time_stamp: this.formatTime(this.currentTime),
+                    content: [],
+                    isActive: false,
+                    isDivTrans: true,
+                    transContent: [],
+                    isTrans: false, // 与定时器配合, 当前Item是否需要请求翻译
+                    transMillisecondStamp: 0 // 翻译时的毫秒时间戳
+                });
+                this.item_index++;
+
+                if (this.translation === '1') {
+                    this.recording_items[this.item_index].isDivTrans = false;
+                }
+
+                if (this.item_index > 0) {
+                    this.recording_items[this.item_index - 1].isDivTrans = false;
+                }
+            }
+            this.$nextTick(() => {
+                this.scrollToBottom();
+            });
         },
         deleteItem() {
             // 检查数组长度是否大于0
             if (this.recording_items.length > 0) {
                 // 检查最后一个item的content是否为空, 删除最后一个item
-                if (this.recording_items[this.recording_items.length - 1].content.length === 0) {
+                let last_item_content = this.concatContent(this.recording_items[this.recording_items.length - 1].content);
+                if (last_item_content.length === 0) {
                     this.recording_items.pop();
                     this.item_index--;
                 }
             }
+            this.$nextTick(() => {
+                this.scrollToBottom();
+            });
         },
         toggleDivs() {
             this.recording = !this.recording; // 录音与暂停状态切换
@@ -563,13 +957,42 @@ export default {
                 this.recorder.stop();
             }
         },
+        customSleep(ms) {
+            return new Promise((resolve) => {
+                setTimeout(resolve, ms);
+            });
+        },
         startTimer() {
             this.timer = setInterval(() => {
                 this.currentTime++;
+                if (this.currentTime - this.activeTime >= 5 && this.isAddItem === true && this.curSentences.length > 0) {
+                    this.addRecordingItem();
+                }
             }, 1000); // Increment time every second
         },
         stopTimer() {
             clearInterval(this.timer);
+        },
+        async startTransTimer() {
+            this.transTimer = setInterval(async () => {
+                if (this.translation === '0') {
+                    for (let i = 0; i < this.recording_items.length; i++) {
+                        let i_time = Date.now() - this.recording_items[i].transMillisecondStamp;
+                        if (this.recording_items[i].isTrans && i_time >= 500) {
+                            let i_content = this.concatContent(this.recording_items[i].content);
+                            voiceTrans(i_content, this.sourceLanguage, this.destLanguage).then((response) => {
+                                this.recording_items[i].transContent = [response.data];
+                            });
+                            this.recording_items[i].isTrans = false;
+                            this.recording_items[i].transMillisecondStamp = Date.now();
+                            await this.customSleep(500);
+                        }
+                    }
+                }
+            }, 5); // Increment time every second
+        },
+        stopTransTimer() {
+            clearInterval(this.transTimer);
         },
         formatTime(seconds) {
             // Convert seconds to HH:MM:SS format
@@ -587,8 +1010,96 @@ export default {
         pad(value) {
             return value < 10 ? '0' + value : value;
         },
-        updateContent(index, event) {
-            this.recording_items[index].content = event.target.innerText;
+        getCaretPosition(element) {
+            let caretOffset = 0;
+            const doc = element.ownerDocument || element.document;
+            const win = doc.defaultView || doc.parentWindow;
+            const sel = win.getSelection();
+            if (sel.rangeCount > 0) {
+                const range = sel.getRangeAt(0);
+                const preCaretRange = range.cloneRange();
+                preCaretRange.selectNodeContents(element);
+                preCaretRange.setEnd(range.startContainer, range.startOffset);
+                caretOffset = preCaretRange.toString().length;
+            }
+            return caretOffset;
+        },
+        setCaretPosition(element, offset) {
+            const doc = element.ownerDocument || element.document;
+            const win = doc.defaultView || doc.parentWindow;
+            const range = doc.createRange();
+            const sel = win.getSelection();
+
+            let charIndex = 0;
+            let foundStart = false,
+                stop = false;
+
+            (function traverseNodes(node) {
+                if (stop) return;
+
+                if (node.nodeType === 3) {
+                    // Text node
+                    const nextCharIndex = charIndex + node.length;
+                    if (!foundStart && offset >= charIndex && offset <= nextCharIndex) {
+                        range.setStart(node, offset - charIndex);
+                        foundStart = true;
+                    }
+                    if (foundStart && offset >= charIndex && offset <= nextCharIndex) {
+                        range.setEnd(node, offset - charIndex);
+                        stop = true;
+                    }
+                    charIndex = nextCharIndex;
+                } else {
+                    for (let i = 0; i < node.childNodes.length; i++) {
+                        traverseNodes(node.childNodes[i]);
+                        if (stop) break;
+                    }
+                }
+            })(element);
+
+            sel.removeAllRanges();
+            sel.addRange(range);
+        },
+        onCompositionStart() {
+            this.isComposing = true;
+        },
+        onCompositionEnd(index, event) {
+            this.isComposing = false;
+            this.onContentChange(index, event); // 输入法完成时触发内容变化处理
+        },
+        onContentChange(index, event) {
+            if (this.isComposing) {
+                return; // 如果正在输入法输入，则不处理
+            }
+            // this.recording_items[index].content = [event.target.innerText];
+            const context = this.$refs['editableDiv' + index][0];
+            const caretPosition = this.getCaretPosition(context);
+
+            // Update the model
+            const contentArray = Array.from(context.childNodes).map((node) => node.textContent);
+            this.recording_items[index].content = contentArray;
+
+            if (this.translation === '0') {
+                this.recording_items[index].isTrans = true;
+            }
+
+            this.$nextTick(() => {
+                this.setCaretPosition(context, caretPosition);
+                this.scrollToBottom();
+            });
+
+            if (this.searchInfo !== '') {
+                if (this.calcSearchContentInfo()) {
+                    this.isShowClearSearchInfo = true;
+                    this.isShowSwitchButton = true;
+                    this.isSearchNone = false;
+                    this.isSearchInputError = false;
+                } else {
+                    this.scrollToSpanID(this.dictIndexID[this.searchedCurNum]);
+                    this.isShowSwitchButton = false;
+                    this.isSearchNone = true;
+                }
+            }
         },
         inDiv(index, event) {
             this.recording_items[index].isActive = true;
@@ -598,6 +1109,19 @@ export default {
         },
         //启动录音
         startRecording() {
+            console.log('语言：', this.language);
+            console.log('翻译：', this.translation);
+            // 设置翻译的源语言，目标语言
+            if (this.translation === '0') {
+                if (this.language === '0') {
+                    this.sourceLanguage = 'zh-CHS';
+                    this.destLanguage = 'en';
+                } else {
+                    this.sourceLanguage = 'en';
+                    this.destLanguage = 'zh-CHS';
+                }
+            }
+
             navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
             if (!navigator.getUserMedia) {
                 console.error('无法访问麦克风:', error);
@@ -637,7 +1161,7 @@ export default {
             // 监听WebSocket的message事件，当收到服务器消息时触发
             this.socket.onmessage = (event) => {
                 var data = JSON.parse(event.data);
-                console.log(data)
+                console.log('onmessage: ', data);
                 switch (
                     data.action //根据WebSocket返回值的某个字段，区分改做什么事情
                 ) {
@@ -649,6 +1173,7 @@ export default {
                             this.addRecordingItem();
                             this.item_index = 0;
                             this.startTimer();
+                            this.startTransTimer();
                         }
                         this.recorder.start();
 
@@ -657,10 +1182,42 @@ export default {
                         setInterval(() => {
                             this.second++;
                         }, 1000);
-                    case 'xxx':
-                        //写你自己的逻辑
+                        break;
+                    case 'result':
+                        if (data.data.var !== undefined) {
+                            if (this.isVar) {
+                                this.curSentences[this.curSentences.length - 1] = data.data.var;
+                            } else {
+                                this.curSentences.push(data.data.var);
+                            }
+                            this.isAddItem = false;
+                            this.isVar = true;
+                        } else if (data.data.onebest !== undefined) {
+                            if (this.isVar) {
+                                this.curSentences[this.curSentences.length - 1] = data.data.onebest;
+                            } else {
+                                this.curSentences.push(data.data.onebest);
+                            }
+                            this.isAddItem = true;
+                            this.isVar = false;
+                        }
+
+                        let result_content = '';
+                        for (let i = 0; i < this.curSentences.length; i++) {
+                            result_content += this.curSentences[i];
+                        }
+                        this.recording_items[this.item_index].content = [result_content];
+                        if (this.translation === '0') {
+                            this.recording_items[this.item_index].isTrans = true;
+                        }
+
+                        if (data.data.onebest !== undefined && this.curSentences.length >= 3) {
+                            this.addRecordingItem();
+                        }
+
                         break;
                 }
+                this.activeTime = this.currentTime;
 
                 // console.log('socket.onmessage==', event.data);
                 // var data = JSON.parse(event.data);
@@ -749,6 +1306,358 @@ export default {
         },
         closeWs() {
             this.socket.close();
+        },
+        async allReplace() {
+            if (this.originText === '') {
+                this.$message({
+                    message: '请输入要替换的原文本内容',
+                    type: 'error',
+                    offset: 500
+                });
+            } else if (this.replaceNum === 0) {
+                this.$message({
+                    message: '没有可替换的文本内容',
+                    type: 'info',
+                    offset: 500
+                });
+            } else {
+                for (let i = 0; i < this.recording_items.length; i++) {
+                    let i_replace = false;
+                    for (let j = 0; j < this.recording_items[i].content.length; j++) {
+                        if (this.recording_items[i].content[j] === this.originText) {
+                            this.recording_items[i].content[j] = this.replaceText;
+                            i_replace = true;
+                        }
+                    }
+
+                    if (i_replace && this.translation === '0') {
+                        await this.customSleep(500);
+                        let i_content = this.concatContent(this.recording_items[i].content);
+                        voiceTrans(i_content, this.sourceLanguage, this.destLanguage).then((response) => {
+                            this.recording_items[i].transContent = [response.data];
+                        });
+                    }
+                }
+                this.$message({
+                    message: '一键替换成功',
+                    type: 'success',
+                    offset: 500
+                });
+            }
+            this.replaceNum = 0;
+            this.dictIndexID = {};
+            this.dictSpanClass = {};
+        },
+        changeSearchStatus() {
+            this.dictIndexID = {};
+            this.dictSpanClass = {};
+            this.searchInfo = '';
+            this.isSearchContent = true;
+        },
+        cancelSearchStatus() {
+            this.isSearchContent = false;
+            this.isSearchInputError = false;
+            this.isShowClearSearchInfo = false;
+            this.isShowSwitchButton = false;
+            this.isSearchNone = false;
+            this.searchInfo = '';
+
+            for (let i = 0; i < this.recording_items.length; i++) {
+                let i_content = this.concatContent(this.recording_items[i].content);
+                this.recording_items[i].content = [i_content];
+            }
+
+            if (this.translation === '0') {
+                for (let i = 0; i < this.recording_items.length; i++) {
+                    let i_trans_content = this.concatContent(this.recording_items[i].transContent);
+                    this.recording_items[i].transContent = [i_trans_content];
+                }
+            }
+
+            this.dictIndexID = {};
+            this.dictSpanClass = {};
+        },
+        handleSearchEnterKey() {
+            if (this.searchInfo === '') {
+                this.dictIndexID = {};
+                this.dictSpanClass = {};
+                this.isSearchInputError = true;
+            } else {
+                if (this.calcSearchContentInfo()) {
+                    this.isShowClearSearchInfo = true;
+                    this.isShowSwitchButton = true;
+                    this.isSearchNone = false;
+                    this.isSearchInputError = false;
+                } else {
+                    this.scrollToSpanID(this.dictIndexID[this.searchedCurNum]);
+                    this.isShowSwitchButton = false;
+                    this.isSearchNone = true;
+                }
+            }
+        },
+        calcSearchContentInfo() {
+            if (this.searchInfo === '') {
+                return false;
+            } else {
+                this.searchedCurNum = 1;
+                let prefix_index = 0;
+                let cur_index = 0;
+                let cur_span_id = '';
+                for (let i = 0; i < this.recording_items.length; i++) {
+                    prefix_index = i;
+                    let content_suffix_index = -1;
+                    let trans_suffix_index = -1;
+
+                    let i_content = this.concatContent(this.recording_items[i].content);
+                    let i_trans_content = this.concatContent(this.recording_items[i].transContent);
+                    if (i_content === '') continue;
+
+                    // 源语言文本
+                    let result_content = [];
+                    let preIndex = 0;
+                    let curIndex = 0;
+                    while ((curIndex = i_content.indexOf(this.searchInfo, curIndex)) !== -1) {
+                        result_content.push(i_content.substring(preIndex, curIndex));
+                        content_suffix_index = content_suffix_index + 1;
+                        cur_span_id = this.generateSpanID(prefix_index, content_suffix_index);
+                        this.dictSpanClass[cur_span_id] = '';
+
+                        result_content.push(i_content.substring(curIndex, curIndex + this.searchInfo.length));
+                        content_suffix_index = content_suffix_index + 1;
+                        cur_index = cur_index + 1;
+                        cur_span_id = this.generateSpanID(prefix_index, content_suffix_index);
+                        if (cur_index === this.searchedCurNum) {
+                            this.dictSpanClass[cur_span_id] = 'searched-actived';
+                        } else {
+                            this.dictSpanClass[cur_span_id] = 'searched';
+                        }
+                        this.dictIndexID[cur_index] = cur_span_id;
+
+                        curIndex += this.searchInfo.length; // 继续搜索下一个匹配位置
+                        preIndex = curIndex;
+                    }
+                    result_content.push(i_content.substring(preIndex, i_content.length));
+                    content_suffix_index = content_suffix_index + 1;
+                    cur_span_id = this.generateSpanID(prefix_index, content_suffix_index);
+                    this.dictSpanClass[cur_span_id] = '';
+                    this.recording_items[i].content = result_content;
+
+                    // 翻译文本
+                    if (this.translation === '0') {
+                        let trans_result_content = [];
+                        let trans_preIndex = 0;
+                        let trans_curIndex = 0;
+                        while ((trans_curIndex = i_trans_content.indexOf(this.searchInfo, trans_curIndex)) !== -1) {
+                            trans_result_content.push(i_trans_content.substring(trans_preIndex, trans_curIndex));
+                            trans_suffix_index = trans_suffix_index + 1;
+                            cur_span_id = this.generateTransSpanID(prefix_index, trans_suffix_index);
+                            this.dictSpanClass[cur_span_id] = '';
+
+                            trans_result_content.push(i_trans_content.substring(trans_curIndex, trans_curIndex + this.searchInfo.length));
+                            trans_suffix_index = trans_suffix_index + 1;
+                            cur_index = cur_index + 1;
+                            cur_span_id = this.generateTransSpanID(prefix_index, trans_suffix_index);
+                            if (cur_index === this.searchedCurNum) {
+                                this.dictSpanClass[cur_span_id] = 'searched-actived';
+                            } else {
+                                this.dictSpanClass[cur_span_id] = 'searched';
+                            }
+                            this.dictIndexID[cur_index] = cur_span_id;
+
+                            trans_curIndex += this.searchInfo.length; // 继续搜索下一个匹配位置
+                            trans_preIndex = trans_curIndex;
+                        }
+                        trans_result_content.push(i_trans_content.substring(trans_preIndex, i_trans_content.length));
+                        trans_suffix_index = trans_suffix_index + 1;
+                        cur_span_id = this.generateSpanID(prefix_index, trans_suffix_index);
+                        this.dictSpanClass[cur_span_id] = '';
+                        this.recording_items[i].transContent = trans_result_content;
+                    }
+                }
+
+                if (cur_index > 0) {
+                    this.searchedTotalNum = cur_index;
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        },
+        clearSearchInfo() {
+            this.isShowClearSearchInfo = false;
+            this.isShowSwitchButton = false;
+            this.isSearchNone = false;
+            this.searchInfo = '';
+            this.dictIndexID = {};
+            this.dictSpanClass = {};
+        },
+        handleSearchInputChange() {
+            if (this.searchInfo === '') {
+                this.isSearchInputError = false;
+                this.isShowClearSearchInfo = false;
+                this.isShowSwitchButton = false;
+                this.isSearchNone = false;
+            } else {
+                this.isShowClearSearchInfo = true;
+            }
+        },
+        concatContent(curContent) {
+            let result_content = '';
+            for (let i = 0; i < curContent.length; i++) {
+                result_content += curContent[i];
+            }
+            return result_content;
+        },
+        computeSearchSpanClass(prefix, one_index, two_index) {
+            let span_id = `${prefix}-${one_index}-${two_index}`;
+            if (this.dictSpanClass.hasOwnProperty(span_id)) {
+                return this.dictSpanClass[span_id];
+            } else {
+                return '';
+            }
+        },
+        leftSwitchButton() {
+            let origin_searchedCurNum = this.searchedCurNum;
+            if (this.searchedCurNum === 1) {
+                this.searchedCurNum = this.searchedTotalNum;
+            } else {
+                this.searchedCurNum = this.searchedCurNum - 1;
+            }
+            this.dictSpanClass[this.dictIndexID[origin_searchedCurNum]] = 'searched';
+            this.dictSpanClass[this.dictIndexID[this.searchedCurNum]] = 'searched-actived';
+            this.scrollToSpanID(this.dictIndexID[this.searchedCurNum]);
+        },
+        rightSwitchButton() {
+            let origin_searchedCurNum = this.searchedCurNum;
+            this.searchedCurNum = (this.searchedCurNum % this.searchedTotalNum) + 1;
+            this.dictSpanClass[this.dictIndexID[origin_searchedCurNum]] = 'searched';
+            this.dictSpanClass[this.dictIndexID[this.searchedCurNum]] = 'searched-actived';
+            this.scrollToSpanID(this.dictIndexID[this.searchedCurNum]);
+        },
+        generateTransSpanID(index, trans_content_index) {
+            return `trans-${index}-${trans_content_index}`;
+        },
+        generateSpanID(index, content_index) {
+            return `content-${index}-${content_index}`;
+        },
+        scrollToSpanID(span_id) {
+            const element = document.getElementById(span_id);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        },
+
+        handleSave() {
+            this.$confirm('保存并退出？')
+                .then(async (_) => {
+                    console.log('1111111111111');
+                    // let voiceUint8Array = new Uint8Array(voiceArray);
+                    // console.log(voiceUint8Array);
+                    // const blob = new Blob([voiceUint8Array], { type: 'audio/mpeg' });
+                    // voiceUint8Array = null;
+                    // const blob = this.recorder.getBlob();
+                    // console.log(blob);
+                    // blob = this.convertToMp3(blob);
+                    // console.log(blob);
+                    
+                    let buffer = this.recorder.getBufferAll();
+                    let f32buffer = this.float32Flatten(buffer)
+                    console.log(buffer);
+                    let int16buffer = this.FloatArray2Int16(f32buffer);
+                    console.log('1111111111111');
+                    let blob = this.encodeMono(1, 48000, int16buffer);
+
+                    const formData = new FormData();
+                    formData.append('file', blob); //文件
+                    formData.append('filename', this.saveFileName); //文件名
+                    formData.append('user_id', userstore.user_id);
+                    formData.append('type', 0);
+
+                    let text = {};
+                    text['record_timestamp'] = this.recordInfo;
+                    text['source_language'] = this.sourceLanguage;
+                    text['dest_language'] = this.destLanguage;
+                    text['content'] = this.content;
+
+                    let tmp_timestamps = [];
+                    let tmp_recordings = [];
+                    for (let i = 0; i < this.recording_items.length; ++i) {
+                        tmp_recordings.push(this.concatContent(this.recording_items[i].content));
+                        tmp_timestamps.push(this.recording_items[i].record_timestamp);
+                    }
+                    text['tmp_timestamps'] = tmp_timestamps;
+                    text['recording_items'] = tmp_recordings;
+                    formData.append('inner_Html', text);
+                    formData.append('content', tmp_recordings);
+                    console.log('text: ', text);
+
+                    saveVoice(formData) //调用api
+                        .then((res) => {
+                            if (res.code === 200) {
+                                console.log('保存上传成功 res', res);
+                            } else {
+                                console.log('保存上传失败 res', res);
+                            }
+                        });
+                    console.log(11111111111);
+                    this.$router.push('/home');
+                })
+                .catch((_) => {});
+        },
+        noSaveClose() {
+            this.centerDialogVisible = false;
+            this.$router.push('/home');
+        },
+        saveClose() {
+            this.centerDialogVisible = false;
+            this.$router.push('/home');
+        },
+        FloatArray2Int16(floatbuffer) {
+            var int16Buffer = new Int16Array(floatbuffer.length);
+            for (var i = 0, len = floatbuffer.length; i < len; i++) {
+                if (floatbuffer[i] < 0) {
+                    int16Buffer[i] = 0x8000 * floatbuffer[i];
+                } else {
+                    int16Buffer[i] = 0x7fff * floatbuffer[i];
+                }
+            }
+            return int16Buffer;
+        },
+
+        encodeMono(channels, sampleRate, samples) {
+            var buffer = [];
+            var mp3enc = new lamejs.Mp3Encoder(channels, sampleRate, 256);
+            var remaining = samples.length;
+            var maxSamples = 1152;
+            for (var i = 0; remaining >= maxSamples; i += maxSamples) {
+                var mono = samples.subarray(i, i + maxSamples);
+                var mp3buf = mp3enc.encodeBuffer(mono);
+                if (mp3buf.length > 0) {
+                    buffer.push(new Int8Array(mp3buf));
+                }
+                remaining -= maxSamples;
+            }
+            var d = mp3enc.flush();
+            if (d.length > 0) {
+                buffer.push(new Int8Array(d));
+            }
+            var blob = new Blob(buffer, { type: 'audio/mp3' });
+            return blob;
+        },
+        float32Flatten(chunks) {
+            //get the total number of frames on the new float32array
+            const nFrames = chunks.reduce((acc, elem) => acc + elem.length, 0);
+
+            //create a new float32 with the correct number of frames
+            const result = new Float32Array(nFrames);
+
+            //insert each chunk into the new float32array
+            let currentFrame = 0;
+            chunks.forEach((chunk) => {
+                result.set(chunk, currentFrame);
+                currentFrame += chunk.length;
+            });
+            return result;
         }
     }
 };
@@ -1083,12 +1992,30 @@ export default {
     border-color: #9491ee !important;
 }
 
+.solid-line {
+    border-top: 1px solid #e9e1e1;
+    width: calc(100% - 26px);
+    height: 1px;
+    margin: 0;
+}
+
 .jItVgd {
     display: flex;
     align-items: flex-start;
     width: 100%;
     padding: 16px 24px;
     background-color: rgb(255, 255, 255);
+    border-radius: 6px;
+    box-sizing: border-box;
+    color: rgba(39, 38, 77, 0.85);
+}
+
+.transJItVgd {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    padding: 16px 24px;
+    background-color: rgba(142, 85, 243, 0.45);
     border-radius: 6px;
     box-sizing: border-box;
     color: rgba(39, 38, 77, 0.85);
@@ -1113,5 +2040,145 @@ export default {
     user-select: text;
     cursor: text;
     white-space: pre-wrap;
+}
+
+.custom-rounded {
+    border-radius: 8px; /* 自定义圆角大小 */
+}
+
+.search-top {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.search-top-left {
+    border-radius: 10px;
+    border: 2px solid rgba(96, 92, 229, 0);
+}
+
+.search-top-left:hover {
+    border-color: rgba(102, 62, 166, 0.493);
+}
+.search-top-left.focus {
+    border-color: rgba(105, 59, 179, 0.764);
+    box-shadow: 0px 0px 8px rgba(105, 59, 179, 0.4); /* 添加更强的模糊效果 */
+}
+
+.search-input {
+    width: 400px;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 20px;
+    height: 36px;
+    border: 1px solid rgb(233, 233, 237);
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    background: rgb(255, 255, 255);
+}
+
+.cancel {
+    font-size: 12px;
+    color: rgba(39, 38, 77, 0.65);
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    height: 18px;
+    width: 42px;
+    margin-left: 7px;
+    cursor: pointer;
+}
+
+.line {
+    display: inline-block;
+    width: 1px;
+    height: 18px;
+    background-color: rgb(233, 233, 237);
+    margin-right: 12px;
+    border: 0px;
+}
+
+.cancelText {
+    cursor: pointer;
+    display: block;
+    width: 29px;
+    font-size: 14px;
+    font-weight: 400;
+}
+.cancelText:hover {
+    color: rgb(86, 24, 187); /* 悬停时的字体颜色 */
+}
+
+.search-input-field {
+    width: 300px;
+    background: none;
+    margin: 0px 7px;
+    outline: none;
+    border: 0px solid rgb(204, 204, 204);
+    font-weight: 400;
+    font-size: 14px;
+    color: rgb(39, 38, 77);
+}
+
+.search-error {
+    width: 131px;
+    font-size: 12px;
+    color: rgb(255, 128, 128);
+    display: flex;
+}
+
+.search-line {
+    width: 1px;
+    height: 18px;
+    background-color: rgb(233, 233, 237);
+    margin-left: 12px;
+    margin-right: 10px;
+}
+
+.switchover {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.switchover-button {
+    width: 24px;
+    height: 24px;
+    -webkit-box-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    align-items: center;
+    display: flex;
+    cursor: pointer;
+}
+
+.switchover-inputNum {
+    font-weight: 400;
+    font-size: 12px;
+    color: rgba(39, 38, 77, 0.45);
+    height: 24px;
+    line-height: 24px;
+    user-select: none;
+}
+
+.clear-searchInfo {
+    cursor: pointer;
+}
+
+.clear-searchInfo:hover path {
+    fill: #888; /* 悬停时颜色加深 */
+}
+
+.searched {
+    background-color: rgb(255, 223, 164);
+    color: rgba(39, 38, 77, 0.85);
+}
+
+.searched-actived {
+    background-color: rgba(159, 156, 238, 0.6);
+    color: rgba(74, 77, 38, 0.85);
 }
 </style>
