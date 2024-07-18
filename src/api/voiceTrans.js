@@ -24,5 +24,6 @@ export function saveVoice(data) {
         },
         baseURL: url,
         data: data,
+        timeout: 1000 *60*15,
     })
 }

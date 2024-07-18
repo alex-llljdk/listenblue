@@ -94,7 +94,6 @@ export default {
                 userstore.avatar = '';
                 userstore.name = '';
                 userstore.token = '';
-                router.push('/home');
                 window.location.reload();
             }
         },

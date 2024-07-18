@@ -6,7 +6,7 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: '/transcript'
+            redirect: '/home'
         },
         {
             path: '/',
@@ -18,11 +18,11 @@ export default new Router({
                     component: () => import(/* webpackChunkName: "home" */ '../components/page/home.vue'),
                     meta: { title: '系统首页' }
                 },
-                {
-                    path: '/livelist',
-                    component: () => import(/* webpackChunkName: "livelist" */ '../components/page/LiveList.vue'),
-                    meta: { title: '直播列表' }
-                },
+                // {
+                //     path: '/livelist',
+                //     component: () => import(/* webpackChunkName: "livelist" */ '../components/page/LiveList.vue'),
+                //     meta: { title: '直播列表' }
+                // },
                 {
                     path: '/404',
                     component: () => import(/* webpackChunkName: "404" */ '../components/page/404.vue'),
@@ -48,6 +48,11 @@ export default new Router({
         {
             path: '/transcript',
             component: () => import(/* webpackChunkName: "transcript" */ '../components/page/Transcript.vue'),
+            meta: { title: '记录'}
+        },
+        {
+            path: '/subtitle',
+            component: () => import(/* webpackChunkName: "transcript" */ '../components/page/Subtitle.vue'),
             meta: { title: '记录'}
         },
         {

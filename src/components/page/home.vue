@@ -50,18 +50,10 @@
                     v-if="openTrans === true"
                 >
                     <div class="transListContainer relative w-full">
-                        <div class="pt-5 pl-5 text-xs h-11">
-                            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"
-                                >全选</el-checkbox
-                            >
-                        </div>
                         <ul class="mb-0 pb-4 list-none">
                             <div class="w-full inline-block m-0 p-0 leading-normal text-sm text-black text-opacity-80">
-                                <li class="flex list-none m-0 pr-6 pl-5">
+                                <li class="flex list-none m-0 pr-6 pl-5" v-for="(item,index) in UploadList" :key="index">
                                     <div class="flex pt-3.5">
-                                        <div class="list-none mr-2">
-                                            <el-checkbox></el-checkbox>
-                                        </div>
                                         <div>
                                             <svg
                                                 t="1714906781285"
@@ -94,7 +86,7 @@
                                     </div>
                                     <div class="ml-2 py-3.5 flex-1 w-0">
                                         <div class="w-full flex justify-between items-center">
-                                            <span class="overflow-hidden overflow-ellipsis">乱世巨星</span>
+                                            <span class="overflow-hidden overflow-ellipsis">{{item.file_name}}</span>
                                             <span class="cursor-pointer">
                                                 <svg
                                                     t="1714943421170"
@@ -277,62 +269,105 @@
                     <div class="text-lg font-normal select-none pl-4">最近</div>
                     <div class="grid w-full place-items-center">
                         <div
-                            v-for="item in rencent_items"
-                            :key="item.id"
+                            v-for="(item, index) in rencent_items"
+                            :key="index"
                             class="relative h-40 w-80 mb-2 rounded-md shadow-lg py-4 px-6 border text-base font-semibold hover_card cursor-pointer"
                         >
-                            <div class="flex changetotext">
-                                <div class="rencent_title w-full mr-5 select-none">{{ item }}</div>
-
-                                <div class="rec_icon collectIconWrap">
-                                    <el-tooltip class="item" effect="dark" content="收藏" placement="bottom">
+                            <div @click="clickToRecord(item.id)">
+                                <div class="flex changetotext">
+                                    <div class="rencent_title w-full mr-5 select-none" v-if="item.dataType > 1">
+                                        {{ item.title.answer }}
+                                    </div>
+                                    <div class="rencent_title w-full mr-5 select-none" v-else>{{ item.title }}</div>
+                                    <div class="rec_icon collectIconWrap">
+                                        <el-tooltip class="item" effect="dark" content="收藏" placement="bottom">
+                                            <svg
+                                                t="1655195283445"
+                                                class="cardTitleImg cardTitleImgShow collectHover"
+                                                viewBox="0 0 1024 1024"
+                                                p-id="6924"
+                                                width="16"
+                                                height="16"
+                                                data-spm-anchor-id="5176.28158796.0.i42.68656ac5pdme4W"
+                                            >
+                                                <path
+                                                    d="M529.066667 165.034667l104.533333 216.405333 206.378667 20.181333a42.666667 42.666667 0 0 1 23.808 74.666667l-162.176 140.885333 46.037333 224.384a42.666667 42.666667 0 0 1-64.298667 44.8l-192.725333-119.637333-192.597333 119.637333a42.666667 42.666667 0 0 1-64.298667-44.8l45.994667-224.384-162.133334-140.842666a42.666667 42.666667 0 0 1 23.808-74.666667L348.16 381.44l104.106667-216.32a42.666667 42.666667 0 0 1 76.8-0.085333z"
+                                                    p-id="6925"
+                                                    fill="currentColor"
+                                                />
+                                            </svg>
+                                        </el-tooltip>
+                                    </div>
+                                    <div class="rec_icon bg-gray-50 iconHoverWrap" v-if="item.dataType === 0">
                                         <svg
-                                            t="1655195283445"
-                                            class="cardTitleImg cardTitleImgShow collectHover"
+                                            t="1721300751329"
+                                            class="icon"
                                             viewBox="0 0 1024 1024"
-                                            p-id="6924"
+                                            version="1.1"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            p-id="4260"
                                             width="16"
                                             height="16"
-                                            data-spm-anchor-id="5176.28158796.0.i42.68656ac5pdme4W"
                                         >
                                             <path
-                                                d="M529.066667 165.034667l104.533333 216.405333 206.378667 20.181333a42.666667 42.666667 0 0 1 23.808 74.666667l-162.176 140.885333 46.037333 224.384a42.666667 42.666667 0 0 1-64.298667 44.8l-192.725333-119.637333-192.597333 119.637333a42.666667 42.666667 0 0 1-64.298667-44.8l45.994667-224.384-162.133334-140.842666a42.666667 42.666667 0 0 1 23.808-74.666667L348.16 381.44l104.106667-216.32a42.666667 42.666667 0 0 1 76.8-0.085333z"
-                                                p-id="6925"
-                                                fill="currentColor"
+                                                d="M849.408 6.656L411.648 140.8c-53.248 15.36-95.744 70.656-95.744 123.392v461.312S284.16 704 213.504 714.24C109.568 729.088 25.6 808.448 25.6 891.904s83.968 134.656 187.904 119.808c103.936-14.848 179.712-91.648 179.712-175.104v-445.44c0-36.864 44.544-52.736 44.544-52.736l387.072-121.344s43.008-14.336 43.008 25.088v367.616s-39.424-22.528-110.08-14.336c-103.936 12.8-187.904 90.624-187.904 174.08S653.824 905.728 757.76 893.44c103.936-12.8 187.904-90.624 187.904-174.08V74.752c-0.512-52.224-43.52-82.944-96.256-68.096z"
+                                                fill="#1296db"
+                                                p-id="4261"
+                                            ></path>
+                                        </svg>
+                                    </div>
+                                    <div class="rec_icon bg-gray-50 iconHoverWrap" v-if="item.dataType === 1">
+                                        <svg
+                                            t="1714551777145"
+                                            class="icon"
+                                            viewBox="0 0 1024 1024"
+                                            version="1.1"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            p-id="4607"
+                                            width="16"
+                                            height="16"
+                                        >
+                                            <path
+                                                d="M128 128v768h768V128H128z m853.333333-85.333333v938.666666H42.666667V42.666667h938.666666z"
+                                                fill="#17abe3"
+                                                p-id="4608"
+                                            />
+                                            <path
+                                                d="M341.333333 341.333333l341.333334 170.666667-341.333334 170.666667z"
+                                                fill="#17abe3"
+                                                p-id="4609"
                                             />
                                         </svg>
-                                    </el-tooltip>
+                                    </div>
+                                    <div class="rec_icon bg-gray-50 iconHoverWrap" v-if="item.dataType > 1">
+                                        <svg
+                                            t="1721216794948"
+                                            class="icon"
+                                            viewBox="0 0 1024 1024"
+                                            version="1.1"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            p-id="4319"
+                                            width="16"
+                                            height="16"
+                                        >
+                                            <path
+                                                d="M284.434286 971.428571h455.131428c88.722286 0 132.864-45.001143 132.864-134.144V448.146286c0-55.296-5.997714-79.286857-40.283428-114.432L595.565714 93.275429c-32.548571-33.426286-59.136-40.704-107.574857-40.704H284.452571c-88.283429 0-132.864 45.421714-132.864 134.582857v650.130285c0 89.563429 44.580571 134.144 132.864 134.144z m3.419428-68.992c-44.141714 0-67.291429-23.588571-67.291428-66.432V188.434286c0-42.422857 23.149714-66.870857 67.730285-66.870857h190.281143v249.014857c0 53.997714 27.428571 80.566857 80.566857 80.566857h244.297143v384.859428c0 42.843429-22.729143 66.432-67.291428 66.432zM566.857143 386.413714c-16.713143 0-23.588571-6.838857-23.588572-23.990857V134.857143l246.857143 251.574857z"
+                                                p-id="4320"
+                                                fill="#1296db"
+                                            ></path>
+                                        </svg>
+                                    </div>
                                 </div>
-                                <div class="rec_icon bg-gray-50 iconHoverWrap">
-                                    <svg
-                                        t="1714551777145"
-                                        class="icon"
-                                        viewBox="0 0 1024 1024"
-                                        version="1.1"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        p-id="4607"
-                                        width="16"
-                                        height="16"
-                                    >
-                                        <path
-                                            d="M128 128v768h768V128H128z m853.333333-85.333333v938.666666H42.666667V42.666667h938.666666z"
-                                            fill="#17abe3"
-                                            p-id="4608"
-                                        />
-                                        <path
-                                            d="M341.333333 341.333333l341.333334 170.666667-341.333334 170.666667z"
-                                            fill="#17abe3"
-                                            p-id="4609"
-                                        />
-                                    </svg>
+                                <div class="mt-5 overflow-hidden flex-wrap flex select-none h-6" v-if="item.dataType > 1">
+                                    <el-tag v-for="tag in item.keyword.answer" :key="tag.id" class="flex mr-1">{{ tag.desc }}</el-tag>
                                 </div>
-                            </div>
-                            <div class="mt-5 overflow-hidden flex-wrap flex select-none h-6">
-                                <el-tag v-for="tag in recent_tag" :key="tag.id" class="flex mr-1">{{ tag }}</el-tag>
+                                <div class="mt-5 overflow-hidden flex-wrap flex select-none h-6" v-else>
+                                    <el-tag v-for="tag in item.keyword.answer" :key="tag.id" class="flex mr-1">{{ tag }}</el-tag>
+                                </div>
                             </div>
                             <div class="mt-4 flex justify-between text-xs font-normal text-gray-400 select-none">
-                                <div>{{ period }}</div>
-                                <div>{{ record_date }}</div>
+                                <div></div>
+                                <div>{{ item.updatetime }}</div>
                             </div>
                             <div class="absolute bottom-0 left-0 w-full z-1">
                                 <div class="h-8 flex justify-between px-14 bg-white label_b opacity-0 cursor-default">
@@ -401,8 +436,7 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="bg_gif">
-        </div>-->
+
         <el-dialog
             :visible="videoDialogVisible"
             v-if="videoDialogVisible"
@@ -478,7 +512,7 @@
             :visible="videoUploadDialogVisible"
             v-if="videoUploadDialogVisible"
             title="上传音视频"
-            width="34%"
+            width="30%"
             top="30vh"
             :close-on-click-modal="false"
             @close="closeVideoUploadDialog"
@@ -596,14 +630,14 @@
             </div>
             <div class="w-full flex justify-center mt-2" v-if="docUploadDialogAcitveIndex === '0'">
                 <el-upload
+                    ref="fileUpload"
                     drag
                     class="upload-demo"
-                    action="#"
-                    ref="upload"
+                    action="handleFileFileUpload"
                     multiple
                     :limit="1"
-                    :file-list="fileList"
-                    :http-request="handleFileUpload"
+                    :file-list="fileFileList"
+                    :http-request="handleFileFileUpload"
                     accept=".pdf, .doc, .docx, .img, .png, jepg"
                 >
                     <i class="el-icon-upload"></i>
@@ -612,30 +646,9 @@
                         <em>点击上传</em>
                     </div>
                     <div class="el-upload__tip" slot="tip">
-                        <div class="flex justify-between mb-2">
-                            <div class="w-5/6">
-                                <el-input v-model="pdfUrl" min="1" placeholder="输入包含文档的URL，后缀需为XXX.pdf"></el-input>
-                            </div>
-                            <div>
-                                <el-button>添加</el-button>
-                            </div>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <div class="text-gray-400">文件类型</div>
-                            <div class="w-5/6">
-                                <el-select v-model="docType" class="ml-3 w-full">
-                                    <el-option
-                                        v-for="item in docTypeOptions"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                    ></el-option>
-                                </el-select>
-                            </div>
-                        </div>
                         <div class="text-gray-400">文件格式：PDF/ Word/ 图片/ HTML</div>
-                        <div class="text-gray-400">文档大小：文件最大支持100M，图片最大支持20M</div>
-                        <div class="text-gray-400">文档页数：PDF/Word最多支持100页</div>
+                        <div class="text-gray-400">文档大小：文件最大支持5M，图片最大支持5M</div>
+                        <div class="text-gray-400">文档页数：目前只支持简单pdf</div>
                     </div>
                 </el-upload>
             </div>
@@ -654,7 +667,7 @@
 
                 <div class="text-gray-400 mb-3 text-xs">单次上传一个网址，请确保添加网址符合网络规范</div>
                 <div class="flex justify-center">
-                    <el-button class="w-1/4" type="primary">
+                    <el-button class="w-1/4" type="primary" @click="submitFileURL">
                         上传
                         <i class="el-icon-upload el-icon--right"></i>
                     </el-button>
@@ -679,7 +692,7 @@
                     @click="
                         liveDialogVisible = false;
                         createLiveDialogVisible = true;
-                        roomNumber = generateRandomString();
+                        roomCreateForm.roomNumber = generateRandomString();
                     "
                 >
                     <div>
@@ -750,7 +763,7 @@
             :visible="createLiveDialogVisible"
             v-if="createLiveDialogVisible"
             title="创建房间"
-            width="21%"
+            width="20%"
             top="30vh"
             :close-on-click-modal="false"
             @close="closeCreateLiveDialog"
@@ -765,7 +778,7 @@
                             class="w-full"
                             type="text"
                             placeholder="请输入内容"
-                            v-model="roomName"
+                            v-model="roomCreateForm.roomName"
                             maxlength="15"
                             show-word-limit
                         ></el-input>
@@ -775,19 +788,19 @@
                 <div class="flex items-center w-full mb-5">
                     <div class="w-1/6">是否公开</div>
                     <div class="w-5/6">
-                        <el-radio v-model="openLiveRadio" label="0">公开</el-radio>
-                        <el-radio v-model="openLiveRadio" label="1">私密</el-radio>
+                        <el-radio v-model="roomCreateForm.openLiveRadio" label="0">公开</el-radio>
+                        <el-radio v-model="roomCreateForm.openLiveRadio" label="1">私密</el-radio>
                     </div>
                 </div>
 
-                <div class="flex items-center w-full mb-5" v-if="openLiveRadio === '1'">
+                <div class="flex items-center w-full mb-5" v-if="roomCreateForm.openLiveRadio === '1'">
                     <div class="w-1/6">密码:</div>
                     <div class="w-5/6">
                         <el-input
                             class="w-full"
                             type="text"
                             placeholder="请输入房间密码"
-                            v-model="roomPassword"
+                            v-model="roomCreateForm.roomPassword"
                             maxlength="8"
                             show-word-limit
                         ></el-input>
@@ -797,15 +810,15 @@
                 <div class="flex items-center w-full mb-5">
                     <div class="mr-2">实时记录</div>
                     <div>
-                        <el-radio v-model="liveRecordRadio" label="0">开启</el-radio>
-                        <el-radio v-model="liveRecordRadio" label="1">关闭</el-radio>
+                        <el-radio v-model="roomCreateForm.liveRecordRadio" label="0">开启</el-radio>
+                        <el-radio v-model="roomCreateForm.liveRecordRadio" label="1">关闭</el-radio>
                     </div>
                 </div>
 
                 <div class="flex items-center w-full mb-5">
                     <div class="flex">
                         <div class="mr-2">房间号:</div>
-                        <div id="roomNumber" class="mr-1">{{ roomNumber }}</div>
+                        <div id="roomNumber" class="mr-1">{{ roomCreateForm.roomNumber }}</div>
                         <div class="cursor-pointer" @click="copyRoomNumber">
                             <svg
                                 t="1715003398431"
@@ -828,58 +841,56 @@
                 </div>
 
                 <div class="w-full flex justify-center">
-                    <el-button type="primary">创建</el-button>
+                    <el-button type="primary" @click="clickCreateRoom">创建</el-button>
                 </div>
             </div>
         </el-dialog>
 
-        <router-link to="/live">
-            <el-dialog
-                :visible="inLiveDialogVisible"
-                v-if="inLiveDialogVisible"
-                title="加入房间"
-                width="20%"
-                top="30vh"
-                :close-on-click-modal="false"
-                @close="closeInLiveDialog"
-                class="select-none"
-                :destroy-on-close="true"
-            >
-                <div class="px-2">
-                    <div class="flex w-full items-center mb-2">
-                        <div class="w-1/6">房间号:</div>
-                        <div class="w-5/6">
-                            <el-input
-                                class="w-full"
-                                type="text"
-                                placeholder="请输入房间号"
-                                v-model="roomNumber"
-                                maxlength="6"
-                                show-word-limit
-                            ></el-input>
-                        </div>
-                    </div>
-
-                    <div class="flex w-full items-center mb-2">
-                        <div class="w-1/6">密码:</div>
-                        <div class="w-5/6">
-                            <el-input
-                                class="w-full"
-                                type="text"
-                                placeholder="请输入房间密码"
-                                v-model="roomPassword"
-                                maxlength="8"
-                                show-word-limit
-                            ></el-input>
-                        </div>
-                    </div>
-
-                    <div class="w-full flex justify-center">
-                        <el-button type="primary">加入</el-button>
+        <el-dialog
+            :visible="inLiveDialogVisible"
+            v-if="inLiveDialogVisible"
+            title="加入房间"
+            width="20%"
+            top="30vh"
+            :close-on-click-modal="false"
+            @close="closeInLiveDialog"
+            class="select-none"
+            :destroy-on-close="true"
+        >
+            <div class="px-2">
+                <div class="flex w-full items-center mb-2">
+                    <div class="w-1/6">房间号:</div>
+                    <div class="w-5/6">
+                        <el-input
+                            class="w-full"
+                            type="text"
+                            placeholder="请输入房间号"
+                            v-model="roomJoinForm.roomNumber"
+                            maxlength="6"
+                            show-word-limit
+                        ></el-input>
                     </div>
                 </div>
-            </el-dialog>
-        </router-link>
+
+                <div class="flex w-full items-center mb-2">
+                    <div class="w-1/6">密码:</div>
+                    <div class="w-5/6">
+                        <el-input
+                            class="w-full"
+                            type="text"
+                            placeholder="请输入房间密码"
+                            v-model="roomJoinForm.roomPassword"
+                            maxlength="8"
+                            show-word-limit
+                        ></el-input>
+                    </div>
+                </div>
+
+                <div class="w-full flex justify-center">
+                    <el-button type="primary" @click="clickJoinRoom">加入</el-button>
+                </div>
+            </div>
+        </el-dialog>
 
         <el-dialog
             :visible="loginDialogVisible"
@@ -909,13 +920,13 @@
                         placeholder="请输入密码"
                     ></el-input>
                 </el-form-item>
-                <button
+                <span
                     class="mt-2 w-full bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center text-white"
                     type="submit"
                     @click="submitLogin('loginForm')"
                 >
                     登录
-                </button>
+                </span>
 
                 <p class="signup-link mt-1">
                     没有帐户?
@@ -924,7 +935,28 @@
             </el-form>
 
             <el-form :model="registerForm" :rules="rules" ref="registerForm" class="demo-ruleForm" v-else>
-                <p class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">注册用户</p>
+                <p class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl mb-2">注册用户</p>
+                <!-- <div class="flex justify-center">
+                    <el-upload class="avatar-uploader" action="#" :show-file-list="false" list-type="picture-card" :auto-upload="false">
+                         <i slot="default" class="el-icon-plus"></i>
+                        <div slot="file" slot-scope="{ file }">
+                            <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
+                        </div>
+                    </el-upload>
+                </div> -->
+                <div class="flex items-center">
+                    上传头像
+                    <el-upload
+                        class="avatar-uploader ml-2"
+                        action="#"
+                        :show-file-list="false"
+                        :http-request="AutoUploadAvatar"
+                        accept=".jpg, .png, .jpeg"
+                    >
+                        <img v-if="registerForm.url" :src="registerForm.url" class="avatar" />
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                </div>
                 <el-form-item label="用户名" prop="name">
                     <el-input
                         class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full"
@@ -962,32 +994,59 @@
                     <a href="javascript:void(0);" @click="changeLoginTab()">登录</a>
                 </p>
 
-                <button
+                <span
                     class="w-full bg-blue-500 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center text-white"
                     type="submit"
                     @click="submitRegister('registerForm')"
                 >
                     创建用户
-                </button>
+                </span>
             </el-form>
         </el-dialog>
     </div>
 </template>
- 
 <script>
 var week = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 import { userStore } from '../../store/store';
-import { Login, Register } from '../../api/user';
+import { Login, Register, UploadAvatar } from '../../api/user';
+import { CreateRoom, JoinRoom } from '../../api/live';
 import { uploadVideo, uploadLargeVideo, uploadVideoUrl, mergeVideo } from '../../api/videoTrans';
+import { uploadFile } from '../../api/fileTrans';
+import { getRecentRecord } from '../../api/record';
 import { Message } from 'element-ui';
 import bus from '../common/bus';
 import SparkMD5 from 'spark-md5';
-import { fileToBuffer } from '../../utils/util';
+import { nanoid } from 'nanoid';
+import { fileToBuffer, encodeWithSalt, decodeWithSalt, Salt } from '../../utils/util';
 const userstore = userStore();
 export default {
     mounted() {
         setInterval(this.startPlay, 7000);
         setInterval(this.updateTime, 1000);
+        //请求最近的两条记录
+        if (userstore.isLoggedIn === true) {
+            getRecentRecord(userstore.user_id).then((res) => {
+                console.log(res);
+                for (let i = 0; i < res.singlerecords.length; i++) {
+                    if (res.singlerecords[i].dataType > 1) {
+                        res.singlerecords[i].title = JSON.parse(res.singlerecords[i].title);
+                        res.singlerecords[i].keyword = JSON.parse(res.singlerecords[i].keyword);
+                        res.singlerecords[i].updatetime = new Date(res.singlerecords[i].updatetime)
+                            .toISOString()
+                            .slice(0, 19)
+                            .replace('T', ' ');
+                    } else {
+                        res.singlerecords[i].title = res.singlerecords[i].title;
+                        res.singlerecords[i].keyword = JSON.parse(res.singlerecords[i].keyword);
+                        res.singlerecords[i].updatetime = new Date(res.singlerecords[i].updatetime)
+                            .toISOString()
+                            .slice(0, 19)
+                            .replace('T', ' ');
+                    }
+                }
+                this.rencent_items = res.singlerecords;
+            });
+        }
     },
     created() {
         bus.$on('openLogin', (msg) => {
@@ -1008,14 +1067,23 @@ export default {
             ulList: [{ msg: '高效开会！' }, { msg: '轻松学习！' }, { msg: '随手总结！' }],
             play: false,
             rencent_items: [
-                '这是一部讲述关于兔子和三只田鼠之间故事的电影，在电影中他们之间将会发生激烈的对抗，电影即将上映。',
-                '小时候，幸福是一件东西，拥有就幸福；长大后，幸福是一个目标，达到就幸福；成熟后，发现幸福原来是一种心态，领悟就幸福。'
+                {
+                    dataType: 5,
+                    id: 1,
+                    keyword: { answer: [] },
+                    title: { answer: '还没有最近的记录哦！' },
+                    updatetime: ''
+                },
+                {
+                    dataType: 5,
+                    id: 2,
+                    keyword: { answer: [] },
+                    title: { answer: '还没有最近的记录哦！' },
+                    updatetime: ''
+                }
             ],
-            time: '',
             date: '',
-            recent_tag: ['电影', '兔子', '三只田鼠', '报复'],
-            period: '02:14',
-            record_date: '04-25 16:11',
+            time: '',
             videoDialogVisible: false,
             videoUploadDialogVisible: false,
             videoUrlUploadDialogVisible: false,
@@ -1026,25 +1094,36 @@ export default {
             loginDialogVisible: false,
             logintab: 0,
             videoFileList: [],
-            fileList: [],
+            fileFileList: [],
             videoFileCount: 0,
 
-            //上传音视频参数
-            lang: 0, //视频语言类型
-            transValue: 0, //是否翻译
+            //正在转写的文件列表  0表示正在上传,1表示上传成功,2表示上传失败 key:file_name,state,record_id
+            UploadList: [],
 
+            //上传音视频参数
+            lang: '0', //视频语言类型
+            transValue: 0, //是否翻译
             videoUrl: '',
             htmlUrl: '',
             docType: 0,
             docUploadDialogAcitveIndex: '0',
-            pdfUrl: '',
-            roomName: '',
-            openTrans: false,
+
+            roomJoinForm: {
+                roomNumber: '',
+                roomPassword: ''
+            },
+            roomCreateForm: {
+                roomName: '',
+                openLiveRadio: '0',
+                roomPassword: '',
+                liveRecordRadio: '0',
+                roomNumber: ''
+            },
+
+            //上传中的组件
+            openTrans: true,
             isUpload: false,
-            openLiveRadio: '0',
-            liveRecordRadio: '0',
-            roomNumber: '',
-            roomPassword: '',
+
             loginForm: {
                 email: '',
                 password: ''
@@ -1054,12 +1133,12 @@ export default {
                 email: '',
                 password: '',
                 confirmPassword: '',
-                avatar: ''
+                url: ''
             },
             rules: {
                 name: [
                     { required: true, message: '请输入用户名', trigger: 'blur' },
-                    { min: 1, max: 5, message: '长度在 1 到 5 个字符', trigger: 'blur' }
+                    { min: 1, max: 8, message: '长度在 1 到 8 个字符', trigger: 'blur' }
                 ],
                 password: [
                     { required: true, message: '请输入密码', trigger: 'blur' },
@@ -1077,22 +1156,20 @@ export default {
                     value: 1,
                     label: '英语'
                 }
-            ],
-            docTypeOptions: [
-                {
-                    value: 0,
-                    label: '文档'
-                },
-                {
-                    value: 1,
-                    label: '论文'
-                },
-                {
-                    value: 2,
-                    label: '图书'
-                }
             ]
         };
+    },
+    watch: {
+        UploadList: {
+            immediate: true,
+            handler(newVal) {
+                if (newVal.length > 0) {
+                    this.isUpload = true;
+                } else {
+                    this.isUpload = false;
+                }
+            }
+        }
     },
     methods: {
         startPlay() {
@@ -1161,7 +1238,7 @@ export default {
         closeVideoUploadDialog() {
             this.videoUploadDialogVisible = false;
             this.uploadOptions[1].label = '英语';
-            this.lang = 0;
+            this.lang = '0';
             this.transValue = 0;
             this.fileCount = 0;
         },
@@ -1171,20 +1248,21 @@ export default {
         },
         closeDocUploadDialog() {
             this.docUploadDialogVisible = false;
+            this.htmlUrl = '';
         },
         closeLiveDialog() {
             this.liveDialogVisible = false;
         },
         closeInLiveDialog() {
             this.inLiveDialogVisible = false;
-            this.roomNumber = '';
-            this.roomPassword = '';
+            this.roomJoinForm.roomNumber = '';
+            this.roomJoinForm.roomPassword = '';
         },
         closeCreateLiveDialog() {
             this.createLiveDialogVisible = false;
-            this.roomName = '';
-            this.roomNumber = '';
-            this.roomPassword = '';
+            this.roomCreateForm.roomName = '';
+            this.roomCreateForm.roomNumber = '';
+            this.roomCreateForm.roomPassword = '';
         },
         closeLoginDialog() {
             this.loginDialogVisible = false;
@@ -1198,16 +1276,13 @@ export default {
             this.videoFileCount = fileList.length;
         },
         handleVideoSuccess() {
-            this.$refs.upload.clearFiles();
+            this.$refs.videoUpload.clearFiles();
         },
         // 处理超出图片个数操作
         handleVideoExceed(files, fileList) {
             this.$message.warning(
                 `当前限制选择 5 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`
             );
-        },
-        submitUpload() {
-            this.$refs.upload.submit();
         },
         changeLang() {
             if (this.lang == '0') {
@@ -1223,7 +1298,6 @@ export default {
         },
         handleDocTypeSelect(key, keyPath) {
             this.docUploadDialogAcitveIndex = key;
-            this.pdfUrl = '';
             this.htmlUrl = '';
             console.log(this.docUploadDialogAcitveIndex);
         },
@@ -1274,11 +1348,15 @@ export default {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     //注册成功
-                    Register(this.loginForm.email, this.loginForm.password).then(() => {
-                        Message.success('注册成功');
-                        this.closeLoginDialog();
-                        this.resetRgisterForm();
-                    });
+                    Register(this.registerForm.email, this.registerForm.password, this.registerForm.name, this.registerForm.url).then(
+                        (response) => {
+                            if (response.code === 200) {
+                                Message.success('注册成功');
+                                this.closeLoginDialog();
+                                this.resetRgisterForm();
+                            }
+                        }
+                    );
                 } else {
                     //注册失败
                     console.log('error submit!!');
@@ -1291,16 +1369,20 @@ export default {
                 if (valid) {
                     //登录成功
                     Login(this.loginForm.email, this.loginForm.password).then((response) => {
-                        Message.success('登录成功');
-                        this.closeLoginDialog();
-                        this.resetLoginForm();
-                        userstore.isLoggedIn = true;
-                        userstore.user_id = response.UserId;
-                        // userstore.avatar = response.Avatar
-                        userstore.avatar = 'https://img2.baidu.com/it/u=1195773901,4039087122&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=750';
-                        userstore.name = response.Name;
-                        userstore.token = response.Token.access_token;
-                        window.location.reload();
+                        if (response.code === 200) {
+                            Message.success('登录成功');
+                            // this.closeLoginDialog();
+                            // this.resetLoginForm();
+                            userstore.isLoggedIn = true;
+                            userstore.user_id = response.UserId;
+                            // userstore.avatar = response.Avatar
+                            userstore.avatar = response.Avatar;
+                            userstore.name = response.Name;
+                            userstore.token = response.Token.access_token;
+                            console.log(response);
+                            console.log(userstore);
+                            window.location.reload();
+                        }
                     });
                 } else {
                     //登录失败
@@ -1327,15 +1409,29 @@ export default {
         // 上传(同时选择多个文件时会多次上传该文件)
         async handleVideoFileUpload(item) {
             let file = item.file;
-            this.disabled = true;
-            this.videoFileList = [...this.videoFileList, file]; //用于展示进度
-            this.uploadModal = true; // 展示进度弹窗
+            var tag = nanoid(4);
+            //进度列表添加
+            this.UploadList.push({
+                tag: tag,
+                file_name: file.name,
+                state: 0,
+                record_id: -1
+            });
+
             // 文件大于5mb时分片上传
             if (file.size / 1024 / 1024 < 5) {
                 const formData = new FormData();
                 formData.append('file', file); //文件
                 formData.append('filename', file.name); //文件名
                 formData.append('user_id', userstore.user_id);
+                if (this.lang === '0') {
+                    formData.append('source_language', 'zh-CHS');
+                    formData.append('dest_language', 'en');
+                } else {
+                    formData.append('source_language', 'en');
+                    formData.append('dest_language', 'zh-CHS');
+                }
+
                 if (file.type === 'audio/mpeg' || file.type === 'audio/mp3') {
                     formData.append('type', 0);
                 } else {
@@ -1354,25 +1450,18 @@ export default {
                         };
                     });
                 }
-                let md5 = await getMd5(file); 
+                let md5 = await getMd5(file);
                 formData.append('md5', md5);
                 uploadVideo(formData) //调用api
                     .then((res) => {
                         if (res.code === 200) {
-                            console.log('res', res);
+                            this.SetUploadSuccess(tag, res.record_id);
                             Message.success(`${file.name}：转写完成`);
                         } else {
-                            this.videoFileList.forEach((item) => {
-                                //进度条报错
-                                if (item.name === file.name) {
-                                    item.typeProgress = 1;
-                                }
-                            });
+                            this.SetUploadError(tag);
+                            Message.Error(`${file.name}：转写失败`);
                         }
                     });
-                // .finally(() => {
-                //     this.disabled = false;
-                // });
             } else {
                 const size = 5 * 1024 * 1024; // 5MB 每个分片大小
                 let current = 0; // 当前分片index(从0开始)
@@ -1404,28 +1493,37 @@ export default {
                 uploadChunk();
                 // 文件完整性检测，完整则合并
                 let mergeTime = 0;
-                let type
+                let type;
                 if (file.type === 'audio/mpeg' || file.type === 'audio/mp3') {
-                    type = "0"
+                    type = '0';
                 } else {
-                    type = "1"
+                    type = '1';
+                }
+                let source_language, dest_language;
+                if (this.lang === '0') {
+                    source_language = 'zh-CHS';
+                    dest_language = 'en';
+                } else {
+                    dest_language = 'zh-CHS';
+                    source_language = 'en';
                 }
                 function merge() {
-                    mergeVideo(md5,total.toString(),file.name,userstore.user_id.toString(),type)
-                    .then((res) => {
-                        if (res.idx != -1) {
-                            current = res.idx; // 当前服务器应该上传的分片下标
-                            startByte = size * current;
-                            uploadChunk();
-                            if (mergeTime <= 5) {
-                                mergeTime += 1;
-                                merge();
-                            } else {
-                                Message.error('文件合并失败,请重新上传');
-                                return;
+                    mergeVideo(md5, total.toString(), file.name, userstore.user_id.toString(), type, source_language, dest_language).then(
+                        (res) => {
+                            if (res.idx != -1) {
+                                current = res.idx; // 当前服务器应该上传的分片下标
+                                startByte = size * current;
+                                uploadChunk();
+                                if (mergeTime <= 5) {
+                                    mergeTime += 1;
+                                    merge();
+                                } else {
+                                    Message.error('文件合并失败,请重新上传');
+                                    return;
+                                }
                             }
-                        } 
-                    });
+                        }
+                    );
                 }
                 // .finally(() => {
                 //     this.disabled = false;
@@ -1441,8 +1539,6 @@ export default {
                     formData.append('current', current);
                     formData.append('total', total);
                     formData.append('md5', md5);
-                    formData.append('lang', that.lang);
-                    formData.append('trans', that.transValue);
                     formData.append('user_id', userstore.user_id);
                     if (file.type === 'audio/mpeg' || file.type === 'audio/mp3') {
                         formData.append('type', 0);
@@ -1468,7 +1564,7 @@ export default {
                                     uploadChunk();
                                 } else {
                                     Message.success(`${file.name}：上传完成`);
-                                                    merge();
+                                    merge();
                                 }
                             } else {
                                 that.list.forEach((item) => {
@@ -1489,18 +1585,176 @@ export default {
         clickUploadVideo() {
             console.log('点击');
             this.$refs.videoUpload.submit();
+            this.closeVideoUploadDialog();
         },
-        submitVideoUrl(){
-            console.log(this.videoUrl)
+        submitVideoUrl() {
+            console.log(this.videoUrl);
             uploadVideoUrl(this.videoUrl, userstore.user_id).then((response) => {
-                if (response.code === 200){
+                if (response.code === 200) {
                     Message.success('转写成功');
-                }else{
-                    Message.Error(response.Msg)
+                } else {
+                    Message.Error(response.Msg);
                 }
-                 
             });
             this.closeVideoUrlUploadDialog();
+        },
+        clickCreateRoom() {
+            let is_record = false;
+            if (this.roomCreateForm.liveRecordRadio === '0') {
+                is_record = true;
+            }
+            let is_open = false;
+            if (this.roomCreateForm.openLiveRadio === '0') {
+                is_open = true;
+            }
+            CreateRoom(
+                this.roomCreateForm.roomName,
+                is_open,
+                this.roomCreateForm.roomPassword,
+                is_record,
+                this.roomCreateForm.roomNumber,
+                userstore.user_id
+            ).then((res) => {
+                if (res.code === 200) {
+                    var index = res.url.lastIndexOf('/');
+                    var url = res.url.slice(0, index);
+                    var pushNumber = res.url.slice(index + 1);
+                    const h = this.$createElement;
+                    this.$msgbox({
+                        title: '创建成功',
+                        message: h('div', null, [
+                            h('div', null, '请使用推流工具进行推流,您的推流地址如下:'),
+                            h('div', { style: 'word-break: break-all;word-wrap: break-word' }, '服务器:' + url),
+                            h('div', { style: 'word-break: break-all;word-wrap: break-word' }, '推流码:' + pushNumber),
+                            h('div', null, `用户将通过您的房间号加入直播，您的房间号为:${this.roomCreateForm.roomNumber}`),
+                            h('div', null, `实时字幕地址:http://localhost/#/subtitle`)
+                        ]),
+                        confirmButtonText: '确定'
+                    });
+                    this.closeCreateLiveDialog();
+                }
+            });
+        },
+        clickJoinRoom() {
+            JoinRoom(this.roomJoinForm.roomNumber, this.roomJoinForm.roomPassword).then((res) => {
+                console.log(res);
+                if (res.code === 200) {
+                    this.$router.push({
+                        path: '/live',
+                        query: { rn: this.roomJoinForm.roomNumber, pw: encodeWithSalt(this.roomJoinForm.roomPassword, Salt) }
+                    });
+                }
+            });
+        },
+        AutoUploadAvatar(file) {
+            var dataform = new FormData();
+            dataform.append('file', file.file);
+            dataform.append('file_name', file.file.name);
+            UploadAvatar(dataform).then((res) => {
+                if (res.code === 200) {
+                    Message.success('头像上传成功');
+                    this.registerForm.url = res.url;
+                } else {
+                    Message.error('头像上传失败');
+                }
+            });
+        },
+        async handleFileFileUpload(item) {
+            let file = item.file;
+            this.disabled = true;
+            this.videoFileList = [...this.videoFileList, file]; //用于展示进度
+            this.uploadModal = true; // 展示进度弹窗
+            // 文件大于5mb时分片上传
+            const formData = new FormData();
+            formData.append('file', file); //文件
+            formData.append('name', file.name); //文件名
+            formData.append('user_id', userstore.user_id);
+
+            console.log(file.type);
+            if (file.type === 'image/jpeg' || file.type === 'image/png') {
+                formData.append('type', 4);
+            } else if (file.type === 'application/pdf') {
+                formData.append('type', 2);
+            } else if (
+                file.type === 'application/msword' ||
+                file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            ) {
+                formData.append('type', 3);
+            }
+
+            var spark = new SparkMD5.ArrayBuffer();
+            function getMd5(file) {
+                return new Promise((resolve) => {
+                    // 对文件对象的处理
+                    var fileReader = new FileReader();
+                    fileReader.readAsArrayBuffer(file);
+                    // fileReader.onload为异步函数，要放到Promise对象中，等待状态的变更后再返回生成的md5值
+                    fileReader.onload = function (e) {
+                        spark.append(e.target.result);
+                        resolve(spark.end());
+                    };
+                });
+            }
+            let md5 = await getMd5(file);
+            formData.append('md5', md5);
+            uploadFile(formData) //调用api
+                .then((res) => {
+                    if (res.code === 200) {
+                        console.log('res', res);
+                        Message.success(`${file.name}：转写完成`);
+                    } else {
+                        this.videoFileList.forEach((item) => {
+                            //进度条报错
+                            if (item.name === file.name) {
+                                item.typeProgress = 1;
+                            }
+                        });
+                    }
+                });
+            // .finally(() => {
+            //     this.disabled = false;
+            // });
+            return false;
+        },
+        submitFileURL() {
+            const formData = new FormData();
+            formData.append('url', this.htmlUrl); //网页名
+            formData.append('user_id', userstore.user_id);
+            formData.append('type', 5);
+            uploadFile(formData) //调用api
+                .then((res) => {
+                    if (res.code === 200) {
+                        console.log('res', res);
+                        Message.success(`${this.htmlUrl}：转写完成`);
+                    }
+                });
+            this.closeDocUploadDialog();
+        },
+        clickToRecord(record_id) {
+            if (!userstore.isLoggedIn) {
+                this.loginDialogVisible = true;
+                return;
+            }
+            console.log(record_id);
+            this.$router.push({
+                path: '/transcript',
+                query: { id: encodeWithSalt(record_id, Salt) }
+            });
+        },
+        SetUploadSuccess(tag, record_id) {
+            for (i = 0; i < this.UploadList; i++) {
+                if (this.UploadList[i].tag === tag) {
+                    this.UploadList[i].state = 1;
+                    this.UploadList[i].record_id = record_id;
+                }
+            }
+        },
+        SetUploadError(tag) {
+            for (i = 0; i < this.UploadList; i++) {
+                if (this.UploadList[i].tag === tag) {
+                    this.UploadList[i].state = 2;
+                }
+            }
         }
     }
 };
@@ -1739,5 +1993,29 @@ border-radius: 10px;
 
 .signup-link a {
     text-decoration: underline;
+}
+
+::v-deep .el-upload--picture-card {
+    width: 100px;
+    height: 100px;
+}
+::v-deep .avatar-uploader .el-upload {
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+}
+::v-deep .el-upload-list--picture-card .el-upload-list__item {
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+}
+::v-deep .el-upload-list--picture-card .el-upload-list__item-thumbnail {
+    width: 100px;
+    height: 100px;
+    line-height: 100px;
+}
+::v-deep .avatar {
+    width: 100px;
+    height: 100px;
 }
 </style>

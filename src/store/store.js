@@ -15,7 +15,7 @@ export const useMyStore = defineStore({
 export const userStore = defineStore({
   id: 'userstore',
   state: () => ({
-    isLoggedIn:false,
+    isLoggedIn:true,
     user_id:-1,
     avatar:"https://img1.baidu.com/it/u=3647744349,2477516282&fm=253&fmt=auto&app=138&f=JPEG?w=380&h=380",
     name:"",

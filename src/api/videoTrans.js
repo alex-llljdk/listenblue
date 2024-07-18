@@ -28,7 +28,7 @@ export function uploadLargeVideo(data) {
 }
 
 
-export function mergeVideo(md5, total, filename, user_id, type) {
+export function mergeVideo(md5, total, filename, user_id, type, source_language, dest_language) {
     var url = request.defaults.baseURL + ":10002"
     return request({
         method: "POST",
@@ -40,6 +40,8 @@ export function mergeVideo(md5, total, filename, user_id, type) {
             'filename': filename,
             'user_id': user_id,
             'type': type,
+            "source_language":source_language,
+            "dest_language":dest_language,
         },
         timeout: 1000 *60*15,
     })

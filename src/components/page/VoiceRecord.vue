@@ -468,6 +468,7 @@
 </template>
 
 <script>
+import { Loading } from 'element-ui';
 import { quillEditor } from 'vue-quill-editor';
 import { voiceTrans } from '../../api/voiceTrans';
 import { saveVoice } from '../../api/voiceTrans';
@@ -477,7 +478,7 @@ import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css';
 import lamejs from 'lamejs';
 const userstore = userStore();
-var voiceArray = [];
+// var voiceArray = [];
 //Recorder
 var Recorder = function (stream, socket) {
     var sampleBits = 16; //输出采样数位 8, 16
@@ -603,7 +604,7 @@ var Recorder = function (stream, socket) {
                 var j = 0;
                 for (var i = 0; i < arr.byteLength; i++) {
                     // wholeAudioDataBuffer.push(1);
-                    voiceArray.push(arr[i]);
+                    // voiceArray.push(arr[i]);
                     tmparr[j++] = arr[i];
                     if ((i + 1) % sendSize == 0) {
                         // console.log("tmparr: ", tmparr);
@@ -1504,6 +1505,13 @@ export default {
             }
         },
         uploadVoiceRecord() {
+            const loadingInstance = Loading.service({
+                lock: true,
+                text: '正在转写中，请稍等',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.8)'
+            });
+
             this.closeMicrophone();
             let buffer = this.recorder.getBufferAll();
             let f32buffer = this.float32Flatten(buffer);
@@ -1515,6 +1523,7 @@ export default {
             formData.append('filename', this.saveFileName); //文件名
             formData.append('user_id', userstore.user_id);
             formData.append('type', 0);
+            formData.append('title', this.recordInfo);
             let text = {
                 record_timestamp: this.recordInfo,
                 source_language: this.sourceLanguage,
@@ -1532,23 +1541,24 @@ export default {
             }
             formData.append('inner_Html', JSON.stringify(text));
             formData.append('content', JSON.stringify(tmp_recordings));
-            console.log('text: ', text);
 
             saveVoice(formData) //调用api
                 .then((res) => {
                     if (res.code === 200) {
-                        console.log('保存上传成功 res', res);
+                        this.$nextTick(() => {
+                            // 以服务的方式调用的 Loading 需要异步关闭
+                            loadingInstance.close();
+                        });
+                        this.$router.push('/home');
                     } else {
                         console.log('保存上传失败 res', res);
                     }
                 });
         },
         handleSave() {
-            this.$confirm('保存并退出？')
-                .then(async (_) => {
-                    this.uploadVoiceRecord();
-                    this.$router.push('/home');
-                })
+            this.$confirm('保存并退出？').then(async (_) => {
+                this.uploadVoiceRecord();
+            });
         },
         noSaveClose() {
             this.centerDialogVisible = false;
@@ -2128,4 +2138,5 @@ export default {
     background-color: rgba(159, 156, 238, 0.6);
     color: rgba(74, 77, 38, 0.85);
 }
+
 </style>

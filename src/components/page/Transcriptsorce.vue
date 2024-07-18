@@ -46,7 +46,7 @@
                         <p>保存</p>
                     </div>
                 </div>
-                <div class="aside-icon text-center mb-8 block px-4 cursor-pointer" @click="generateDocx">
+                <div class="aside-icon text-center mb-8 block px-4 cursor-pointer">
                     <div class="flex justify-center mb-2">
                         <svg
                             t="1715676434283"
@@ -123,7 +123,7 @@
             </el-aside>
         </div>
         <div class="flex h-full w-full" style="background: #f2f5fb">
-            <div class="contentContainer w-full pt-6" v-if="resource_type !== 2">
+            <div class="contentContainer w-full pt-6">
                 <div class="contentHeader w-full pb-2">
                     <div class="flex justify-between w-full px-8">
                         <div>
@@ -333,7 +333,7 @@
                                     </svg>
                                 </div>
                             </el-popover>
-                            <el-popover placement="bottom-end" width="280" trigger="hover" visible-arrow="false" v-if="aiType === 0">
+                            <el-popover placement="bottom-end" width="280" trigger="hover" visible-arrow="false">
                                 <div class="p-2 select-none">
                                     <div class="font-semibold text-black text-sm leading-6">翻译</div>
                                     <div class="flex items-center">
@@ -371,13 +371,7 @@
                                     </svg>
                                 </div>
                             </el-popover>
-                            <el-tooltip
-                                class="item"
-                                effect="dark"
-                                content="展开视频"
-                                placement="bottom"
-                                v-if="!isVideoOpen && resource_type === 1"
-                            >
+                            <el-tooltip class="item" effect="dark" content="展开视频" placement="bottom" v-if="!isVideoOpen">
                                 <div
                                     class="tools-icon cursor-pointer w-10 h-10 rounded-lg flex items-center justify-center mr-3"
                                     @click="changeVideo"
@@ -402,13 +396,7 @@
                                 </div>
                             </el-tooltip>
 
-                            <el-tooltip
-                                class="item"
-                                effect="dark"
-                                content="收起视频"
-                                placement="bottom"
-                                v-else-if="isVideoOpen && resource_type === 1"
-                            >
+                            <el-tooltip class="item" effect="dark" content="收起视频" placement="bottom" v-else>
                                 <div
                                     class="tools-icon cursor-pointer w-10 h-10 rounded-lg flex items-center justify-center mr-3"
                                     @click="changeVideo"
@@ -440,13 +428,15 @@
                                     <div class="font-normal text-xs text-gray-400 leading-5">
                                         在保留原文的要点内容基础上，将原文内容进行精简和改写
                                     </div>
-                                    <div class="aiRadio mt-2">
+                                    <div class="flex aiRadio mt-2">
                                         <div class="whitespace-nowrap">显示内容：</div>
                                         <el-radio-group v-model="aiType">
-                                            <el-radio :label="0">原文显示</el-radio>
-                                            <el-radio :label="1" class="mb-1">改写结果</el-radio>
-                                            <el-radio :label="2">原文和改写结果</el-radio>
+                                            <el-radio :label="0" class="mb-1">改写结果</el-radio>
+                                            <el-radio :label="1">原文和改写结果</el-radio>
                                         </el-radio-group>
+                                    </div>
+                                    <div class="w-full mt-3">
+                                        <el-button type="primary">改写总结</el-button>
                                     </div>
                                 </div>
                                 <div
@@ -474,19 +464,12 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="contentBody overflow-auto">
-                    <div class="audio-player" v-if="resource_type === 0">
-                        <audio controls class="audio-control" ref="audio" v-if="showVoiceUrl">
-                            <source :src="voice_url" />
-                        </audio>
-                    </div>
-
-                    <div class="w-full h-96 px-8" v-else-if="isVideoOpen && resource_type === 1">
+                    <div class="w-full h-96 px-8" v-if="isVideoOpen">
                         <d-player id="dplayer" class="h-full" :options="playerOptions"></d-player>
                     </div>
 
-                    <div class="scrollContainer overflow-auto py-2 px-8" :style="computedResourceTypeStyle">
+                    <div class="scrollContainer overflow-auto py-2 px-8" :style="{ height: isVideoOpen ? 'calc(100% - 384px)' : '100%' }">
                         <div class="AIDIV mb-2">
                             <div class="zhinengsulan mb-3 select-none">
                                 <img src="../../assets/img/zhinengsulan.png" alt class="h-12 pointer-events-none" />
@@ -519,13 +502,8 @@
                                 <div class="mt-1">
                                     <div class="relative">
                                         <div class="relative flex mb-2">
-                                            <div
-                                                :class="{
-                                                    breakabstractword: !openAbstract,
-                                                    openabstractword: openAbstract
-                                                }"
-                                            >
-                                                {{ text_summary }}
+                                            <div :class="{ breakabstractword: !openAbstract, openabstractword: openAbstract }">
+                                                这是一部讲述关于兔子和三只田鼠之间故事的电影，在电影中他们之间将会发生激烈的对抗，电影即将上映。
                                             </div>
                                         </div>
                                         <div class="text-xs text-blue-400 text-right">
@@ -542,20 +520,17 @@
                                         mode="horizontal"
                                         background-color="rgb(0 0 0 / 0%)"
                                         active-text-color="rgb(0 0 0)"
-                                        @select="handleSelectAisum"
                                     >
                                         <el-menu-item index="1">章节速览</el-menu-item>
                                         <el-menu-item index="2">要点回顾</el-menu-item>
                                     </el-menu>
                                 </div>
-                                <div class="aisumContent mb-2" v-if="aiSumActiveIndex === '1'">
+                                <div class="aisumContent mb-2">
                                     <div class="relative">
-                                        <div class="relative flex" v-for="(scanning_item, index) in scanning_items" :key="index">
+                                        <div class="relative flex">
                                             <div class="leftAisumContent mr-4 relative">
                                                 <div class="h-10 flex items-center relative cursor-default select-none">
-                                                    <div class="w-11 text-xs text-black select-none">
-                                                        {{ scanning_item['time'] }}
-                                                    </div>
+                                                    <div class="w-11 text-xs text-black select-none">00:00</div>
                                                     <div>
                                                         <svg
                                                             t="1716204788686"
@@ -581,64 +556,14 @@
                                             <div class="rightAisumContent block w-full pt-0.5 cursor-pointer">
                                                 <div class="min-h-10 mb-2 w-full bg-blue-100 rounded py-2 px-4 relative flex border">
                                                     <div style="visibilit: visible">
-                                                        <div class="aisumtext mb-1" :class="{ breakaisum: !openEpSumScanning }">
-                                                            {{ scanning_item['title'] }}
+                                                        <div class="aisumtext mb-1" :class="{ breakaisum: !openEpSum }">
+                                                            这是一部讲述关于兔子和三只田鼠之间故事的电影，在电影中他们之间将会发生激烈的对抗，电影即将上映。
                                                         </div>
-                                                        <div class="text-xs text-gray-400" v-if="openEpSumScanning">
-                                                            {{ scanning_item['desc'] }}
-                                                        </div>
+                                                        <div class="text-xs text-gray-400" v-if="openEpSum">111</div>
                                                     </div>
                                                 </div>
+                                                <div class="text-xs text-blue-400 cursor-pointer" @click="changeEp">{{ epopentitle }}</div>
                                             </div>
-                                        </div>
-                                        <div class="text-xs text-blue-400 cursor-pointer ml-16" @click="changeEpScanning">
-                                            {{ epopentitleScanning }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="aisumContent mb-2" v-if="aiSumActiveIndex === '2'">
-                                    <div class="relative">
-                                        <div class="relative flex" v-for="(review_item, index) in review_items" :key="index">
-                                            <div class="leftAisumContent mr-4 relative">
-                                                <div class="h-10 flex items-center relative cursor-default select-none">
-                                                    <div class="w-11 text-sm font-bold text-blue-400 select-none">要点</div>
-                                                    <div>
-                                                        <svg
-                                                            t="1716204788686"
-                                                            class="icon"
-                                                            viewBox="0 0 1024 1024"
-                                                            version="1.1"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                            p-id="2618"
-                                                            width="8"
-                                                            height="8"
-                                                        >
-                                                            <path
-                                                                d="M512 520.064m-414.464 0a3.238 3.238 0 1 0 828.928 0 3.238 3.238 0 1 0-828.928 0Z"
-                                                                fill="#1296db"
-                                                                p-id="2619"
-                                                                data-spm-anchor-id="a313x.search_index.0.i0.44783a81zqBcfd"
-                                                                class="selected"
-                                                            />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="rightAisumContent block w-full pt-0.5 cursor-pointer">
-                                                <div class="min-h-10 mb-2 w-full bg-blue-100 rounded py-2 px-4 relative flex border">
-                                                    <div style="visibilit: visible">
-                                                        <div class="aisumtext mb-1" :class="{ breakaisum: !openEpSumReview }">
-                                                            {{ review_item['ques'] }}
-                                                        </div>
-                                                        <div class="text-xs text-gray-400" v-if="openEpSumReview">
-                                                            {{ review_item['ans'] }}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="text-xs text-blue-400 cursor-pointer ml-16" @click="changeEpReview">
-                                            {{ epopentitleReview }}
                                         </div>
                                     </div>
                                 </div>
@@ -703,7 +628,7 @@
 
                             <div class="iwvckw">
                                 <div class="gnYZJU" :class="item_recording.isActive ? 'gnYZJU_focus ring-1 ring-purple-300' : 'gnYZJU'">
-                                    <div v-if="(aiType === 0 && (showType === '0' || showType === '2')) || aiType === 2" class="jItVgd">
+                                    <div v-if="(showType === '0' || showType === '2') && !rewriteAI" class="jItVgd">
                                         <div class="kCofWf">
                                             <div
                                                 class="kFJVLr w-full"
@@ -726,19 +651,9 @@
                                         </div>
                                     </div>
 
-                                    <div v-if="aiType === 0 && showType === '2'" class="solid-line"></div>
+                                    <div v-if="showType === '2' && !rewriteAI" class="solid-line"></div>
 
-                                    <div class="w-full text-left ml-12 mt-4" v-if="aiType === 1">
-                                        <div class="text-xs text-blue-300">AI改写结果：</div>
-                                    </div>
-                                    <div class="w-full text-left ml-12" v-if="aiType === 2">
-                                        <div class="text-xs text-blue-300">AI改写结果：</div>
-                                    </div>
-
-                                    <div
-                                        v-if="(aiType === 0 && (showType === '1' || showType === '2')) || aiType === 1 || aiType === 2"
-                                        class="jItVgd"
-                                    >
+                                    <div v-if="(showType === '1' || showType === '2') && !rewriteAI" class="jItVgd">
                                         <div class="kCofWf">
                                             <div class="kFJVLr w-full">
                                                 <span
@@ -758,124 +673,8 @@
                     </div>
                 </div>
             </div>
-
-            <iframe
-                :src="pdf_url"
-                style="border: none; width: 50%; height: 100%"
-                class="p-2"
-                v-if="pdf_url !== null && resource_type === 2"
-            ></iframe>
-
-            <div class="h-full w-1/2 bg-white px-8 pt-3 pb-16">
-                <el-tabs v-model="activePDFName" @tab-click="handlePDFClick" class v-if="resource_type === 2">
-                    <el-tab-pane name="first">
-                        <template #label>
-                            <span class="text-base">智能速览</span>
-                        </template>
-                    </el-tab-pane>
-                    <el-tab-pane name="second">
-                        <template #label>
-                            <span class="text-base">笔记</span>
-                        </template>
-                    </el-tab-pane>
-                </el-tabs>
-
-                <div class="introduction" style="overflow-y: auto" v-if="activePDFName === 'first' && resource_type === 2">
-                    <div class="introduction-content">
-                        <div>
-                            <span class="taskTitle">{{ pdfFileTitle }}</span>
-                            <div class="title-wrapper">
-                                <span class="title">全文概述</span>
-                            </div>
-                            <div class="card">
-                                <div class="markdown-body">
-                                    <p>{{ pdfOverview }}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="title-wrapper mt-4">
-                                <span class="title">关键要点</span>
-                            </div>
-                            <div class="card">
-                                <div class="markdown-body ml-8">
-                                    <ol>
-                                        <li v-for="(pdfKeyPoint, index) in pdfKeyPoints" :key="index">
-                                            {{ pdfKeyPoint }}
-                                        </li>
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <div class="title-wrapper mt-4">
-                                <span class="title">文档速读</span>
-                            </div>
-                            <div class="card">
-                                <div class="markdown-body ml-4">
-                                    <div class="aisumContent mb-2">
-                                        <div class="relative">
-                                            <div class="relative flex" v-for="(read_item, index) in pdfQuickReading" :key="index">
-                                                <div class="leftAisumContent mr-4 relative">
-                                                    <div class="h-10 flex items-center relative cursor-default select-none">
-                                                        <div class="w-11 text-xs text-black select-none">
-                                                            {{ read_item['page'] }}
-                                                        </div>
-                                                        <div>
-                                                            <svg
-                                                                t="1716204788686"
-                                                                class="icon"
-                                                                viewBox="0 0 1024 1024"
-                                                                version="1.1"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                p-id="2618"
-                                                                width="8"
-                                                                height="8"
-                                                            >
-                                                                <path
-                                                                    d="M512 520.064m-414.464 0a3.238 3.238 0 1 0 828.928 0 3.238 3.238 0 1 0-828.928 0Z"
-                                                                    fill="#1296db"
-                                                                    p-id="2619"
-                                                                    data-spm-anchor-id="a313x.search_index.0.i0.44783a81zqBcfd"
-                                                                    class="selected"
-                                                                />
-                                                            </svg>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="rightAisumContent block w-full pt-0.5 cursor-pointer">
-                                                    <div class="min-h-10 mb-2 w-full bg-blue-100 rounded py-2 px-4 relative flex border">
-                                                        <div style="visibilit: visible">
-                                                            <div class="aisumtext breakaisum mb-1">
-                                                                {{ read_item['title'] }}
-                                                            </div>
-                                                            <div class="text-xs text-gray-400">
-                                                                {{ read_item['content'] }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="h-full editorPDFViewport -mt-6 mx-3" v-else-if="activePDFName === 'second' && resource_type === 2">
-                    <quill-editor
-                        class="h-full"
-                        v-model="content"
-                        :options="editorOption"
-                        @blur="onEditorBlur($event)"
-                        @focus="onEditorFocus($event)"
-                        @change="onEditorChange($event)"
-                    ></quill-editor>
-                </div>
-                <div class="h-full editorViewport" v-else-if="resource_type !== 2">
+            <div class="h-full w-1/2" style="background: #f2f5fb">
+                <div class="h-full editorViewport">
                     <quill-editor
                         class="h-full"
                         v-model="content"
@@ -895,20 +694,12 @@ import flvjs from 'flv.js';
 import { quillEditor } from 'vue-quill-editor';
 import { voiceTrans } from '../../api/voiceTrans';
 import { saveVoice } from '../../api/voiceTrans';
-import { getRecord, getPDFRecord, getAiRewriting } from '../../api/record';
 import { userStore } from '../../store/store';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css';
 import VueDPlayer from 'vue-dplayer';
 import 'vue-dplayer/dist/vue-dplayer.css';
-import { encodeWithSalt, decodeWithSalt, Salt } from '../../utils/util';
-
-import JSZip from 'jszip';
-import Docxtemplater from 'docxtemplater';
-import { saveAs } from 'file-saver';
-import PizZipUtils from 'pizzip/utils/index.js';
-import PizZip from 'pizzip';
 
 const userstore = userStore();
 // toolbar标题
@@ -965,7 +756,6 @@ export default {
         return {
             // recording_items 数组用于存储要动态生成的 div 元素的数据
             recording_items: [],
-            copy_recording_items: null,
             currentTime: 0, // 当前时间，单位：秒
             timer: null, // 定时器
             inputWidth: 204,
@@ -974,19 +764,16 @@ export default {
             content: null,
             sourceLanguage: '',
             destLanguage: '',
-            resource_type: 0,
+            resource_type: '',
 
             openkeyword: false,
             keywordopentitle: '展开全部',
             openAbstract: false,
             abstractopentitle: '展开全部',
             aiSumActiveIndex: '1',
-            openEpSumScanning: false,
-            openEpSumReview: false,
-            epopentitleScanning: '查看章节摘要',
-            epopentitleReview: '查看章节摘要',
-            recent_tag: [],
-            text_summary: '',
+            openEpSum: false,
+            epopentitle: '查看章节摘要',
+            recent_tag: ['电影', '兔子', '三只田鼠', '报复'],
 
             editorOption: {
                 placeholder: '请在这里记录您的想法', //提示
@@ -1016,6 +803,7 @@ export default {
             isVideoOpen: true,
             aiType: 0,
             showType: '0', // 0源语言显示, 1纯译文显示, 2双语显示
+            rewriteAI: false, // AI改写时, 只显示AI改写的内容, showType将会被屏蔽
 
             playerOptions: {
                 container: document.getElementById('dplayer'), //播放器容器
@@ -1028,11 +816,25 @@ export default {
                 preload: 'auto', // 自动预加载
                 volume: 0.7, // 初始化音量
                 playbackSpeed: [0.5, 0.75, 1, 1.25, 1.5, 2, 3], //可选的播放速度，可自定义
+                // video: {
+                //     url: 'http://172.30.230.46/savel/BKWKFZ4V6ZJ6MHJK6QRQ7GZ5FM.flv', // 播放视频的路径
+                //     defaultQuality: 0 // 默认是高清
+                //     // pic: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606462956126&di=2d87964d4faf656af55d09d938640d97&imgtype=0&src=http%3A%2F%2Fattachments.gfan.com%2Fforum%2Fattachments2%2F201310%2F10%2F150326y7dzdd8d4kpjjdsd.jpg', // 视频封面图片
+                //     //  thumbnails: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606462956126&di=2d87964d4faf656af55d09d938640d97&imgtype=0&src=http%3A%2F%2Fattachments.gfan.com%2Fforum%2Fattachments2%2F201310%2F10%2F150326y7dzdd8d4kpjjdsd.jpg' // 进度条上的缩略图,需要通过dplayer-thumbnails来生成
+                // },
                 video: {
-                    url: '', // 播放视频的路径
-                    defaultQuality: 0 // 默认是高清
-                    // pic: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606462956126&di=2d87964d4faf656af55d09d938640d97&imgtype=0&src=http%3A%2F%2Fattachments.gfan.com%2Fforum%2Fattachments2%2F201310%2F10%2F150326y7dzdd8d4kpjjdsd.jpg', // 视频封面图片
-                    //  thumbnails: 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1606462956126&di=2d87964d4faf656af55d09d938640d97&imgtype=0&src=http%3A%2F%2Fattachments.gfan.com%2Fforum%2Fattachments2%2F201310%2F10%2F150326y7dzdd8d4kpjjdsd.jpg' // 进度条上的缩略图,需要通过dplayer-thumbnails来生成
+                    url: 'http://localhost/savel/CI33ZHT3OJ4LVJLA5J33NBTL7Q.flv',
+                    type: 'customFlv',
+                    customType: {
+                        customFlv: function (video, player) {
+                            const flvPlayer = flvjs.createPlayer({
+                                type: 'flv',
+                                url: video.src
+                            });
+                            flvPlayer.attachMediaElement(video);
+                            flvPlayer.load();
+                        }
+                    }
                 },
                 subtitle: {
                     //字幕
@@ -1069,190 +871,37 @@ export default {
             searchedTotalNum: 1,
             dictSpanClass: {}, // {id: class}
             dictIndexID: {}, // {index: id}
-            replaceNum: 0,
-
-            activePDFName: 'first',
-
-            scanning_items: [],
-            review_items: [],
-
-            pdfFileTitle: '',
-            pdfOverview: '',
-            pdfKeyPoints: [],
-            pdfQuickReading: [],
-
-            showVoiceUrl: false,
-            voice_url: '',
-            pdf_url: '',
-
-            recordId: null,
-
-            guide_template: 'http://172.30.230.46/template/guide_template.docx',
-            origin_text: [],
-            origin_template: 'http://172.30.230.46/template/origin_template.docx',
-            AI_rewrite_template: '',
-            pdf_template: 'http://172.30.230.46/template/pdf_template.docx'
+            replaceNum: 0
         };
     },
     mounted() {
-        this.tempRoute = Object.assign({}, this.$route);
-        this.recordId = decodeWithSalt(this.$route.query.id, Salt);
-
         this.initTitle();
-        getRecord(this.recordId).then((response) => {
-            let ret_data = response;
-            if (ret_data['datatype'] > 1) {
-                this.resource_type = 2;
-                this.pdf_url = ret_data['path'];
-                console.log(ret_data['path']);
-                this.pdfFileTitle = ret_data['title'];
-                this.pdfOverview = ret_data['summary'];
-                this.pdfKeyPoints = [];
-                for (let i = 0; i < ret_data['keyword'].length; ++i) {
-                    this.pdfKeyPoints.push(ret_data['keyword'][i]['desc']);
-                }
 
-                for (let i = 0; i < ret_data['scanning'].length; ++i) {
-                    let pageStr = ret_data['scanning'][i]['index'];
-                    let parts = pageStr.split('_');
-                    let number = '第' + parts[1] + '页';
-                    this.pdfQuickReading.push({
-                        page: number,
-                        title: ret_data['scanning'][i]['title'],
-                        content: ret_data['scanning'][i]['desc']
-                    });
-                }
-            } else {
-                let ret_inner_text = ret_data['inner_text'];
-                this.resource_type = ret_data['datatype'];
-
-                if (this.resource_type === 0 || this.resource_type === 1) {
-                    this.content = ret_inner_text['content'] === '' ? null : ret_inner_text['content'];
-                    this.recordInfo = ret_inner_text['recordInfo'] === '' ? this.getYMDHMSTime : ret_inner_text['recordInfo'];
-                    this.savedTime = ret_inner_text['savedTime'] === '' ? this.getCurSavedTime : ret_inner_text['savedTime'];
-                    this.sourceLanguage = ret_inner_text['source_language'];
-                    this.destLanguage = ret_inner_text['dest_language'];
-                    let trans_text = ret_data['trans_text'];
-                    this.origin_text = trans_text;
-                    for (let i = 0; i < trans_text.length; ++i) {
-                        this.addRecordingItem(trans_text[i]['timestamp'], trans_text[i]['content']);
-                    }
-
-                    for (let i = 0; i < ret_data['keyword'].length; ++i) {
-                        this.recent_tag.push(ret_data['keyword'][i]['key']);
-                    }
-
-                    this.text_summary = ret_data['summary'];
-
-                    this.review_items = ret_data['review'];
-                    this.scanning_items = ret_data['scanning'];
-
-                    if (this.resource_type === 0) {
-                        this.voice_url = ret_data['path'];
-                        this.showVoiceUrl = true;
-                    } else if (this.resource_type === 1) {
-                        const filename = ret_data['path'].split('/').pop();
-                        // 获取扩展名
-                        const extension = filename.split('.').pop().toLowerCase();
-                        if (extension === 'flv') {
-                            this.playerOptions['video'] = {
-                                url: ret_data['path'],
-                                type: 'customFlv',
-                                customType: {
-                                    customFlv: function (video, player) {
-                                        const flvPlayer = flvjs.createPlayer({
-                                            type: 'flv',
-                                            url: video.src
-                                        });
-                                        flvPlayer.attachMediaElement(video);
-                                        flvPlayer.load();
-                                    }
-                                }
-                            };
-                        } else if (extension === 'mp4') {
-                            this.playerOptions['video']['url'] = ret_data['path'];
-                        }
-                    }
-                }
+        let data = {
+            type: 0,
+            inner_Html: {
+                recordInfo: '2024-07-07 10:42 记录',
+                savedTime: '已保存于 13:12:10',
+                source_language: 'zh-CHS',
+                dest_language: 'en',
+                content: '可编辑的富文本框',
+                record_timestamps: ['00:00', '00:01', '00:02', '00:03', '00:04'],
+                recording_items: ['这是一个录音框', '这是第二个录音框', '这是第三个录音框', '这是第四个录音框', '这是第五个录音框']
             }
-        });
+        };
 
-        // getRecord("163").then((response) => {
-        //   let ret_data = response;
-        //   let ret_inner_text = ret_data["inner_text"];
-        //   this.resource_type = ret_data["datatype"] === 3 ? 2 : ret_data["datatype"];
+        this.recordInfo = data['inner_Html']['recordInfo'];
+        this.savedTime = data['inner_Html']['savedTime'];
+        this.content = data['inner_Html']['content'];
+        this.sourceLanguage = data['inner_Html']['source_language'];
+        this.destLanguage = data['inner_Html']['dest_language'];
+        this.resource_type = data['type'];
 
-        //   if (this.resource_type === 0 || this.resource_type === 1) {
-        //     this.content =
-        //       ret_inner_text["content"] === "" ? null : ret_inner_text["content"];
-        //     this.recordInfo =
-        //       ret_inner_text["recordInfo"] === ""
-        //         ? this.getYMDHMSTime
-        //         : ret_inner_text["recordInfo"];
-        //     this.savedTime =
-        //       ret_inner_text["savedTime"] === ""
-        //         ? this.getCurSavedTime
-        //         : ret_inner_text["savedTime"];
-        //     this.sourceLanguage = ret_inner_text["source_language"];
-        //     this.destLanguage = ret_inner_text["dest_language"];
-        //     let trans_text = ret_data["trans_text"];
-        //     this.origin_text = trans_text;
-        //     for (let i = 0; i < trans_text.length; ++i) {
-        //       this.addRecordingItem(trans_text[i]["timestamp"], trans_text[i]["content"]);
-        //     }
-
-        //     for (let i = 0; i < ret_data["keyword"].length; ++i) {
-        //       this.recent_tag.push(ret_data["keyword"][i]["key"]);
-        //     }
-
-        //     this.text_summary = ret_data["summary"];
-
-        //     this.review_items = ret_data["review"];
-        //     this.scanning_items = ret_data["scanning"];
-
-        //     if (this.resource_type === 0) {
-        //       this.voice_url =
-        //         "http://172.30.230.46/voice/2/0916e14b0d2f684c6fedc18b0e040b38/%E5%B0%8F%E5%93%81%EF%BC%9A%E5%A4%A9%E7%8E%8B%E5%B7%A8%E6%98%9F-%E5%96%9C%E5%89%A7%E5%90%AC%E6%88%91%E7%9A%84.mp3";
-        //       this.showVoiceUrl = true;
-        //     } else if (this.resource_type === 1) {
-        //       this.playerOptions["video"]["url"] =
-        //         "https://cesium.com/public/SandcastleSampleData/big-buck-bunny_trailer.mp4";
-        //     }
-        //   }
-        // });
+        for (let i = 0; i < data['inner_Html']['recording_items'].length; ++i) {
+            this.addRecordingItem(data['inner_Html']['record_timestamps'][i], data['inner_Html']['recording_items'][i]);
+        }
     },
     computed: {
-        getSaveFileName() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const date = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
-            return `${year}-${month}-${date}-${hours}-${minutes}-${seconds}-${milliseconds}`;
-        },
-        getYMDHMSTime() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const date = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            return `${year}-${month}-${date} ${hours}:${minutes} 记录`;
-        },
-        getExportTime() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const date = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            const milliseconds = String(now.getMilliseconds()).padStart(3, '0');
-            return `${year} 年 ${month} 月 ${date} 日 ${hours}:${minutes}`;
-        },
         getCurSavedTime() {
             const hms = this.getHMSTime();
             return `已保存于 ${hms}`;
@@ -1262,18 +911,6 @@ export default {
         },
         isReplaceAvailable() {
             return false;
-        },
-        computedResourceTypeStyle() {
-            if (this.resource_type === 0) {
-                return {
-                    height: 'calc(100% - 100px)'
-                };
-            } else if (this.resource_type === 1) {
-                return {
-                    height: this.isVideoOpen ? 'calc(100% - 400px)' : '100%'
-                };
-            } else {
-            }
         }
     },
     watch: {
@@ -1301,234 +938,9 @@ export default {
                     console.log('i_content: ', i_content);
                 }
             }
-        },
-
-        async aiType(newValue) {
-            if (newValue === 0 && this.copy_recording_items !== null) {
-                this.recording_items = this.copy_recording_items;
-            } else if (newValue === 1 || newValue === 2) {
-                this.copy_recording_items = this.recording_items;
-                this.recording_items = this.copy_recording_items;
-                var request = [];
-                for (let i = 0; i < this.recording_items.length; i++) {
-                    request.push(this.recording_items[i].content[0]);
-                }
-                getAiRewriting(request).then((response) => {
-                    if (response.code === 200) {
-                        
-                        var res = JSON.parse(response.data);
-                        console.log(res)
-                        for (let i = 0; i < this.recording_items.length; i++) {
-                            this.recording_items[i].transContent = [res[i]["content"]];
-                        }
-                        this.$message({
-                            message: 'AI改写成功',
-                            type: 'success',
-                            offset: 500
-                        });
-                    }
-                    // this.recording_items[i].transContent = [response.data];
-                });
-
-                // console.log('newValue: ', newValue);
-                // for (let i = 0; i < this.recording_items.length; i++) {
-                //     let i_content = this.concatContent(this.recording_items[i].content);
-                //     voiceTrans(i_content, this.sourceLanguage, this.destLanguage).then(response => {
-                //         this.recording_items[i].transContent = [response.data];
-                //     });
-                //     await this.customSleep(50);
-                //     console.log('i_content: ', i_content);
-                // }
-            }
         }
     },
     methods: {
-        handleSelectAisum(index) {
-            this.aiSumActiveIndex = index;
-        },
-        loadFile(url, callback) {
-            PizZipUtils.getBinaryContent(url, callback);
-        },
-        generateDocx() {
-            if (this.resource_type === 0 || this.resource_type === 1) {
-                this.$confirm('导出智能速览及原文？').then(async (_) => {
-                    // 导出摘要
-                    let keys_content = '';
-                    for (let i = 0; i < this.recent_tag.length; ++i) {
-                        keys_content += this.recent_tag[i] + ' ';
-                    }
-
-                    let chapters_content = [];
-                    for (let i = 0; i < this.scanning_items.length; ++i) {
-                        chapters_content.push({
-                            timestamp: this.scanning_items[i]['time'],
-                            title: this.scanning_items[i]['title'],
-                            content: this.scanning_items[i]['desc']
-                        });
-                    }
-
-                    let export_guide_data = {
-                        recordInfo: this.recordInfo,
-                        exportTime: this.getExportTime,
-                        keyPoints: keys_content,
-                        summary: this.text_summary,
-                        chapters: chapters_content,
-                        keyInfo: this.review_items
-                    };
-
-                    this.loadFile(this.guide_template, (error, content) => {
-                        if (error) {
-                            throw error;
-                        }
-
-                        // 创建一个PizZip实例
-                        const zip = new PizZip(content);
-
-                        const doc = new Docxtemplater(zip, {
-                            paragraphLoop: true,
-                            linebreaks: true
-                        });
-                        // 设置数据
-                        doc.setData(export_guide_data);
-
-                        try {
-                            // 渲染文档
-                            doc.render();
-                        } catch (error) {
-                            const e = {
-                                message: error.message,
-                                name: error.name,
-                                stack: error.stack,
-                                properties: error.properties
-                            };
-                            console.log(JSON.stringify({ error: e }));
-                            throw error;
-                        }
-
-                        const out = doc.getZip().generate({
-                            type: 'blob',
-                            mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                        });
-
-                        // 下载文件
-                        saveAs(out, this.recordInfo + '_导读.docx');
-                    });
-
-                    let export_origin_data = {
-                        recordInfo: this.recordInfo,
-                        exportTime: this.getExportTime,
-                        originText: this.origin_text
-                    };
-                    // 导出原文
-                    this.loadFile(this.origin_template, (error, content) => {
-                        if (error) {
-                            throw error;
-                        }
-
-                        // 创建一个PizZip实例
-                        const zip = new PizZip(content);
-
-                        const doc = new Docxtemplater(zip, {
-                            paragraphLoop: true,
-                            linebreaks: true
-                        });
-                        // 设置数据
-                        doc.setData(export_origin_data);
-
-                        try {
-                            // 渲染文档
-                            doc.render();
-                        } catch (error) {
-                            const e = {
-                                message: error.message,
-                                name: error.name,
-                                stack: error.stack,
-                                properties: error.properties
-                            };
-                            console.log(JSON.stringify({ error: e }));
-                            throw error;
-                        }
-
-                        const out = doc.getZip().generate({
-                            type: 'blob',
-                            mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                        });
-
-                        // 下载文件
-                        saveAs(out, this.recordInfo + '_原文.docx');
-                    });
-                });
-            } else if (this.resource_type === 2) {
-                this.$confirm('导出文档智能速览？').then(async (_) => {
-                    // 导出摘要
-                    let keys_content = [];
-                    for (let i = 0; i < this.pdfKeyPoints.length; ++i) {
-                        keys_content.push({
-                            index: i,
-                            desc: this.pdfKeyPoints[i]
-                        });
-                    }
-
-                    let chapters_content = [];
-                    for (let i = 0; i < this.pdfQuickReading.length; ++i) {
-                        chapters_content.push({
-                            index: this.pdfQuickReading[i]['page'],
-                            title: this.pdfQuickReading[i]['title'],
-                            desc: this.pdfQuickReading[i]['content']
-                        });
-                    }
-
-                    let export_data = {
-                        title: this.pdfFileTitle,
-                        exportTime: this.getExportTime,
-                        summary: this.pdfOverview,
-                        keyword: keys_content,
-                        scanning: chapters_content
-                    };
-
-                    this.loadFile(this.pdf_template, (error, content) => {
-                        if (error) {
-                            throw error;
-                        }
-
-                        // 创建一个PizZip实例
-                        const zip = new PizZip(content);
-
-                        const doc = new Docxtemplater(zip, {
-                            paragraphLoop: true,
-                            linebreaks: true
-                        });
-                        // 设置数据
-                        doc.setData(export_data);
-
-                        try {
-                            // 渲染文档
-                            doc.render();
-                        } catch (error) {
-                            const e = {
-                                message: error.message,
-                                name: error.name,
-                                stack: error.stack,
-                                properties: error.properties
-                            };
-                            console.log(JSON.stringify({ error: e }));
-                            throw error;
-                        }
-
-                        const out = doc.getZip().generate({
-                            type: 'blob',
-                            mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                        });
-
-                        // 下载文件
-                        saveAs(out, this.pdfFileTitle + '_智能速览.docx');
-                    });
-                });
-            }
-        },
-        handlePDFClick(tab, event) {
-            console.log(tab, event);
-        },
         getHMSTime() {
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
@@ -1692,20 +1104,12 @@ export default {
                 this.abstractopentitle = '展开全部';
             }
         },
-        changeEpScanning() {
-            this.openEpSumScanning = !this.openEpSumScanning;
-            if (this.openEpSumScanning == true) {
-                this.epopentitleScanning = '收起';
+        changeEp() {
+            this.openEpSum = !this.openEpSum;
+            if (this.openEpSum == true) {
+                this.epopentitle = '收起';
             } else {
-                this.epopentitleScanning = '查看章节摘要';
-            }
-        },
-        changeEpReview() {
-            this.openEpSumReview = !this.openEpSumReview;
-            if (this.openEpSumReview == true) {
-                this.epopentitleReview = '收起';
-            } else {
-                this.epopentitleReview = '查看章节摘要';
+                this.epopentitle = '查看章节摘要';
             }
         },
 
@@ -1762,7 +1166,7 @@ export default {
                     if (i_content === '') continue;
 
                     // 源语言文本
-                    if ((this.aiType === 0 && (this.showType === '0' || this.showType === '2')) || this.aiType === 2) {
+                    if ((this.showType === '0' || this.showType === '2') && !this.rewriteAI) {
                         let result_content = [];
                         let preIndex = 0;
                         let curIndex = 0;
@@ -1794,7 +1198,7 @@ export default {
                     }
 
                     // 翻译文本
-                    if ((this.aiType === 0 && (this.showType === '1' || this.showType === '2')) || this.aiType === 1 || this.aiType === 2) {
+                    if ((this.showType === '1' || this.showType === '2') && !this.rewriteAI) {
                         let trans_result_content = [];
                         let trans_preIndex = 0;
                         let trans_curIndex = 0;
@@ -1873,7 +1277,7 @@ export default {
                 this.recording_items[i].content = [i_content];
             }
 
-            if ((this.aiType === 0 && (this.showType === '1' || this.showType === '2')) || this.aiType === 1 || this.aiType === 2) {
+            if ((this.showType === '1' || this.showType === '2') && !this.rewriteAI) {
                 for (let i = 0; i < this.recording_items.length; i++) {
                     let i_trans_content = this.concatContent(this.recording_items[i].transContent);
                     this.recording_items[i].transContent = [i_trans_content];
@@ -1904,7 +1308,7 @@ export default {
             } else {
                 for (let i = 0; i < this.recording_items.length; i++) {
                     let i_replace = false;
-                    if ((this.aiType === 0 && (this.showType === '0' || this.showType === '2')) || this.aiType === 0) {
+                    if ((this.showType === '0' || this.showType === '2') && !this.rewriteAI) {
                         for (let j = 0; j < this.recording_items[i].content.length; j++) {
                             if (this.recording_items[i].content[j] === this.originText) {
                                 this.recording_items[i].content[j] = this.replaceText;
@@ -1913,7 +1317,7 @@ export default {
                         }
                     }
 
-                    if ((this.aiType === 0 && this.showType === '1') || this.aiType === 1 || this.aiType === 2) {
+                    if (this.showType === '1' && !this.rewriteAI) {
                         for (let j = 0; j < this.recording_items[i].transContent.length; j++) {
                             if (this.recording_items[i].transContent[j] === this.originText) {
                                 this.recording_items[i].transContent[j] = this.replaceText;
@@ -1922,7 +1326,7 @@ export default {
                         }
                     }
 
-                    if (i_replace && this.showType === '2' && this.aiType === 0) {
+                    if (i_replace && this.showType === '2' && !this.rewriteAI) {
                         await this.customSleep(50);
                         let i_content = this.concatContent(this.recording_items[i].content);
                         voiceTrans(i_content, this.sourceLanguage, this.destLanguage).then((response) => {
@@ -2078,14 +1482,6 @@ export default {
     line-height: 16px;
     outline: none;
     box-shadow: none;
-}
-.editorPDFViewport {
-    height: 100%;
-    background-color: #fff;
-    border-radius: 10px !important;
-    padding: 40px 40px 140px;
-    position: relative;
-    z-index: 1;
 }
 
 .editorViewport {
@@ -2552,75 +1948,5 @@ export default {
 .searched-actived {
     background-color: rgba(159, 156, 238, 0.6);
     color: rgba(74, 77, 38, 0.85);
-}
-
-.audio-player {
-    background-color: #f0f8ff; /* 温柔的背景色 */
-    border-radius: 15px; /* 圆角边框 */
-    padding: 20px; /* 内边距 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 阴影效果 */
-    width: calc(100% - 40px); /* 适应父容器宽度 */
-    margin: 0 auto; /* 居中对齐 */
-}
-
-.audio-control {
-    width: 100%; /* 音频控件宽度适应容器 */
-    border: none; /* 去掉默认边框 */
-    outline: none; /* 去掉默认轮廓 */
-}
-
-.introduction {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background: rgb(255, 255, 255);
-}
-
-.introduction-content {
-    flex: 1 1;
-}
-
-.taskTitle {
-    flex: 1 1;
-    display: inline-block;
-    font-family: PingFang SC;
-    font-size: 20px;
-    font-weight: 500;
-    -webkit-font-smoothing: antialiased;
-    line-height: 40px;
-    letter-spacing: 0px;
-    margin-bottom: 12px;
-}
-
-.title-wrapper {
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.title {
-    flex: 1 1;
-    font-family: PingFang SC;
-    font-size: 14px;
-    font-weight: 600;
-    -webkit-font-smoothing: antialiased;
-    line-height: 24px;
-    letter-spacing: 0px;
-}
-
-.card {
-    border-radius: 8px;
-}
-
-.markdown-body {
-    font-weight: 400;
-    font-size: 14px;
-    color: rgb(86, 98, 121);
-    line-height: 24px;
-}
-
-ol {
-    list-style-type: decimal;
 }
 </style>
