@@ -62,7 +62,7 @@
                                 </div>
                                 <div class="avatar w-1/5" v-else>
                                     <el-avatar
-                                        src="item.avatar"
+                                        :src="item.avatar"
                                     ></el-avatar>
                                 </div>
                                 <div class="title w-3/5">
@@ -128,4 +128,10 @@ export default {
 
 
 <style scoped>
+.avatar {
+    display: block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
 </style>
