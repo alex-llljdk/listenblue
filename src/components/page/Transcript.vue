@@ -1319,7 +1319,7 @@ export default {
                         var res = JSON.parse(response.data);
                         console.log(res)
                         for (let i = 0; i < this.recording_items.length; i++) {
-                            this.recording_items[i].transContent = [res[i]["content"]];
+                            this.recording_items[i].transContent = [JSON.parse(res[i]).content];
                         }
                         this.$message({
                             message: 'AI改写成功',

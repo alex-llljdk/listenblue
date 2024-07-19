@@ -468,7 +468,7 @@
 </template>
 
 <script>
-import { Loading } from 'element-ui';
+import { Loading, Message } from 'element-ui';
 import { quillEditor } from 'vue-quill-editor';
 import { voiceTrans } from '../../api/voiceTrans';
 import { saveVoice } from '../../api/voiceTrans';
@@ -1504,14 +1504,7 @@ export default {
                 element.scrollIntoView({ behavior: 'smooth' });
             }
         },
-        uploadVoiceRecord() {
-            const loadingInstance = Loading.service({
-                lock: true,
-                text: '正在转写中，请稍等',
-                spinner: 'el-icon-loading',
-                background: 'rgba(0, 0, 0, 0.8)'
-            });
-
+        uploadVoiceRecord(loadingInstance) {
             this.closeMicrophone();
             let buffer = this.recorder.getBufferAll();
             let f32buffer = this.float32Flatten(buffer);
@@ -1551,13 +1544,27 @@ export default {
                         });
                         this.$router.push('/home');
                     } else {
-                        console.log('保存上传失败 res', res);
+                        this.$nextTick(() => {
+                            // 以服务的方式调用的 Loading 需要异步关闭
+                            loadingInstance.close();
+                        });
+                        Message.error('上传失败');
                     }
                 });
         },
         handleSave() {
-            this.$confirm('保存并退出？').then(async (_) => {
-                this.uploadVoiceRecord();
+            this.$confirm('保存并退出？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'info'
+            }).then(() => {
+                const loadingInstance = Loading.service({
+                    lock: true,
+                    text: '正在转写中，请稍等',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.8)'
+                });
+                this.uploadVoiceRecord(loadingInstance);
             });
         },
         noSaveClose() {
@@ -1566,7 +1573,13 @@ export default {
         },
         saveClose() {
             this.centerDialogVisible = false;
-            this.uploadVoiceRecord();
+            const loadingInstance = Loading.service({
+                    lock: true,
+                    text: '正在转写中，请稍等',
+                    spinner: 'el-icon-loading',
+                    background: 'rgba(0, 0, 0, 0.8)'
+                });
+            this.uploadVoiceRecord(loadingInstance);
             this.$router.push('/home');
         },
         FloatArray2Int16(floatbuffer) {
@@ -2138,5 +2151,4 @@ export default {
     background-color: rgba(159, 156, 238, 0.6);
     color: rgba(74, 77, 38, 0.85);
 }
-
 </style>

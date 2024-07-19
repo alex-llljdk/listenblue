@@ -133,7 +133,7 @@ export default {
                 },
                 {
                     icon: 'el-icon-lx-calendar',
-                    index: 'record',
+                    index: '/recordlist',
                     title: '记录',
                 },
                 {

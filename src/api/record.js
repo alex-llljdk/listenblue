@@ -47,3 +47,15 @@ export function getAiRewriting(data) {
         timeout: 1000 *60*15,
     })
 }
+
+export function getRecordList(data) {
+    var url = request.defaults.baseURL + ":10005"
+    return request({
+        method: "GET",
+        url: "/record/recordByUserid?user_id=" + data,
+        headers: {
+            "Content-Type": "multipart/form-data"
+        },
+        baseURL: url,
+    })
+}

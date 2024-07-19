@@ -8,7 +8,7 @@
                     :class="[{ hoverTrans: openTrans === false }, { closeTrans: openTrans === false }]"
                     @click="clickTrans"
                 >
-                    <div class="flex items-center">
+                    <div class="flex items-center" v-if="uploadType === 0">
                         <div class="mr-2">
                             <svg
                                 t="1714943972617"
@@ -29,6 +29,38 @@
                         </div>
                         <div class>转写中</div>
                     </div>
+                    <div class="flex items-center" v-else>
+                        <div class="mr-2">
+                            <svg
+                                t="1714906781285"
+                                class="icon"
+                                viewBox="0 0 1024 1024"
+                                version="1.1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                p-id="3240"
+                                width="20"
+                                height="20"
+                            >
+                                <path d="M0 0h1024v1024H0V0z" fill="#202425" opacity=".01" p-id="3241" />
+                                <path
+                                    d="M955.733333 512c0 245.077333-198.656 443.733333-443.733333 443.733333S68.266667 757.077333 68.266667 512 266.922667 68.266667 512 68.266667s443.733333 198.656 443.733333 443.733333z"
+                                    fill="#11AA66"
+                                    p-id="3242"
+                                />
+                                <path
+                                    d="M512 102.4C285.7984 102.4 102.4 285.7984 102.4 512s183.3984 409.6 409.6 409.6 409.6-183.3984 409.6-409.6S738.2016 102.4 512 102.4zM34.133333 512C34.133333 248.081067 248.081067 34.133333 512 34.133333s477.866667 213.947733 477.866667 477.866667-213.947733 477.866667-477.866667 477.866667S34.133333 775.918933 34.133333 512z"
+                                    fill="#11AA66"
+                                    p-id="3243"
+                                />
+                                <path
+                                    d="M787.114667 339.285333a51.2 51.2 0 0 1 0 72.362667l-307.2 307.2a51.2 51.2 0 0 1-72.362667 0l-170.666667-170.666667a51.2 51.2 0 0 1 72.362667-72.362666L443.733333 610.235733l271.018667-271.018666a51.2 51.2 0 0 1 72.362667 0z"
+                                    fill="#FFFFFF"
+                                    p-id="3244"
+                                />
+                            </svg>
+                        </div>
+                        <div class>转写完毕</div>
+                    </div>
                     <div>
                         <svg
                             t="1714907031563"
@@ -46,15 +78,34 @@
                 </div>
 
                 <div
-                    class="top-full right-0 mt-2.5 ml-1.5 max-h-96 overflow-y-scroll w-80 absolute flex bg-white rounded-lg border"
+                    class="top-full right-0 mt-2.5 ml-1.5 max-h-96 w-80 overflow-auto absolute flex bg-white rounded-lg border"
                     v-if="openTrans === true"
                 >
                     <div class="transListContainer relative w-full">
                         <ul class="mb-0 pb-4 list-none">
                             <div class="w-full inline-block m-0 p-0 leading-normal text-sm text-black text-opacity-80">
-                                <li class="flex list-none m-0 pr-6 pl-5" v-for="(item,index) in UploadList" :key="index">
+                                <li class="flex list-none m-0 pr-6 pl-5" v-for="(item, index) in UploadList" :key="index">
                                     <div class="flex pt-3.5">
-                                        <div>
+                                        <div v-if="item.state === 0">
+                                            <svg
+                                                t="1714943972617"
+                                                class="icon"
+                                                viewBox="0 0 1024 1024"
+                                                version="1.1"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                p-id="6806"
+                                                width="20"
+                                                height="20"
+                                            >
+                                                <path
+                                                    d="M512.005813 0C229.229613 0 0 229.229613 0 512.06394s229.229613 511.93606 512.005813 511.93606 511.982562-229.229613 511.982562-511.93606S794.770387 0 512.005813 0z m190.65654 475.804321a24.715598 24.715598 0 0 1-34.876197 0L536.663283 344.716324v393.577876a24.669096 24.669096 0 0 1-49.326566 0V344.716324L356.24872 475.804321a24.660958 24.660958 0 0 1-34.876196-34.876196l172.695298-172.672048a26.192023 26.192023 0 0 1 35.864356 0l172.683673 172.683673a24.715598 24.715598 0 0 1 0 34.864571z"
+                                                    p-id="6807"
+                                                    fill="#1296db"
+                                                />
+                                            </svg>
+                                        </div>
+
+                                        <div v-if="item.state === 1">
                                             <svg
                                                 t="1714906781285"
                                                 class="icon"
@@ -86,8 +137,8 @@
                                     </div>
                                     <div class="ml-2 py-3.5 flex-1 w-0">
                                         <div class="w-full flex justify-between items-center">
-                                            <span class="overflow-hidden overflow-ellipsis">{{item.file_name}}</span>
-                                            <span class="cursor-pointer">
+                                            <span class="overflow-hidden overflow-ellipsis whitespace-nowrap">{{ item.file_name }}</span>
+                                            <span class="cursor-pointer" v-if="item.state !== 0" @click="deleteUploadList(index)">
                                                 <svg
                                                     t="1714943421170"
                                                     class="icon"
@@ -106,7 +157,15 @@
                                                 </svg>
                                             </span>
                                         </div>
-                                        <div class="mt-1 text-xs text-gray-500">转写中，预计剩余...</div>
+                                        <div class="mt-1 loader" v-if="item.state === 0"></div>
+                                        <div class="flex justify-between" v-if="item.state === 1">
+                                            <div class="mt-1 text-xs text-gray-500">转写完成，请点击查看</div>
+                                            <div class="mt-1 text-xs text-blue-500 cursor-pointer" @click="clickToRecord(item.record_id)">
+                                                查看
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-1 text-xs text-gray-500" v-if="item.state === 2">转写失败，请重试</div>
                                     </div>
                                 </li>
                             </div>
@@ -237,7 +296,7 @@
                             <div class="w-1/2 h-full rounded-r-2xl p-4 bx_sd">
                                 <div class="font-semibold text-2xl">实时直播,实时记录</div>
                                 <div class="font-medium text-base leading-7 mt-3">直播总结，实时笔记</div>
-                                <div class="font-medium text-base leading-7">双语翻译，实时字幕</div>
+                                <div class="font-medium text-base leading-7">实时交流，实时字幕</div>
                                 <div class="hover_svg bottom-0 right-0 absolute pb-2 pr-2 opacity-0">
                                     <svg
                                         t="1714583281873"
@@ -269,7 +328,7 @@
                     <div class="text-lg font-normal select-none pl-4">最近</div>
                     <div class="grid w-full place-items-center">
                         <div
-                            v-for="(item, index) in rencent_items"
+                            v-for="(item, index) in recent_items"
                             :key="index"
                             class="relative h-40 w-80 mb-2 rounded-md shadow-lg py-4 px-6 border text-base font-semibold hover_card cursor-pointer"
                         >
@@ -1044,7 +1103,7 @@ export default {
                             .replace('T', ' ');
                     }
                 }
-                this.rencent_items = res.singlerecords;
+                this.recent_items = res.singlerecords;
             });
         }
     },
@@ -1066,7 +1125,7 @@ export default {
         return {
             ulList: [{ msg: '高效开会！' }, { msg: '轻松学习！' }, { msg: '随手总结！' }],
             play: false,
-            rencent_items: [
+            recent_items: [
                 {
                     dataType: 5,
                     id: 1,
@@ -1123,6 +1182,7 @@ export default {
             //上传中的组件
             openTrans: true,
             isUpload: false,
+            uploadType: 0,
 
             loginForm: {
                 email: '',
@@ -1162,12 +1222,20 @@ export default {
     watch: {
         UploadList: {
             immediate: true,
+            deep: true,
             handler(newVal) {
                 if (newVal.length > 0) {
                     this.isUpload = true;
                 } else {
                     this.isUpload = false;
                 }
+                for (var i = 0; i < newVal.length; i++) {
+                    if (newVal[i].state === 0) {
+                        this.uploadType = 0;
+                        return;
+                    }
+                }
+                this.uploadType = 1;
             }
         }
     },
@@ -1217,7 +1285,7 @@ export default {
                 inputPattern: /^[^\n]{1,150}$/,
                 inputErrorMessage: '命名不能为空,不能带有回车，最大长度为150字符',
                 inputType: 'textarea',
-                inputValue: this.rencent_items[0]
+                inputValue: this.recent_items[0]
             })
                 .then(({ value }) => {
                     this.$message({
@@ -1459,7 +1527,7 @@ export default {
                             Message.success(`${file.name}：转写完成`);
                         } else {
                             this.SetUploadError(tag);
-                            Message.Error(`${file.name}：转写失败`);
+                            Message.error(`${file.name}：转写失败`);
                         }
                     });
             } else {
@@ -1510,17 +1578,25 @@ export default {
                 function merge() {
                     mergeVideo(md5, total.toString(), file.name, userstore.user_id.toString(), type, source_language, dest_language).then(
                         (res) => {
-                            if (res.idx != -1) {
-                                current = res.idx; // 当前服务器应该上传的分片下标
-                                startByte = size * current;
-                                uploadChunk();
-                                if (mergeTime <= 5) {
-                                    mergeTime += 1;
-                                    merge();
-                                } else {
-                                    Message.error('文件合并失败,请重新上传');
-                                    return;
+                            if (res.code === 200) {
+                                if (res.idx != -1) {
+                                    current = res.idx; // 当前服务器应该上传的分片下标
+                                    startByte = size * current;
+                                    uploadChunk();
+                                    if (mergeTime <= 5) {
+                                        mergeTime += 1;
+                                        merge();
+                                        return;
+                                    } else {
+                                        Message.error('文件合并失败,请重新上传');
+                                        return;
+                                    }
                                 }
+                                that.SetUploadSuccess(tag, res.record_id);
+                                Message.success(`${file.name}：转写完成`);
+                            } else {
+                                that.SetUploadError(tag);
+                                Message.error(`${file.name}：转写失败`);
                             }
                         }
                     );
@@ -1563,16 +1639,10 @@ export default {
                                     current++;
                                     uploadChunk();
                                 } else {
-                                    Message.success(`${file.name}：上传完成`);
                                     merge();
                                 }
                             } else {
-                                that.list.forEach((item) => {
-                                    //设置进度条
-                                    if (item.name === file.name) {
-                                        item.typeProgress = 1;
-                                    }
-                                });
+                                Message.error(`${file.name}：上传失败`);
                             }
                         })
                         .finally(() => {
@@ -1588,12 +1658,21 @@ export default {
             this.closeVideoUploadDialog();
         },
         submitVideoUrl() {
-            console.log(this.videoUrl);
-            uploadVideoUrl(this.videoUrl, userstore.user_id).then((response) => {
-                if (response.code === 200) {
-                    Message.success('转写成功');
+            var tag = nanoid(4);
+            //进度列表添加
+            this.UploadList.push({
+                tag: tag,
+                file_name: this.videoUrl,
+                state: 0,
+                record_id: -1
+            });
+            uploadVideoUrl(this.videoUrl, userstore.user_id).then((res) => {
+                if (res.code === 200) {
+                    this.SetUploadSuccess(tag, res.record_id);
+                    Message.success(`${file.name}：转写完成`);
                 } else {
-                    Message.Error(response.Msg);
+                    this.SetUploadError(tag);
+                    Message.error(`${file.name}：转写失败`);
                 }
             });
             this.closeVideoUrlUploadDialog();
@@ -1661,9 +1740,14 @@ export default {
         },
         async handleFileFileUpload(item) {
             let file = item.file;
-            this.disabled = true;
-            this.videoFileList = [...this.videoFileList, file]; //用于展示进度
-            this.uploadModal = true; // 展示进度弹窗
+            var tag = nanoid(4);
+            //进度列表添加
+            this.UploadList.push({
+                tag: tag,
+                file_name: file.name,
+                state: 0,
+                record_id: -1
+            });
             // 文件大于5mb时分片上传
             const formData = new FormData();
             formData.append('file', file); //文件
@@ -1700,23 +1784,24 @@ export default {
             uploadFile(formData) //调用api
                 .then((res) => {
                     if (res.code === 200) {
-                        console.log('res', res);
+                        this.SetUploadSuccess(tag, res.record_id);
                         Message.success(`${file.name}：转写完成`);
                     } else {
-                        this.videoFileList.forEach((item) => {
-                            //进度条报错
-                            if (item.name === file.name) {
-                                item.typeProgress = 1;
-                            }
-                        });
+                        this.SetUploadError(tag);
+                        Message.error(`${file.name}：转写失败`);
                     }
                 });
-            // .finally(() => {
-            //     this.disabled = false;
-            // });
-            return false;
+            this.closeDocUploadDialog();
         },
         submitFileURL() {
+            var tag = nanoid(4);
+            //进度列表添加
+            this.UploadList.push({
+                tag: tag,
+                file_name: this.htmlUrl,
+                state: 0,
+                record_id: -1
+            });
             const formData = new FormData();
             formData.append('url', this.htmlUrl); //网页名
             formData.append('user_id', userstore.user_id);
@@ -1724,8 +1809,11 @@ export default {
             uploadFile(formData) //调用api
                 .then((res) => {
                     if (res.code === 200) {
-                        console.log('res', res);
+                        this.SetUploadSuccess(tag, res.record_id);
                         Message.success(`${this.htmlUrl}：转写完成`);
+                    } else {
+                        this.SetUploadError(tag);
+                        Message.error(`${this.htmlUrl}：转写失败`);
                     }
                 });
             this.closeDocUploadDialog();
@@ -1742,19 +1830,24 @@ export default {
             });
         },
         SetUploadSuccess(tag, record_id) {
-            for (i = 0; i < this.UploadList; i++) {
+            for (var i = 0; i < this.UploadList.length; i++) {
                 if (this.UploadList[i].tag === tag) {
                     this.UploadList[i].state = 1;
                     this.UploadList[i].record_id = record_id;
+                    break;
                 }
             }
         },
         SetUploadError(tag) {
-            for (i = 0; i < this.UploadList; i++) {
+            for (var i = 0; i < this.UploadList.length; i++) {
                 if (this.UploadList[i].tag === tag) {
                     this.UploadList[i].state = 2;
+                    break;
                 }
             }
+        },
+        deleteUploadList(i) {
+            this.UploadList = this.UploadList.filter((element, index) => index !== i);
         }
     }
 };
@@ -2017,5 +2110,40 @@ border-radius: 10px;
 ::v-deep .avatar {
     width: 100px;
     height: 100px;
+}
+
+.loader {
+    display: block;
+    --height-of-loader: 4px;
+    --loader-color: rgb(36, 167, 255);
+    width: 100%;
+    height: var(--height-of-loader);
+    border-radius: 30px;
+    background-color: rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.loader::before {
+    content: '';
+    position: absolute;
+    background: var(--loader-color);
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    border-radius: 30px;
+    animation: moving 1s ease-in-out infinite;
+}
+
+@keyframes moving {
+    50% {
+        width: 100%;
+    }
+
+    100% {
+        width: 0;
+        right: 0;
+        left: unset;
+    }
 }
 </style>
