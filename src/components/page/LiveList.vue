@@ -41,25 +41,36 @@
 
         <div class="livelist-body flex w-full h-4/5">
             <ul class="w-full px-4 pt-10">
-                <li v-for="count in 10" class="w-1/5 px-4 mb-5 inline-block cursor-pointer">
-                    <div>
+                <li v-for="(item,index) in LiveList" :key="index" class="w-1/5 px-4 mb-5 inline-block cursor-pointer" >
+                    <div @click="clickJoinRoom(item.room_number)">
                         <el-card :body-style="{ padding: '0px' }">
                             <img
                                 src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
                                 class="w-full h-48 block"
+                                v-if="item.cover_url===''"
+                            />
+                            <img
+                                :src="item.cover_url"
+                                class="w-full h-48 block"
+                                v-else
                             />
                             <div class="p-4 flex w-full">
-                                <div class="avatar w-1/5">
+                                <div class="avatar w-1/5" v-if="item.avatar===''">
                                     <el-avatar
                                         src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
                                     ></el-avatar>
                                 </div>
+                                <div class="avatar w-1/5" v-else>
+                                    <el-avatar
+                                        src="item.avatar"
+                                    ></el-avatar>
+                                </div>
                                 <div class="title w-3/5">
-                                    <div>房间名</div>
-                                    <div>用户名</div>
+                                    <div>{{item.room_title}}</div>
+                                    <div>{{item.user_name}}</div>
                                 </div>
                                 <div class="see_num w-1/5 flex justify-end items-center">
-                                    <span>111</span>
+                                    <span>{{item.room_number}}</span>
                                 </div>
                             </div>
                         </el-card>
@@ -84,7 +95,35 @@
 </template>
 
 <script>
-export default {};
+import { GetLiveList} from '../../api/live';
+import { JoinRoom } from '../../api/live';
+import { encodeWithSalt,Salt } from '../../utils/util';
+
+export default {
+    mounted(){
+        GetLiveList().then((res)=>{
+            console.log(res)
+            this.LiveList = res.live_list
+        })
+    },
+    data() {
+        return {
+            LiveList: []
+        };
+    },
+    methods:{
+        clickJoinRoom(roomNumber) {
+            JoinRoom(roomNumber, "").then((res) => {
+                if (res.code === 200) {
+                    this.$router.push({
+                        path: '/live',
+                        query: { rn: roomNumber, pw: encodeWithSalt("", Salt) }
+                    });
+                }
+            });
+        },
+    }
+};
 </script>
 
 

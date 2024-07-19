@@ -1692,7 +1692,9 @@ export default {
                 this.roomCreateForm.roomPassword,
                 is_record,
                 this.roomCreateForm.roomNumber,
-                userstore.user_id
+                userstore.user_id,
+                userstore.name,
+                userstore.avatar
             ).then((res) => {
                 if (res.code === 200) {
                     var index = res.url.lastIndexOf('/');

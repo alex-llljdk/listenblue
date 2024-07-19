@@ -309,6 +309,9 @@ export default {
             }
         };
     },
+    beforeDestroy(){
+        this.socket.close()
+    },
     created() {
         // window.addEventListener('resize', this.getHeight)
         // this.getHeight()

@@ -832,10 +832,10 @@ export default {
             }
         }
     },
-    beforeRouteLeave(to, from, next) {
+    beforeDestroy() {
         console.log('Leaving the route...');
         this.clearRecorderAndCloseSocket();
-        next();
+        this.closeMicrophone();
     },
     methods: {
         closeMicrophone() {

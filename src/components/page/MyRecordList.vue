@@ -302,4 +302,13 @@ export default {
 .hover_card:hover .iconHoverWrap {
     display: none;
 }
+.rencent_title {
+    display: -webkit-box;
+    line-height: 1.5;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    word-break: break-all;
+    font-family: PingFangSC-Medium;
+}
 </style>
