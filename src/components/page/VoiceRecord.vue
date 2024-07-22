@@ -1564,6 +1564,7 @@ export default {
                     spinner: 'el-icon-loading',
                     background: 'rgba(0, 0, 0, 0.8)'
                 });
+                this.sleep(2000)
                 this.uploadVoiceRecord(loadingInstance);
             });
         },
@@ -1574,11 +1575,12 @@ export default {
         saveClose() {
             this.centerDialogVisible = false;
             const loadingInstance = Loading.service({
-                    lock: true,
-                    text: '正在转写中，请稍等',
-                    spinner: 'el-icon-loading',
-                    background: 'rgba(0, 0, 0, 0.8)'
-                });
+                lock: true,
+                text: '正在转写中，请稍等',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.8)'
+            });
+            this.sleep(2000)
             this.uploadVoiceRecord(loadingInstance);
             this.$router.push('/home');
         },
@@ -1628,6 +1630,15 @@ export default {
                 currentFrame += chunk.length;
             });
             return result;
+        },
+        sleep(time) {
+            var timeStamp = new Date().getTime();
+            var endTime = timeStamp + time;
+            while (true) {
+                if (new Date().getTime() > endTime) {
+                    return;
+                }
+            }
         }
     }
 };

@@ -60,9 +60,11 @@
                                         src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
                                     ></el-avatar>
                                 </div>
-                                <div class="avatar w-1/5" v-else>
+                                <div class="w-1/5" v-else>
                                     <el-avatar
                                         :src="item.avatar"
+                                        :fit='scale-down'
+                                        shape="square"
                                     ></el-avatar>
                                 </div>
                                 <div class="title w-3/5">

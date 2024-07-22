@@ -1708,7 +1708,7 @@ export default {
                             h('div', { style: 'word-break: break-all;word-wrap: break-word' }, '服务器:' + url),
                             h('div', { style: 'word-break: break-all;word-wrap: break-word' }, '推流码:' + pushNumber),
                             h('div', null, `用户将通过您的房间号加入直播，您的房间号为:${this.roomCreateForm.roomNumber}`),
-                            h('div', null, `实时字幕地址:http://localhost/#/subtitle`)
+                            h('div', null, `实时字幕地址:http://localhost:8080/#/subtitle`)
                         ]),
                         confirmButtonText: '确定'
                     });

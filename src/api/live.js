@@ -1,7 +1,7 @@
 import request from "../utils/request"
 
 //创建房间
-export function CreateRoom(room_title, is_open, password, is_record, room_number, user_id){
+export function CreateRoom(room_title, is_open, password, is_record, room_number, user_id,user_name,user_avatar){
     var url = request.defaults.baseURL + ":10004"
     return request({
         baseURL: url,
@@ -13,7 +13,9 @@ export function CreateRoom(room_title, is_open, password, is_record, room_number
             "password": password,
             "is_record": is_record,
             "room_number":room_number,
-            "user_id":user_id
+            "user_id":user_id,
+            "user_name":user_name,
+            "avatar": user_avatar
         },
     })
 }
@@ -42,6 +44,15 @@ export function SaveLive(path, inner_text, user_id) {
             'inner_text': inner_text,
             'user_id':user_id,
         },
+        baseURL: url,
+    })
+}
+
+export function GetLiveList() {
+    var url = request.defaults.baseURL + ":10004"
+    return request({
+        method: "Get",
+        url: "/live/liveList",
         baseURL: url,
     })
 }

@@ -2,8 +2,7 @@
     <div class="h-full w-full flex items-center justify-center">
         <div class="text-container">
             <span class="text-content break-words text-blue-400">
-                <!-- {{ showSubtitle }} -->
-                今天我很开新撒飞洒飞洒飞洒飞洒飞洒飞洒飞洒飞洒发生的撒大大撒今天我很开新撒飞洒飞洒飞洒飞洒飞洒飞洒飞洒飞洒发生的撒大大撒今天我很开新撒飞洒飞洒ddd飞洒飞洒飞大大萨达萨达萨达萨达洒飞洒飞洒飞洒发生的撒大大撒ddddddddddddddd大撒大撒ddd
+                {{ showSubtitle }}
             </span>
         </div>
     </div>
