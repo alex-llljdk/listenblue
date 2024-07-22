@@ -1,0 +1,70 @@
+syntax = "v1"
+
+info (
+	title:  "video" // TODO: add title
+	desc:   "video" // TODO: add description
+	author: "fjf"
+	email:  "978920244@qq.com"
+)
+
+type (
+	uploadVideoRequest {
+		FileName string `json:"filename"`
+		UserId   int64  `json:"user_id"`
+	// File multipart.File `json:"file"`
+	}
+	uploadVideoReponse {
+		Code     int    `json:"code"`
+		Msg      string `json:"msg"`
+		RecordId int    `json:"record_id"`
+	}
+	// uploadLargeVideoRequest{
+	//  FileName string `json:"filename"`
+	// }
+	uploadLargeVideoReponse {
+		Code int    `json:"code"`
+		Msg  string `json:"msg"`
+	}
+	mergeRequest {
+		Md5            string `json:"md5"`
+		Total          string `json:"total"`
+		FileName       string `json:"filename"`
+		UserId         string `json:"user_id"`
+		DataType       string `json:"type"`
+		SourceLanguage string `json:"source_language"`
+		DestLanguage   string `json:"dest_language"`
+	}
+	mergeReponse {
+		Code     int    `json:"code"`
+		Msg      string `json:"msg"`
+		Idx      int    `json:"idx"`
+		RecordId int    `json:"record_id"`
+	}
+	uploadUrlRequest {
+		Url    string `json:"url"`
+		UserId int64  `json:"user_id"`
+	}
+	uploadUrlResponse {
+		Code     int    `json:"code"`
+		Msg      string `json:"msg"`
+		RecordId int    `json:"record_id"`
+	}
+)
+
+@server (
+	jwt: Auth
+)
+service video-api {
+	@handler uploadVideo
+	post /video/upload (uploadVideoRequest) returns (uploadVideoReponse)
+
+	@handler uploadLargeVideo
+	post /video/uploadLarge returns (uploadLargeVideoReponse)
+
+	@handler merge
+	post /video/merge (mergeRequest) returns (mergeReponse)
+
+	@handler uploadUrl
+	post /video/uploadUrl (uploadUrlRequest) returns (uploadUrlResponse)
+}
+

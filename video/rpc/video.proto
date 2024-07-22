@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package video;
+option go_package="./video";
+
+//注册
+message UploadRequest {
+  string Path = 1; //文件路径
+  uint64 UserId = 2; //用户ID
+  uint32 DataType = 3; //文件类型 0为mp3,1为mp4  后续添加文档等文件
+  string Keyword = 4;  //关键要点
+  string Summary = 5;  //全文概述
+  string Scanning = 6; //章节速读
+  string Review =7; //要点回顾
+  string TransText = 8; //原文
+  string Innertext = 9;
+  string Title = 10;
+}
+
+message UploadResponse {
+  int32 Code = 1;
+  string Msg = 2 ;
+  int32 RecordId = 3 ;
+}
+
+message VideoRecord {
+  uint32 id = 1; // 记录
+  string Path = 2; //文件路径
+  string Title = 3; //文件名称和标题
+  int64 UserId = 4; //用户ID
+  uint32 DataType = 5; //文件类型 0为mp3,1为mp4  后续添加文档等文件
+}
+
+service Video {
+  // 上传文件创建记录
+  rpc UploadVideo(UploadRequest) returns(UploadResponse);
+}

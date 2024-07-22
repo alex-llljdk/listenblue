@@ -1,0 +1,42 @@
+syntax = "v1"
+
+info (
+	title:  "voice"
+	desc:   "record voice"
+	author: "fjf"
+	email:  "978920244@qq.com"
+)
+
+type (
+	TransRequest {
+		Text string `json:"text"`
+		From string `json:"from"`
+		To   string `json:"to"`
+	}
+	TransResponse {
+		Code int    `json:"code"`
+		Msg  string `json:"msg"`
+		Data string `json:"data"`
+	}
+	SaveRequest {
+		TextList []string `json:"text"`
+		DataType string `json:"datatype"`
+		UserId string `json:"user_id"`
+	}
+	SaveResponse {
+		Code int    `json:"code"`
+		Msg  string `json:"msg"`
+	}
+)
+
+@server (
+	jwt: Auth
+)
+service voice-api {
+	@handler Trans // TODO: set handler name and delete this comment
+	post /voice/trans (TransRequest) returns (TransResponse)
+
+	@handler Save // TODO: set handler name and delete this comment
+	post /voice/save (SaveRequest) returns (SaveResponse)
+}
+

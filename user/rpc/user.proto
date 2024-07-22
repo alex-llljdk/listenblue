@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package user;
+option go_package="./user";
+
+//注册
+message RegisterRequest {
+  string Name = 1;
+  string Email = 2;
+  string Password = 3;
+  string Avatar = 4;
+}
+
+message RegisterResponse {
+  int32 Code = 1;
+  string Msg = 2 ;
+}
+
+//登录
+message LoginRequest {
+  string Email = 1;
+  string Password = 2;
+}
+
+message LoginResponse {
+  int32 Code = 1;
+  string Msg = 2;
+  int64 UserId = 3;
+  string Avatar = 4;
+  string Name = 5;
+}
+
+message UserInfoRequest {
+  int64 userId = 1;
+  int64 actionId =2;
+}
+message UserInfoResponse {
+  int32 Code = 1; // 状态码，0-成功，其他值-失败
+  string Msg = 2; // 返回状态描述
+  UserInfo User = 3; // 用户信息
+}
+
+message UserInfo {
+  uint32 id = 1; // 用户id
+  string name = 2; // 用户名称
+  optional uint32 follow_count = 3; // 关注总数
+  optional uint32 follower_count = 4; // 粉丝总数
+  bool is_follow = 5; // true-已关注，false-未关注
+  optional string avatar = 6; //用户头像
+  optional string background_image = 7; //用户个人页顶部大图
+  optional string signature = 8; //个人简介
+  optional uint32 total_favorited = 9; //获赞数量
+  optional uint32 work_count = 10; //作品数量
+  optional uint32 favorite_count = 11; //点赞数量
+}
+
+service User {
+  // 注册
+  rpc Register(RegisterRequest) returns(RegisterResponse);
+  // 登录
+  rpc Login(LoginRequest) returns(LoginResponse);
+  // 获取用户信息
+  rpc UserInfo(UserInfoRequest) returns(UserInfoResponse);
+}

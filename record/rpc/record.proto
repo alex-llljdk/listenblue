@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package record;
+option go_package="./record";
+
+//注册
+message BasicRespone {
+  int32 Code = 1;
+  string Msg = 2 ;
+}
+
+message Records {
+  int32 Code = 1;
+  string Msg = 2 ;
+  uint64 Id = 3; // 记录
+  string Path = 4; //文件路径
+  string Title = 5; //文件名称和标题
+  uint64 UserId = 6; //用户ID
+  uint32 DataType = 7; //文件类型 0为mp3,1为mp4  后续添加文档等文件
+  string Keyword = 8;  //关键要点
+  string Summary = 9;  //全文概述
+  string Scanning = 10; //全文速读
+  string InnerText = 11; //编辑框内容
+  string Review =12; //回顾
+  string TransText = 13; //原文
+}
+
+message RecordByUserIdReq {
+  uint64 UserId = 1;
+}
+
+message IDandTitle{
+  uint64 Id = 1; // 记录
+  string Title = 2;
+  uint32 DataType = 3;
+  string UpdateTime = 4;
+  string Keyword = 5;
+}
+
+message RecordByUserIdResp {
+  int32 Code = 1;
+  string Msg = 2 ;
+  repeated IDandTitle IdTitles = 4;
+  //BasicRespone BasicResp=3;
+}
+
+message DetailRecordReq{
+  uint64 Id = 1;
+}
+
+message DetailRecordResp{
+  int32 Code = 1;
+  string Msg = 2 ;
+  string Path = 3; //文件路径
+  string Title = 4; //文件名称和标题
+  uint64 UserId = 5; //用户ID
+  uint32 DataType = 6; //文件类型 0为mp3,1为mp4  后续添加文档等文件
+  string Keyword = 7;  //关键要点
+  string Summary = 8;  //全文概述
+  string Scanning = 9; //全文速读
+
+}
+
+
+service Record {
+  // 查询用户对应的记录和标题
+  rpc GetIdAndTitles(RecordByUserIdReq) returns(RecordByUserIdResp);
+
+  //查询最近记录
+  rpc GetRecentIdAndTitles(RecordByUserIdReq) returns(RecordByUserIdResp);
+
+  // 查询某条详细的记录
+  rpc GetDetailRecordById (DetailRecordReq) returns(Records);
+
+  // 更新某条详细的记录
+  rpc UpdateDetailRecordById (Records) returns(BasicRespone);
+
+}

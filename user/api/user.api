@@ -1,0 +1,84 @@
+syntax = "v1"
+
+info (
+	title:  "user" // TODO: add title
+	desc:   "" // TODO: add description
+	author: ""
+	email:  "978920244@qq.com"
+)
+
+type (
+	Token {
+		AccessToken  string `json:"access_token"`
+		AccessExpire int64  `json:"access_expire"`
+	}
+	RegisterRequest {
+		Name     string `json:"name"`
+		Email    string `json:"email"`
+		Password string `json:"password"`
+		Avatar   string `json:"avatar"`
+	}
+	RegisterResponse {
+		Code int    `json:"code"`
+		Msg  string `json:"msg"`
+	}
+	LoginRequest {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+	LoginResponse {
+		Code   int    `json:"code"`
+		Msg    string `json:"msg"`
+		Token  Token  `json:'token'`
+		UserId int64  `json:'user_id'`
+		Name   string `json:'name'`
+		Avatar string `json:'avatar'`
+	}
+	UserInfoRequest {
+		UserId   int64 `form:"user_id"`
+		ActionId int64 `form:"action_id"`
+	}
+	UserInfoResponse {
+		Code     int    `json:"code"`
+		Msg      string `json:"msg"`
+		UserInfo User   `json:"userInfo"`
+	}
+	User {
+		Id              uint32 `json:"id"`
+		Name            string `json:"name"`
+		Avatar          string `json:"avatar"`
+		Signature       string `json:"signature"`
+		BackgroundImage string `json:"background_image"` //用户个人页顶部大图
+		FollowCount     uint32 `json:"follow_count"`
+		FollowerCount   uint32 `json:"follower_count"`
+		TotalFavorited  uint32 `json:"total_favorited"`
+		WorkCount       uint32 `json:"work_count"`
+		FavoriteCount   uint32 `json:"favorite_count"`
+		IsFollow        bool   `json:"is_follow"`
+	}
+	UploadImageResponse {
+		Code int    `json:"code"`
+		Msg  string `json:"msg"`
+		Url  string `json:"url"`
+	}
+)
+
+service user-api {
+	@handler Login
+	post /user/login (LoginRequest) returns (LoginResponse)
+
+	@handler Register
+	post /user/register (RegisterRequest) returns (RegisterResponse)
+
+	@handler UploadImg
+	post /user/uploadImg returns (UploadImageResponse)
+}
+
+@server (
+	jwt: Auth
+)
+service user-api {
+	@handler UserInfo
+	get /user/userinfo (UserInfoRequest) returns (UserInfoResponse)
+}
+

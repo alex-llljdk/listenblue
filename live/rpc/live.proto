@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package live;
+option go_package="./live";
+
+message CreateRoomRequest {
+  string RoomTitle = 1;
+	bool IsOpen = 2;
+	string Password = 3;
+	bool IsRecord = 4;
+	string RoomNumber = 5;
+  int32 UserId = 6;
+  string EncRoomNumber = 7;
+  string UserName = 8;
+  string UserAvatar = 9;
+}
+
+message CreateRoomResponse {
+  int32 Code = 1;
+  string Msg = 2;
+  string Url = 3;
+}
+
+message StartPublishResponse {
+  int32 Code = 1;
+  string Msg = 2;
+  string Res = 3;
+}
+
+message StartPublishRequest {
+  string EncRoomNumber = 1;
+}
+
+message ClosePublishResponse {
+  int32 Code = 1;
+  string Msg = 2;
+  string res = 3;
+}
+
+message ClosePublishRequest {
+  string EncRoomNumber = 1;
+}
+
+message JoinRoomInfo {
+  string RoomTitle = 1;
+	bool IsOpen = 2;
+	string Password = 3;
+	bool IsRecord = 4;
+	string RoomNumber = 5;
+  int32 UserId = 6;
+  string Url = 7;
+}
+
+message JoinRoomResponse {
+  int32 Code = 1;
+  string Msg = 2;
+  JoinRoomInfo  roomInfo = 3;
+}
+
+message JoinRoomRequest {
+  string RoomNumber = 1;
+  string Password = 2;
+
+}
+
+message SaveRecordRequest {
+  string Path = 1; //文件路径
+  string Title = 2; //文件名称和标题
+  uint64 UserId = 3; //用户ID
+  uint32 DataType = 4; //文件类型 0为mp3,1为mp4  后续添加文档等文件
+  string Keyword = 5;  //关键要点
+  string Summary = 6;  //全文概述
+  string Scanning = 7; //全文速读
+  string InnerText = 8; //编辑框内容
+  string Review =9; //回顾
+  string TransText = 10; //原文
+}
+
+message SaveRecordResponse {
+  int32 Code = 1;
+  string Msg = 2;
+}
+
+message SaveLiveRequest{
+  string Path = 1; //文件路径
+  uint64 UserId = 2; //用户ID
+  string InnerText=3;
+}
+
+message SaveLiveResponse {
+  int32 Code = 1;
+  string Msg = 2;
+}
+
+
+message GetLiveListInfo {
+  string RoomTitle = 1;
+	string RoomNumber = 2;
+  string UserName = 3;
+  string CoverUrl = 4;
+  string UserAvatar = 5;
+}
+
+message GetLiveListRequest{
+}
+
+
+message GetLiveListResponse{
+    int32 Code = 1;
+    string Msg = 2;
+    repeated GetLiveListInfo LiveList = 3;
+}
+
+service Live {
+  rpc CreateRoom(CreateRoomRequest) returns(CreateRoomResponse);
+
+  rpc StartPublish(StartPublishRequest) returns(StartPublishResponse);
+
+  rpc ClosePublish(ClosePublishRequest) returns(ClosePublishResponse);
+
+  rpc JoinRoom(JoinRoomRequest) returns(JoinRoomResponse);
+
+  rpc SaveToRecord(SaveRecordRequest) returns (SaveRecordResponse);
+
+  rpc SaveLive(SaveLiveRequest) returns (SaveLiveResponse);
+
+  rpc GetLiveList(GetLiveListRequest) returns (GetLiveListResponse);
+}

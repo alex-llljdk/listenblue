@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package file;
+option go_package="./file";
+
+//注册
+message UploadResponse {
+  int32 Code = 1;
+  string Msg = 2 ;
+  int32 RecordId =3;
+}
+
+message FileRecord {
+  uint64 id = 1; // 记录
+  string Path = 2; //文件路径
+  string Title = 3; //文件名称和标题
+  uint64 UserId = 4; //用户ID
+  uint32 DataType = 5; //文件类型 0为mp3,1为mp4  后续添加文档等文件
+  string Keyword = 6;  //关键要点
+  string Summary = 7;  //全文概述
+  string Scanning = 8; //全文速读
+  string SpeechSummary = 9; //发言总结
+  string Review =10; //回顾
+  string TransText = 11; //原文
+}
+
+
+service File {
+  // 上传文件创建记录
+  rpc UploadFile(FileRecord) returns(UploadResponse);
+
+}

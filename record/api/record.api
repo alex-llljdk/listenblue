@@ -1,0 +1,68 @@
+syntax = "v1"
+
+info (
+	title: "record" // TODO: add title
+	desc:  "record" // TODO: add description
+)
+
+type (
+	RecordByUserIdRequest {
+		UserId uint64 `form:"user_id"`
+	}
+	SingleRecord {
+		Id         uint64 `json:"id"`
+		Title      string `json:"title"`
+		UpdateTime string `json:"updatetime"`
+		Keyword    string `json:"keyword"`
+		DataType   uint32 `json:"dataType"`
+	}
+	RecordByUserIdRespone {
+		SingleRecords []SingleRecord `json:"singlerecords"`
+		Code          int            `json:"code"`
+		Msg           string         `json:"msg"`
+	}
+	RecordByIdRequest {
+		Id uint64 `form:"id"`
+	}
+	RecordByIdRespone {
+		Code      int                 `json:"code"`
+		Msg       string              `json:"msg"`
+		Id        uint64              `json:"id"`
+		Path      string              `json:"path"`
+		Title     string              `json:"title"`
+		UserId    uint64              `json:"user_id"`
+		DataType  uint32              `json:"datatype"`
+		Keyword   []map[string]string `json:"keyword"`
+		Summary   string              `json:"summary"`
+		Scanning  []map[string]string `json:"scanning"`
+		InnerText map[string]string   `json:"inner_text"`
+		Review    []map[string]string `json:"review"`
+		TransText []map[string]string `json:"trans_text"`
+	}
+	AiRewritingRequest {
+		Text []string `json:"text"`
+	}
+	AiRewritingResponse {
+		Code int    `json:"code"`
+		Msg  string `json:"msg"`
+		Data string `json:"data"`
+	}
+)
+
+@server (
+	jwt: Auth
+)
+service record-api {
+	@handler recordByUserid
+	get /record/recordByUserid (RecordByUserIdRequest) returns (RecordByUserIdRespone)
+
+	@handler recordById
+	get /record/recordById (RecordByIdRequest) returns (RecordByIdRespone)
+
+	@handler recentRecordById
+	get /record/recentRecordById (RecordByUserIdRequest) returns (RecordByUserIdRespone)
+
+	@handler getAiRewriting
+	post /record/getAiRewriting (AiRewritingRequest) returns (AiRewritingResponse)
+}
+

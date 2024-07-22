@@ -1,0 +1,21 @@
+Name: live.rpc
+ListenOn: 0.0.0.0:8084
+Salt: HWVOFkGgPTryzICwd7qnJaZR9KQ2i8xe
+
+Consul:
+  Host: 127.0.0.1:8500
+  Key: live.rpc
+
+DB:
+  DataSource: root:123456@tcp(127.0.0.1:3306)/zjhx?charset=utf8mb4&parseTime=true&loc=Local
+  MaxIdleConns: 10
+  MaxOpenConns: 100
+  ConnMaxLifetime: 3600   
+
+Cache:
+  - Host: 127.0.0.1:6379
+
+BizRedis:
+  Host: 127.0.0.1:6379
+  Pass:
+  Type: node

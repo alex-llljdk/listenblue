@@ -1,0 +1,110 @@
+syntax = "v1"
+
+info (
+	title:  "" // TODO: add title
+	desc:   "" // TODO: add description
+	author: ""
+	email:  "978920244@qq.com"
+)
+
+type (
+	CreateRoomRequest {
+		RoomTitle  string `json:"room_title"`
+		IsOpen     bool   `json:"is_open"`
+		Password   string `json:"password"`
+		IsRecord   bool   `json:"is_record"`
+		RoomNumber string `json:"room_number"`
+		UserId     int    `json:"user_id"`
+		UserName   string `json:"user_name"`
+		UserAvatar string `json:"avatar"`
+	}
+	CreateRoomResponse {
+		Url  string `json:"url"`
+		Code int    `json:"code"`
+		Msg  string `json:"msg"`
+	}
+	OnPublishRequest {
+		Name string `form:"name"`
+	}
+	OnPublishResponse {
+		Code     int    `json:"code"`
+		Msg      string `json:"msg"`
+		IsRecord bool   `json:"is_record"`
+	}
+	ClosePublishRequest {
+		Name string `form:"name"`
+	}
+	ClosePublishResponse {
+		Code int    `json:"code"`
+		Msg  string `json:"msg"`
+	}
+	JoinRoomRequest {
+		RoomNumber string `json:"room_number"`
+		Password   string `json:"password"`
+	}
+	JoinData {
+		UserID     int    `json:"user_id"`
+		RoomTitle  string `json:"room_title"`
+		IsOpen     bool   `json:"is_open"`
+		Password   string `json:"password"`
+		IsRecord   bool   `json:"is_record"`
+		RoomNumBer string `json:"room_number"`
+		Url        string `json:"url"`
+	}
+	JoinRoomResponse {
+		Code int      `json:"code"`
+		Msg  string   `json:"msg"`
+		data JoinData `json:"data"`
+	}
+	ChatRequest {
+		Name   string `form:"name"`
+		UserID int    `form:"user_id"`
+	}
+	SaveRequest {
+		Path      string `json:"path"`
+		UserID    int    `json:"user_id"`
+		InnerText string `json:"inner_text"`
+	}
+	SaveResponse {
+		Code int    `json:"code"`
+		Msg  string `json:"msg"`
+	}
+	LiveListData {
+		UserName   string `json:"user_name"`
+		RoomTitle  string `json:"room_title"`
+		RoomNumBer string `json:"room_number"`
+		CoverUrl   string `json:"cover_url"`
+		UserAvatar string `json:"avatar"`
+	}
+	GetLiveListResponse {
+		Code     int            `json:"code"`
+		Msg      string         `json:"msg"`
+		LiveList []LiveListData `json:"live_list"`
+	}
+)
+
+service live-api {
+	@handler StartPublish
+	get /live/startPublish (OnPublishRequest) returns (OnPublishResponse)
+
+	@handler ClosePublish
+	get /live/closePublish (ClosePublishRequest) returns (ClosePublishResponse)
+}
+
+@server (
+	jwt: Auth
+)
+service live-api {
+	@handler CreateRoom
+	post /live/createRoom (CreateRoomRequest) returns (CreateRoomResponse)
+
+	@handler JoinRoom
+	post /live/joinRoom (JoinRoomRequest) returns (JoinRoomResponse)
+
+	@handler SaveLive
+	post /live/saveLive (SaveRequest) returns (SaveResponse)
+
+	@handler GetLiveList
+	get /live/liveList returns (GetLiveListResponse)
+}
+

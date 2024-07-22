@@ -1,0 +1,10 @@
+Name: voice.rpc
+ListenOn: 0.0.0.0:8083
+Consul:
+  Host: 127.0.0.1:8500
+  Key: voice.rpc
+DB:
+  DataSource: root:123456@tcp(127.0.0.1:3306)/zjhx?charset=utf8mb4&parseTime=true&loc=Local
+  MaxIdleConns: 10
+  MaxOpenConns: 100
+  ConnMaxLifetime: 3600   

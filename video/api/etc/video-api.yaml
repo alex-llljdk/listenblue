@@ -1,0 +1,15 @@
+Name: video-api
+Host: 0.0.0.0
+Port: 10002
+MaxBytes: 5656870912
+Timeout: 600000
+
+FilePath: C:/Users/fjf/Desktop/backend/data
+Salt: HWVOFkGgPTryzICwd7qnJaZR9KQ2i8xe
+
+VideoRpc:
+  Target: consul://127.0.0.1:8500/video.rpc?wait=14s
+  Timeout: 20000
+Auth:
+  AccessSecret: uOvKLmVfztaXGpNYd4Z0I1SiT7MweJhl
+  AccessExpire: 86400

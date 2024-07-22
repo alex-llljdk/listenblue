@@ -1,0 +1,21 @@
+syntax = "v1"
+
+info (
+	title: "file" // TODO: add title
+	desc:  "file" // TODO: add description
+)
+
+type UploadFileResponse {
+	Code     int    `json:"code"`
+	Msg      string `json:"msg"`
+	RecordId int    `json:"record_id"`
+}
+
+@server (
+	jwt: Auth
+)
+service file-api {
+	@handler uploadFile
+	post /file/upload returns (UploadFileResponse)
+}
+
