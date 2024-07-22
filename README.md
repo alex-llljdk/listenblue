@@ -12,12 +12,14 @@
 ![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%875.png)
 ![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%876.png)
 ![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%877.png)
+![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%878.png)
+
 
 3、pdf，word，图片文档上传模块，html网页解析功能，AI归纳总结。
 --------
-![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%872.png)
-![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%873.png)
-![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%874.png)
+![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%879.png)
+![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%8710.png)
+![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%8711.png)
 
 4、在线直播模块，实时记录，实时字幕，在线交流。
 --------
