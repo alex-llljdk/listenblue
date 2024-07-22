@@ -33,3 +33,5 @@
 
 5、记录模块，展示音视频、文件记录，提供AI翻译、AI改写等服务。
 --------
+![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%8718.png)
+![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%8719.png)
