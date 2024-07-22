@@ -23,5 +23,12 @@
 
 4、在线直播模块，实时记录，实时字幕，在线交流。
 --------
+![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%8712.png)
+![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%8713.png)
+![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%8714.png)
+
 5、记录模块，展示音视频、文件记录，提供AI翻译、AI改写等服务。
 --------
+![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%8715.png)
+![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%8716.png)
+![Example Image](https://github.com/alex-llljdk/listenblue/blob/main/assets/%E5%9B%BE%E7%89%8717.png)
